@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image" href="/public/assets/img/icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>All In One Toolkit</title>
+    <style>
+      ion-icon {
+        font-size: 24pt;
+      }
+    </style>
+  </head>
+
+  <body class="styleBody">
+    <div id="root" class="flex flex-col"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if (localStorage['theme'] === undefined) {
+        localStorage['theme'] = '';
+      }
+      document.querySelector("html").setAttribute("class", localStorage['theme']);
+    </script>
+  </body>
+</html>
