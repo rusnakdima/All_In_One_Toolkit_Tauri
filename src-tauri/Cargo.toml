@@ -1,11 +1,11 @@
 [package]
 name = "all_in_one_toolkit"
-version = "0.1.0"
+version = "0.2.0"
 description = "All In One Toolkit"
 authors = ["Dmitriy303"]
 license = "MIT License"
 repository = "https://github.com/rusnakdima/All_In_One_Toolkit_Tauri"
-edition = "2023"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -16,7 +16,6 @@ tauri-build = { version = "1.4", features = [] }
 tauri = { version = "1.4", features = ["shell-open"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-blob = "0.3.0"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

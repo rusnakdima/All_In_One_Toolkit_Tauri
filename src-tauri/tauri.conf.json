@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "all_in_one_toolkit",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "tauri": {
     "allowlist": {
@@ -21,10 +21,15 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.dmitriydev.all_in_one_toolkit",
+      "identifier": "com.dmitriydev.allinonetoolkit",
       "icon": [
         "icons/icon.png"
-      ]
+      ],
+      "windows": {
+        "webviewInstallMode": {
+          "type": "embedBootstrapper"
+        }
+      }
     },
     "security": {
       "csp": null
@@ -35,7 +40,9 @@
         "resizable": true,
         "title": "All In One Toolkit",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "minHeight": 400,
+        "minWidth": 400
       }
     ]
   }

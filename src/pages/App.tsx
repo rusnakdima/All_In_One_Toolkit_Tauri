@@ -9,6 +9,8 @@ import Home from "./Home";
 import CountWords from "./CountWords";
 import UrlEncDec from "./UrlEncDec";
 import Base64EncDec from "./Base64EncDec";
+import ColorPalette from "./ColorPalette";
+import VirusTotal from "./VirusTotal";
 
 class App extends React.Component {
 
@@ -22,7 +24,7 @@ class App extends React.Component {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/count_words" element={<CountWords />} />
-              <Route path="/virustotal" element={<Home />} />
+              <Route path="/virustotal" element={<VirusTotal />} />
               <Route path="/url_enc_dec" element={<UrlEncDec />} />
               <Route path="/base64_enc_dec" element={<Base64EncDec />} />
               <Route path="/convert_doc_txt" element={<Home />} />
@@ -30,7 +32,7 @@ class App extends React.Component {
               <Route path="/data_to_chart" element={<Home />} />
               <Route path="/text_to_speech" element={<Home />} />
               <Route path="/file_downloader" element={<Home />} />
-              <Route path="/color_palette" element={<Home />} />
+              <Route path="/color_palette" element={<ColorPalette />} />
               <Route path="/xls_to_json" element={<Home />} />
               <Route path="/csv_to_table" element={<Home />} />
               <Route path="/json_to_table" element={<Home />} />
