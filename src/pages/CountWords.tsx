@@ -7,11 +7,11 @@ class CountWords extends React.Component {
   };
   file = null;
 
-  changeFile = async (event: any) => {
+  changeFile = (event: any) => {
     this.file = event.target.files[0];
     if(this.file) {
       const reader = new FileReader();
-      reader.onload = async (e: any) => {
+      reader.onload = (e: any) => {
         const text = (e.target.result);
         this.setState({
           fieldEl: text

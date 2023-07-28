@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Link } from "react-router-dom";
 
-import { HomeOutline, ReaderOutline, BugOutline, CodeWorkingOutline, /* DocumentOutline, BarChartOutline, VolumeHighOutline, CloudDownloadOutline,*/ ColorFilterOutline,/* CodeSlashOutline */ } from "react-ionicons";
+import { HomeOutline, ReaderOutline, CodeWorkingOutline, ColorFilterOutline, BugOutline, BarChartOutline, /* DocumentOutline,*/  CodeSlashOutline } from "react-ionicons";
 
 class Nav extends React.Component {
   render(){
@@ -17,14 +17,13 @@ class Nav extends React.Component {
             <Link to="/base64_enc_dec" className="styleLinkMenu"><CodeWorkingOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>Base64 Encode/Decode</span></Link>
             <Link to="/color_palette" className="styleLinkMenu"><ColorFilterOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>Color Palette</span></Link>
             <Link to="/virustotal" className="styleLinkMenu"><BugOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>VirusTotal</span></Link>
-            {/* <Link to="/convert_doc_txt" className="styleLinkMenu"><DocumentOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>Converter DOC to TXT</span></Link>
-            <Link to="/convert_txt_doc" className="styleLinkMenu"><DocumentOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>Converter TXT to DOC</span></Link>
             <Link to="/data_to_chart" className="styleLinkMenu"><BarChartOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>Visualization data on chart</span></Link>
-            <Link to="/text_to_speech" className="styleLinkMenu"><VolumeHighOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>Text-to-speech</span></Link>
-            <Link to="/file_downloader" className="styleLinkMenu"><CloudDownloadOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>Files downloader</span></Link>
-            <Link to="/xls_to_json" className="styleLinkMenu"><CodeSlashOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>XLS to JSON</span></Link>
             <Link to="/csv_to_table" className="styleLinkMenu"><CodeSlashOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>CSV to Table data</span></Link>
             <Link to="/json_to_table" className="styleLinkMenu"><CodeSlashOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>JSON to Table data</span></Link>
+            
+            {/* <Link to="/convert_doc_txt" className="styleLinkMenu"><DocumentOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>Converter DOC to TXT</span></Link>
+            <Link to="/convert_txt_doc" className="styleLinkMenu"><DocumentOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>Converter TXT to DOC</span></Link>
+            <Link to="/xls_to_json" className="styleLinkMenu"><CodeSlashOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>XLS to JSON</span></Link>
             <Link to="/xml_to_json" className="styleLinkMenu"><CodeSlashOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>XML to JSON </span></Link>
             <Link to="/json_to_xml" className="styleLinkMenu"><CodeSlashOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" /> <span>JSON to XML</span></Link> */}
           </div>
