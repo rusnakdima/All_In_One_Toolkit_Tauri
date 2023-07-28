@@ -14,6 +14,8 @@ import VirusTotal from "./VirusTotal";
 import DataToChart from "./DataToChart";
 import CsvToTable from "./CsvToTable";
 import JsonToTable from "./JsonToTable";
+import JsonToXml from "./JsonToXml";
+import XmlToJson from "./XmlToJson";
 
 class App extends React.Component {
 
@@ -34,14 +36,14 @@ class App extends React.Component {
               <Route path="/data_to_chart" element={<DataToChart />} />
               <Route path="/csv_to_table" element={<CsvToTable />} />
               <Route path="/json_to_table" element={<JsonToTable />} />
+              <Route path="/json_to_xml" element={<JsonToXml />} />
+              <Route path="/xml_to_json" element={<XmlToJson />} />
 
               <Route path="/convert_doc_txt" element={<Home />} />
               <Route path="/convert_txt_doc" element={<Home />} />
               <Route path="/text_to_speech" element={<Home />} />
               <Route path="/file_downloader" element={<Home />} />
               <Route path="/xls_to_json" element={<Home />} />
-              <Route path="/xml_to_json" element={<Home />} />
-              <Route path="/json_to_xml" element={<Home />} />
             </Routes>
           </BrowserRouter>
         </div>

@@ -2,7 +2,7 @@ import React from "react";
 
 class CountWords extends React.Component {
   state = {
-    fieldEl: "",
+    dataField: "",
     outputText: ""
   };
   file = null;
@@ -14,7 +14,7 @@ class CountWords extends React.Component {
       reader.onload = (e: any) => {
         const text = (e.target.result);
         this.setState({
-          fieldEl: text
+          dataField: text
         });
       }
       reader.readAsText(this.file)
@@ -23,7 +23,7 @@ class CountWords extends React.Component {
   };
 
   calc = () => {
-    let text = this.state.fieldEl;
+    let text = this.state.dataField;
     let result = '';
     let num_chars = text.split('').length;
     let num_words = text.split(' ').length;
@@ -52,7 +52,7 @@ class CountWords extends React.Component {
         <span className="my-3 text-xl font-bold">Or enter/paste text in the field below</span>
         
         <div className="flex flex-row">
-          <textarea onChange={(event: any) => {this.state.fieldEl = event.target.value}} rows={6} className="styleTextarea" value={this.state.fieldEl}></textarea>
+          <textarea onChange={(event: any) => {this.state.dataField = event.target.value}} rows={6} className="styleTextarea" value={this.state.dataField}></textarea>
         </div>
         
         <button className="styleBut w-min" onClick={() => {this.calc()}}>Calculate</button>

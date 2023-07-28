@@ -1236,6 +1236,11 @@ input[type="range"]::-ms-fill-lower {
   background-color: rgb(255 255 255 / 0.6);
 }
 
+.bg-green-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(4 108 78 / var(--tw-bg-opacity));
+}
+
 .p-0 {
   padding: 0px;
 }
