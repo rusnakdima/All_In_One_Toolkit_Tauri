@@ -154,7 +154,7 @@ class JsonToTable extends React.Component {
         <div className="flex flex-col gap-y-3">
           <span className="text-2xl font-bold border-b-2 styleBorderSolid">Visualization data from JSON to Table</span>
 
-          <details>
+          <details className="styleDetails">
             <summary>
               <span className="text-xl font-bold">Select the JSON file with the data</span>
             </summary>
@@ -165,7 +165,7 @@ class JsonToTable extends React.Component {
             </div>
           </details>
 
-          <details>
+          <details className="styleDetails">
             <summary>
               <span className="text-xl font-bold">Insert JSON data</span>
             </summary>

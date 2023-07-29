@@ -63,9 +63,9 @@
 }
 
 ::-webkit-scrollbar {
-  @apply bg-transparent w-1
+  @apply bg-transparent w-2 h-2
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply rounded-2xl w-1 border-2 border-solid border-black dark:border-white
+  @apply rounded-2xl bg-gray-600
 }

@@ -72,13 +72,13 @@ class JsonToXml extends React.Component {
     }
   };
 
-  convertDataFileFun = async () => {
+  parseDataFileFun = async () => {
     if(this.file != null){
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();
       if(text != null && text != ''){
-        var dataJson = JSON.parse(text);
+        const dataJson = JSON.parse(text);
         this.convertDataFun(dataJson);
       }
     } else {
@@ -86,12 +86,12 @@ class JsonToXml extends React.Component {
     }
   };
 
-  convertDataFieldFun = () => {
+  parseDataFieldFun = () => {
     if(this.dataField != ''){
-      var dataJson = JSON.parse(this.dataField);
+      const dataJson = JSON.parse(this.dataField);
       this.convertDataFun(dataJson);
     } else {
-      this.alertNotify("bg-red-700", "You have not selected a file!");
+      this.alertNotify("bg-red-700", "The field is empty! Insert the data!");
     }
   };
 
@@ -115,30 +115,30 @@ class JsonToXml extends React.Component {
         <div className="flex flex-col gap-y-3">
           <span className="text-2xl font-bold border-b-2 styleBorderSolid">Converter JSON to XML</span>
 
-          <details>
+          <details className="styleDetails">
             <summary>
               <span className="text-xl font-bold">Select the JSON file with the data</span>
             </summary>
             
             <div className="flex flex-col gap-y-3">
               <input className="styleFileInput" type="file" onChange={(event: any) => {this.file = event.target.files[0]}} accept=".json" />
-              <button className="styleBut w-max" onClick={() => {this.convertDataFileFun()}}>Convert data from a JSON file</button>
+              <button className="styleBut w-max" onClick={() => {this.parseDataFileFun()}}>Convert a data</button>
             </div>
           </details>
 
-          <details>
+          <details className="styleDetails">
             <summary>
               <span className="text-xl font-bold">Insert JSON data</span>
             </summary>
 
             <div className="flex flex-col gap-y-3">
               <textarea className="styleTextarea" name="field" onChange={(event: any) => {this.dataField = event.target.value}} rows={7}></textarea>
-              <button className="styleBut w-max" onClick={() => {this.convertDataFieldFun()}}>Convert data from the field</button>
+              <button className="styleBut w-max" onClick={() => {this.parseDataFieldFun()}}>Convert a data</button>
             </div>
           </details>
 
           <div className="flex flex-row gap-x-3">
-            <button className="styleBut" onClick={() => {this.saveDataFileFun()}}>Save data to file XML</button>
+            <button className="styleBut" onClick={() => {this.saveDataFileFun()}}>Save a data</button>
           </div>
         </div>
 

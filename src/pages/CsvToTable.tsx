@@ -73,8 +73,7 @@ class CsvToTable extends React.Component {
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();
-      const lines = text.split("\r\n");
-      const data: any[] = lines.map((line: any) => line.split(","));
+      const data: any[] = text.split("\r\n").map((line: any) => line.split(","));
       this.createTableFun(data);
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");
@@ -97,7 +96,7 @@ class CsvToTable extends React.Component {
         <div className="flex flex-col gap-y-3">
           <span className="text-2xl font-bold border-b-2 styleBorderSolid">Visualization data from CSV to Table</span>
 
-          <details>
+          <details className="styleDetails">
             <summary>
               <span className="text-xl font-bold">Select the CSV file with the data</span>
             </summary>
@@ -108,7 +107,7 @@ class CsvToTable extends React.Component {
             </div>
           </details>
 
-          <details>
+          <details className="styleDetails">
             <summary>
               <span className="text-xl font-bold">Insert CSV data</span>
             </summary>

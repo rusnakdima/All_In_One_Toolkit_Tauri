@@ -1,10 +1,12 @@
 import React from "react";
 
+import * as XLSX from "xlsx";
+
 import { CloseCircleOutline } from "react-ionicons";
 
 import { invoke } from "@tauri-apps/api/tauri";
 
-class XmlToJson extends React.Component {
+class XlsToJson extends React.Component {
   file: any = null;
   dataField: string = "";
   dataJson: {[key: string]: any} = {};
@@ -46,24 +48,15 @@ class XmlToJson extends React.Component {
     }, 10);
   };
 
-  parseData(array: any[]){
-    let tempObj: {[key: string]: any} = {};
-    array.forEach((elem: any) => {
-      if([...elem.children].length > 0){
-        let rez = this.parseData([...elem.children]);
-        if(tempObj[elem.nodeName] != undefined) {
-          tempObj[elem.nodeName].length == undefined ? tempObj[elem.nodeName] = [tempObj[elem.nodeName], rez] : tempObj[elem.nodeName].push(rez);
-        } else tempObj[elem.nodeName] = rez;
-      }
-      else tempObj[elem.nodeName] = elem.textContent;
+  convertDataFun = (data: any[]) => {
+    this.dataJson = {"root": []};
+    let strokeF = data[0];
+    data.splice(0, 1);
+    data.forEach((element) => {
+      let tempObj: {[key: string]: any} = {};
+      element.forEach((elem: any, index: number) => tempObj[strokeF[index]] = elem);
+      this.dataJson["root"].push(tempObj);
     });
-    return tempObj;
-  }
-
-  convertDataFun = (dataXML: string) => {
-    let parser = new DOMParser();
-    let xmlDoc = parser.parseFromString(dataXML, 'text/xml');
-    this.dataJson = this.parseData([...xmlDoc.children]);
 
     if (Object.keys(this.dataJson).length > 0) {
       this.alertNotify("bg-green-700", "The data has been successfully converted!");
@@ -74,13 +67,15 @@ class XmlToJson extends React.Component {
 
   parseDataFileFun = async () => {
     if(this.file != null){
-      const fileUrl = URL.createObjectURL(this.file);
-      const response = await fetch(fileUrl);
-      const text = await response.text();
-      if(text != null && text != ''){
-        const dataXml = text;
-        this.convertDataFun(dataXml);
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const text = (e.target.result);
+        const workbook = XLSX.read(text, {type:'binary'});
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        this.convertDataFun(data);
       }
+      reader.readAsBinaryString(this.file)
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");
     }
@@ -88,16 +83,16 @@ class XmlToJson extends React.Component {
 
   parseDataFieldFun = () => {
     if(this.dataField != ''){
-      const dataXml = this.dataField;
-      this.convertDataFun(dataXml);
+      const data = this.dataField.split("\n").map((elem) => elem.split("\t"));
+      this.convertDataFun(data);
     } else {
       this.alertNotify("bg-red-700", "The field is empty! Insert the data!");
     }
   };
 
   saveDataFileFun = async () => {
-    if(this.file != null || Object.keys(this.dataJson).length != 0){
-      await invoke("xml_to_json", {"data": JSON.stringify(this.dataJson)})
+    if(this.file != null || Object.keys(this.dataJson).length > 0){
+      await invoke("xls_to_json", {"data": JSON.stringify(this.dataJson)})
       .then((data: any) => {
         this.alertNotify("bg-green-700", `The data has been successfully saved to a file "${data}"!`);
       })
@@ -112,33 +107,33 @@ class XmlToJson extends React.Component {
   render(){
     return (
       <>
-        <div className="flex flex-col gap-y-3">
-          <span className="text-2xl font-bold border-b-2 styleBorderSolid">Converter XML to JSON</span>
+        <div className="flex flex-col">
+          <span className="text-2xl font-bold border-b-2 styleBorderSolid">Converter XLS to JSON</span>
 
           <details className="styleDetails">
             <summary>
-              <span className="text-xl font-bold">Select the XML file with the data</span>
+              <span className="text-xl font-bold">Select a tabular document with data</span>
             </summary>
-            
+
             <div className="flex flex-col gap-y-3">
-              <input className="styleFileInput" type="file" onChange={(event: any) => {this.file = event.target.files[0]}} accept=".xml" />
-              <button className="styleBut w-max" onClick={() => {this.parseDataFileFun()}}>Convert a table</button>
+              <input className="styleFileInput" type="file" onChange={(event: any) => {this.file = event.target.files[0]}} accept=".xls, .xlsx, .xlsm" />
+              <button className="styleBut w-max" onClick={() => {this.parseDataFileFun()}}>Convert a data</button>
             </div>
           </details>
 
           <details className="styleDetails">
             <summary>
-              <span className="text-xl font-bold">Insert XML data</span>
+              <span className="text-xl font-bold">Insert data from a table (copy a table from any source)</span>
             </summary>
 
             <div className="flex flex-col gap-y-3">
               <textarea className="styleTextarea" name="field" onChange={(event: any) => {this.dataField = event.target.value}} rows={7}></textarea>
-              <button className="styleBut w-max" onClick={() => {this.parseDataFieldFun()}}>Convert a table</button>
+              <button className="styleBut w-max" onClick={() => {this.parseDataFieldFun()}}>Convert a data</button>
             </div>
           </details>
-
+          
           <div className="flex flex-row gap-x-3">
-            <button className="styleBut" onClick={() => {this.saveDataFileFun()}}>Save a table</button>
+            <button className="styleBut" onClick={() => {this.saveDataFileFun()}}>Save a data</button>
           </div>
         </div>
 
@@ -159,4 +154,4 @@ class XmlToJson extends React.Component {
   };
 };
 
-export default XmlToJson;
+export default XlsToJson;

@@ -16,6 +16,8 @@ import CsvToTable from "./CsvToTable";
 import JsonToTable from "./JsonToTable";
 import JsonToXml from "./JsonToXml";
 import XmlToJson from "./XmlToJson";
+import XlsToJson from "./XlsToJson";
+import JsonToXls from "./JsonToXls";
 
 class App extends React.Component {
 
@@ -38,12 +40,11 @@ class App extends React.Component {
               <Route path="/json_to_table" element={<JsonToTable />} />
               <Route path="/json_to_xml" element={<JsonToXml />} />
               <Route path="/xml_to_json" element={<XmlToJson />} />
+              <Route path="/xls_to_json" element={<XlsToJson />} />
+              <Route path="/json_to_xls" element={<JsonToXls />} />
 
               <Route path="/convert_doc_txt" element={<Home />} />
               <Route path="/convert_txt_doc" element={<Home />} />
-              <Route path="/text_to_speech" element={<Home />} />
-              <Route path="/file_downloader" element={<Home />} />
-              <Route path="/xls_to_json" element={<Home />} />
             </Routes>
           </BrowserRouter>
         </div>

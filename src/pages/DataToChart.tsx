@@ -212,7 +212,7 @@ class DataToChart extends React.Component {
 
             <div className="flex flex-col gap-y-3">
               <input className="styleFileInput" type="file" onChange={(event: any) => {this.file = event.target.files[0]}} accept=".xls, .xlsx, .xlsm" />
-              <button className="styleBut w-max" onClick={() => {this.createTableFileData()}}>Create a table based on data from a file</button>
+              <button className="styleBut w-max" onClick={() => {this.createTableFileData()}}>Create a table</button>
             </div>
           </details>
 
@@ -223,7 +223,7 @@ class DataToChart extends React.Component {
 
             <div className="flex flex-col gap-y-3">
               <textarea className="styleTextarea" onChange={(event: any) => {this.dataField = event.target.value}} rows={7}></textarea>
-              <button className="styleBut w-max" onClick={() => {this.createTableFieldData()}}>Create a table based on data from the field</button>
+              <button className="styleBut w-max" onClick={() => {this.createTableFieldData()}}>Create a table</button>
             </div>
           </details>
 
@@ -244,7 +244,7 @@ class DataToChart extends React.Component {
                 </div>
               </div>
               
-              <button className="styleBut w-max" onClick={() => {this.createTableManual()}}>Create a table based on data from the field</button>
+              <button className="styleBut w-max" onClick={() => {this.createTableManual()}}>Create a table</button>
             </div>
           </details>
 
