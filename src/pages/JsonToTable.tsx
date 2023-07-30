@@ -56,13 +56,16 @@ class JsonToTable extends React.Component {
     });
     thead.appendChild(tr);
     table.appendChild(thead);
+
     const tbody = document.createElement('tbody');
     arr.forEach((elem: any) => {
       let tr = document.createElement('tr');
       Object.values(elem).forEach((value: any) => {
         let td = document.createElement('td');
         td.classList.add("styleTD");
-        if(Array.isArray(value) && typeof(value[0]) != "string") {
+        if(value == null){
+          td.innerText = "null";
+        } else if(Array.isArray(value) && typeof(value[0]) == "object") {
           td.appendChild(this.parseArr(value));
         } else if(!Array.isArray(value) && typeof(value) == "object"){
           td.appendChild(this.parseObj(value));
@@ -91,6 +94,7 @@ class JsonToTable extends React.Component {
     tr.appendChild(th);
     thead.appendChild(tr);
     table.appendChild(thead);
+
     const tbody = document.createElement('tbody');
     Object.entries(object).forEach(([key, value]) => {
       let tr = document.createElement('tr');
@@ -100,7 +104,9 @@ class JsonToTable extends React.Component {
       tr.appendChild(td);
       td = document.createElement('td');
       td.classList.add("styleTD");
-      if(Array.isArray(value) && typeof(value[0]) != "string") {
+      if(value == null){
+        td.innerText = "null";
+      } else if(Array.isArray(value) && typeof(value[0]) == "object") {
         td.appendChild(this.parseArr(value));
       } else if(!Array.isArray(value) && typeof(value) == "object"){
         td.appendChild(this.parseObj(value));
@@ -132,8 +138,10 @@ class JsonToTable extends React.Component {
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();
-      const data: {[key: string]: any} = JSON.parse(text);
-      this.createTableFun(data);
+      if(text != null && text != ''){
+        const data: {[key: string]: any} = JSON.parse(text);
+        this.createTableFun(data);
+      }
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");
     }

@@ -5,7 +5,6 @@ use std::fs::File;
 use std::io::Write;
 use rand::Rng;
 use rust_xlsxwriter::Workbook;
-use serde_json::{Result};
 
 fn generate_name() -> String {
     let alphabetic = "abcdefghijklmnopqrstuvwxyz";
@@ -47,12 +46,12 @@ fn xls_to_json(data: String) -> String{
     format!("{name_file}")
 }
 
-fn parse_str(str: String) -> Result<Vec<Vec<String>>>{
+fn parse_str(str: String) -> Result<Vec<Vec<String>>, serde_json::Error>{
     let result: Vec<Vec<String>> = serde_json::from_str(&str)?;
     Ok(result)
 }
 
-fn save_xlsx(data: String, name_file: String) -> Result<()> {
+fn save_xlsx(data: String, name_file: String) -> Result<(), serde_json::Error> {
     let mut workbook = Workbook::new();
     let worksheet = workbook.add_worksheet();
     if let Ok(arr_data) = parse_str(data) {
@@ -78,9 +77,22 @@ fn json_to_xls(data: String) -> String{
     format!("{}", name_file)
 }
 
+async fn req_site(url: String, key: String) -> Result<String, reqwest::Error> {
+    let client = reqwest::Client::new();
+    let response = client.get(url).header("x-apikey", key).send().await?;
+    let json = response.text().await.unwrap();
+    Ok(json)
+}
+
+#[tauri::command]
+async fn virus_total(url: String, key: String) -> String {
+    let data = req_site(url, key).await.unwrap();
+    format!("{}", data)
+}
+
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, json_to_xls])
+        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, json_to_xls, virus_total])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
