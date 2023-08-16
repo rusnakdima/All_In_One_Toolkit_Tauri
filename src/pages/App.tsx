@@ -42,9 +42,6 @@ class App extends React.Component {
               <Route path="/xml_to_json" element={<XmlToJson />} />
               <Route path="/xls_to_json" element={<XlsToJson />} />
               <Route path="/json_to_xls" element={<JsonToXls />} />
-
-              <Route path="/convert_doc_txt" element={<Home />} />
-              <Route path="/convert_txt_doc" element={<Home />} />
             </Routes>
           </BrowserRouter>
         </div>

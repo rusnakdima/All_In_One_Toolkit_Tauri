@@ -62,6 +62,10 @@
   @apply fixed top-1 right-1 border styleBorderSolid !border-white rounded-lg flex flex-col text-white
 }
 
+.styleIonIcon{
+  @apply text-black dark:text-white !w-[35px] !h-[35px]
+}
+
 ::-webkit-scrollbar {
   @apply bg-transparent w-2 h-2
 }

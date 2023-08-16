@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "all_in_one_toolkit",
-    "version": "0.5.1"
+    "version": "0.5.2"
   },
   "tauri": {
     "allowlist": {
@@ -23,7 +23,8 @@
       "targets": "all",
       "identifier": "com.dmitriydev.allinonetoolkit",
       "icon": [
-        "icons/icon.png"
+        "icons/icon.png",
+        "icons/icon.ico"
       ],
       "windows": {
         "webviewInstallMode": {
