@@ -1,52 +1,19 @@
 import React from "react";
 
-// import * as XLSX from "xlsx";
-
-import { CloseCircleOutline } from "react-ionicons";
+import WindNotify from "./WindNotify";
 
 import { invoke } from "@tauri-apps/api/tauri";
 
 class JsonToXls extends React.Component {
+  childRef: any = React.createRef();
+
   file: any = null;
   dataField: string = "";
   // dataJson: {[key: string]: any} = {};
   dataXls: any[] = [];
 
-  state = {
-    windNotify: false,
-    notText: ""
-  };
-
   alertNotify(color: string, title: string) {
-    this.setState({
-      windNotify: true
-    })
-    setTimeout(() => {
-      let notify = document.querySelector("#windNotify") as HTMLDivElement | null;
-      if (notify != null) notify.classList.add(color);
-      this.setState({
-        notText: title
-      })
-      
-      let timeNotify = document.querySelector("#timeNotify") as HTMLDivElement | null;
-      if (timeNotify != null) {
-        if(timeNotify.style.width != '') if(+timeNotify.style.width.split('').slice(0, -1).join('') > 0) return;
-        let width = 100;
-        timeNotify.style.width = `${width}%`;
-    
-        const interval = setInterval(() => {
-          width -= 0.3;
-          if (width < 0) {
-            width = 0;
-            clearInterval(interval);
-            this.setState({
-              windNotify: false
-            })
-          }
-          if (timeNotify != null) timeNotify.style.width = `${width}%`;
-        }, 10);
-      }
-    }, 10);
+    this.childRef.current.alertNotify(color, title);
   };
 
   convertDataFun = (data: {[key: string]: any}) => {
@@ -84,7 +51,7 @@ class JsonToXls extends React.Component {
   };
 
   saveDataFileFun = async () => {
-    if(this.file != null || Array.isArray(this.dataXls)){
+    if(this.file != null || this.dataXls.length > 0){
       await invoke("json_to_xls", {"data": JSON.stringify(this.dataXls)})
       .then((data: any) => {
         this.alertNotify("bg-green-700", `The data has been successfully saved to a file "${data}"!`);
@@ -92,7 +59,7 @@ class JsonToXls extends React.Component {
       .catch((err: any) => console.error(err));
     } else if(this.file == null){
       this.alertNotify("bg-red-700", "You have not selected a file!");
-    } else if (!Array.isArray(this.dataXls)){
+    } else if (this.dataXls.length == 0){
       this.alertNotify("bg-red-700", "No data was received from the file!");
     }
   };
@@ -130,18 +97,7 @@ class JsonToXls extends React.Component {
           </div>
         </div>
 
-        {this.state.windNotify && <div id="windNotify" className="styleWindNotify">
-          <div className="flex flex-row p-3">
-            <div className="flex flex-col">
-              <span className="text-4xl">Notification</span>
-              <span>{this.state.notText}</span>
-            </div>
-            <button onClick={() => {this.setState({windNotify: false})}}>
-              <CloseCircleOutline cssClasses={"!text-white !w-10 !h-10"} />
-            </button>
-          </div>
-          <div className="flex flex-col mb-1 bg-white w-full h-1" id="timeNotify"></div>
-        </div>}
+        <WindNotify ref={this.childRef} />
       </>
     );
   };

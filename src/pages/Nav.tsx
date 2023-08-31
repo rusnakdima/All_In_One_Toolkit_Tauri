@@ -24,6 +24,7 @@ class Nav extends React.Component {
             <Link to="/xml_to_json" className="styleLinkMenu"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>XML to JSON </span></Link>
             <Link to="/xls_to_json" className="styleLinkMenu"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>XLS to JSON</span></Link>
             <Link to="/json_to_xls" className="styleLinkMenu"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>JSON to XLS</span></Link>
+            <Link to="/css_converter" className="styleLinkMenu"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>CSS Converter</span></Link>
           </div>
         </div>
       </div>

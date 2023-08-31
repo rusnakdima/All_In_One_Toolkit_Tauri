@@ -18,6 +18,7 @@ import JsonToXml from "./JsonToXml";
 import XmlToJson from "./XmlToJson";
 import XlsToJson from "./XlsToJson";
 import JsonToXls from "./JsonToXls";
+import CssConverter from "./CssConverter";
 
 class App extends React.Component {
 
@@ -42,6 +43,7 @@ class App extends React.Component {
               <Route path="/xml_to_json" element={<XmlToJson />} />
               <Route path="/xls_to_json" element={<XlsToJson />} />
               <Route path="/json_to_xls" element={<JsonToXls />} />
+              <Route path="/css_converter" element={<CssConverter />} />
             </Routes>
           </BrowserRouter>
         </div>

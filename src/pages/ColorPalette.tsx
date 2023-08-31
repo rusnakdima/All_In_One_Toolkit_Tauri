@@ -164,7 +164,7 @@ class ColorPalette extends React.Component {
           </div>
         </div>
 
-        <label className="styleLabel" >Enter the color according to the selected type</label>
+        <label className="styleLabel">Enter the color according to the selected type</label>
         <input type="text" onChange={(event: any) => { this.convertColor(event) }} className="styleField" />
 
         <div id="blockCol" className="flex flex-col gap-y-3 mt-5">

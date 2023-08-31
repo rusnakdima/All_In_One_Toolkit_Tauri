@@ -90,9 +90,15 @@ async fn virus_total(url: String, key: String) -> String {
     format!("{}", data)
 }
 
+#[tauri::command]
+async fn get_json() -> String {
+    let data = std::fs::read_to_string("src/css_library.json").unwrap();
+    format!("{}", data)
+}
+
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, json_to_xls, virus_total])
+        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, json_to_xls, virus_total, get_json])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
