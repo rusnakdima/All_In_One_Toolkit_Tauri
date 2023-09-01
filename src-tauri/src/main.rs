@@ -90,15 +90,26 @@ async fn virus_total(url: String, key: String) -> String {
     format!("{}", data)
 }
 
-#[tauri::command]
-async fn get_json() -> String {
-    let data = std::fs::read_to_string("src/css_library.json").unwrap();
-    format!("{}", data)
-}
+// async fn file_read(handle: tauri::AppHandle) -> std::io::Result<()> {
+//     let resource_path = handle.path_resolver()
+//         .resolve_resource("db/css_library.json")
+//         .expect("failed to resolve resource");
+
+//     let mut file = File::open(&resource_path)?;
+//     let mut data = String::new();
+//     file.read_to_string(&mut data)?;
+//     Ok(())
+// }
+
+// #[tauri::command]
+// async fn get_json() -> String {
+//     let data = std::fs::read_to_string("./../db/css_library.json").unwrap();
+//     format!("{}", data)
+// }
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, json_to_xls, virus_total, get_json])
+        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, json_to_xls, virus_total/* , get_json */])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -1131,6 +1131,10 @@ input[type="range"]::-ms-fill-lower {
   justify-content: center;
 }
 
+.justify-between {
+  justify-content: space-between;
+}
+
 .gap-3 {
   gap: 0.75rem;
 }
@@ -1350,6 +1354,10 @@ input[type="range"]::-ms-fill-lower {
 
 .uppercase {
   text-transform: uppercase;
+}
+
+.italic {
+  font-style: italic;
 }
 
 .\!text-gray-500 {
