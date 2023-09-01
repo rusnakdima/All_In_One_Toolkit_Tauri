@@ -25,6 +25,8 @@ If you are using the pnpm package manager, then run this command:
 pnpm -v
 ```
 
+You also need to install Rust by downloading it from this [link](https://www.rust-lang.org/tools/install)
+
 After that, go to the folder with this project and run the following command:
 
 ```bash
