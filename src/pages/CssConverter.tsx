@@ -85,20 +85,21 @@ class CssConverter extends React.Component {
       if(this.typeStyle == style){
         td.innerText = item;
       } else if(objItem = this.dataArr.find((obj: any) => obj[this.typeStyle] == item)){
-        if(this.typeStyle == "css" && propCSS && Object.keys(tempObj).includes(propCSS![1])){
+        if(propCSS && Object.keys(tempObj).includes(propCSS![1])){
           td.innerText = (objItem[style]) ? `${tempObj[String(propCSS![1])]}-${objItem[style]}` : "";
-        } else if(this.typeStyle != "css" && style == "css" && objItem[this.typeStyle] == propTailwind![2]){
-          td.innerText = (objItem[style]) ? `${Object.keys(tempObj).find((elem: string) => tempObj[elem] == propTailwind![1])}: ${regCSS.exec(objItem[style])![2]};` : "";
         } else {
           td.innerText = (objItem[style]) ? objItem[style] : "";
         }
       } else if((propCSS && Object.keys(tempObj).includes(propCSS![1])) ||
-        (propTailwind && Object.values(tempObj).includes(propTailwind![1]))){
+                (propTailwind && Object.values(tempObj).includes(propTailwind![1]))){
         if(this.typeStyle == "css" && (objItem = this.dataArr.find((obj: any) => obj["css"] == `color: ${propCSS![2]};`))){
           if(objItem) td.innerText = (objItem[style]) ? `${tempObj[String(propCSS![1])]}-${objItem[style]}` : "";
           else td.innerText = "";
-        } else if(this.typeStyle != "css" && (objItem = this.dataArr.find((obj: any) => obj[this.typeStyle] == propTailwind![2]))){
+        } else if(this.typeStyle != "css" && style == "css" && (objItem = this.dataArr.find((obj: any) => obj[this.typeStyle] == propTailwind![2]))){
           if(objItem) td.innerText = (objItem[style]) ? `${Object.keys(tempObj).find((elem: string) => tempObj[elem] == propTailwind![1])}: ${regCSS.exec(objItem["css"])![2]};` : "";
+          else td.innerText = "";
+        } else if(this.typeStyle != "css" && style != "css" && (objItem = this.dataArr.find((obj: any) => obj[this.typeStyle] == propTailwind![2]))){
+          if(objItem) td.innerText = (objItem[style]) ? `${propTailwind![1]}-${objItem[style]}` : "";
           else td.innerText = "";
         } else if(this.typeStyle == "css" && style == "tailwind" && propCSS){
           let key = this.dataArr.find((obj: any) => obj[style].indexOf(propCSS![1]))!["tailwind_custom"];
@@ -165,6 +166,8 @@ class CssConverter extends React.Component {
           blockTable.appendChild(table);
         }
       }, 500);
+    } else if (!this.file && this.dataArr.length == 0) {
+      this.alertNotify("bg-red-700", "You have not selected the css_library file.json with data!");
     } else if (this.typeStyle == '') {
       this.alertNotify("bg-red-700", "You have not selected the type of source styles!");
     } else if (this.dataField == '') {
