@@ -3,6 +3,7 @@
 
 use std::fs::File;
 use std::io::Write;
+use tauri::api::path;
 use rand::Rng;
 use rust_xlsxwriter::Workbook;
 
@@ -22,28 +23,40 @@ fn generate_name() -> String {
 #[tauri::command]
 fn json_to_xml(data: String) -> String{
     let name_file: String = format!("{}{}", generate_name(), ".xml");
-    let mut data_file = File::create(&name_file).expect("creation failed");
+    let document_folder = path::document_dir().expect("Failed to get document folder");
+    let app_folder = document_folder.join("AllInOneToolkit");
+    std::fs::create_dir_all(&app_folder).expect("Failed to create app folder");
+    let file_path = app_folder.join(&name_file);
+    let mut data_file = File::create(&file_path).expect("creation failed");
     data_file.write(data.as_bytes()).expect("write failed");
-    println!("Created a file {}", name_file);
-    format!("{name_file}")
+    println!("Created a file {}", file_path.display());
+    format!("{}", file_path.display())
 }
 
 #[tauri::command]
 fn xml_to_json(data: String) -> String{
     let name_file: String = format!("{}{}", generate_name(), ".json");
-    let mut data_file = File::create(&name_file).expect("creation failed");
+    let document_folder = path::document_dir().expect("Failed to get document folder");
+    let app_folder = document_folder.join("AllInOneToolkit");
+    std::fs::create_dir_all(&app_folder).expect("Failed to create app folder");
+    let file_path = app_folder.join(&name_file);
+    let mut data_file = File::create(&file_path).expect("creation failed");
     data_file.write(data.as_bytes()).expect("write failed");
-    println!("Created a file {}", name_file);
-    format!("{name_file}")
+    println!("Created a file {}", file_path.display());
+    format!("{}", file_path.display())
 }
 
 #[tauri::command]
 fn xls_to_json(data: String) -> String{
     let name_file: String = format!("{}{}", generate_name(), ".json");
-    let mut data_file = File::create(&name_file).expect("creation failed");
+    let document_folder = path::document_dir().expect("Failed to get document folder");
+    let app_folder = document_folder.join("AllInOneToolkit");
+    std::fs::create_dir_all(&app_folder).expect("Failed to create app folder");
+    let file_path = app_folder.join(&name_file);
+    let mut data_file = File::create(&file_path).expect("creation failed");
     data_file.write(data.as_bytes()).expect("write failed");
-    println!("Created a file {}", name_file);
-    format!("{name_file}")
+    println!("Created a file {}", file_path.display());
+    format!("{}", file_path.display())
 }
 
 fn parse_str(str: String) -> Result<Vec<Vec<String>>, serde_json::Error>{
@@ -70,11 +83,17 @@ fn save_xlsx(data: String, name_file: String) -> Result<(), serde_json::Error> {
 #[tauri::command]
 fn json_to_xls(data: String) -> String{
     let name_file: String = format!("{}{}", generate_name(), ".xlsx");
-    if let Err(err) = save_xlsx(data, name_file.clone()) {
+    let document_folder = path::document_dir().expect("Failed to get document folder");
+    let app_folder = document_folder.join("AllInOneToolkit");
+    std::fs::create_dir_all(&app_folder).expect("Failed to create app folder");
+    let file_path = app_folder.join(&name_file);
+    let file_path_str = file_path.to_str().unwrap_or_default();
+    if let Err(err) = save_xlsx(data, file_path_str.to_string()) {
         eprintln!("Failed to save the Excel file: {:?}", err);
+    } else {
+        println!("Created a file {}", file_path.display());
     }
-    
-    format!("{}", name_file)
+    format!("{}", file_path.display())
 }
 
 async fn req_site(url: String, key: String) -> Result<String, reqwest::Error> {

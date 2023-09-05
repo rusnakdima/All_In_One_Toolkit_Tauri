@@ -1,13 +1,15 @@
 import React from "react";
 
-import { AlertCircleOutline, CloseCircleOutline } from "react-ionicons";
+import { NotificationsOutline, CloseOutline } from "react-ionicons";
 
 class WindNotify extends React.Component {
   state = {
     windNotify: false,
     blockTable: false,
-    notText: ""
+    notText: "",
+    width: 0
   };
+  interval: any;
 
   alertNotify(color: string, title: string) {
     this.setState({
@@ -22,20 +24,26 @@ class WindNotify extends React.Component {
       
       let timeNotify = document.querySelector("#timeNotify") as HTMLDivElement | null;
       if (timeNotify != null) {
-        if(timeNotify.style.width != '') if(+timeNotify.style.width.split('').slice(0, -1).join('') > 0) return;
-        let width = 100;
-        timeNotify.style.width = `${width}%`;
-    
-        const interval = setInterval(() => {
-          width -= 0.3;
-          if (width < 0) {
-            width = 0;
-            clearInterval(interval);
+        if (this.interval) {
+          clearInterval(this.interval);
+        }
+
+        this.setState({
+          width: 100
+        });
+
+        timeNotify.style.width = `${this.state.width}%`;
+
+        this.interval = setInterval(() => {
+          this.state.width -= 0.3;
+          if (this.state.width < 0) {
             this.setState({
+              width: 0,
               windNotify: false
             });
+            clearInterval(this.interval);
           }
-          if (timeNotify != null) timeNotify.style.width = `${width}%`;
+          if (timeNotify != null) timeNotify.style.width = `${this.state.width}%`;
         }, 10);
       }
     }, 10);
@@ -45,14 +53,16 @@ class WindNotify extends React.Component {
     return (
       <>
         {this.state.windNotify && <div id="windNotify" className="styleWindNotify">
-          <div className="flex flex-row p-3 items-center">
-            <AlertCircleOutline cssClasses={"!text-white !fill-white !w-10 !h-10 !mr-3"} />
+          <div className="flex flex-row p-3 items-start">
             <div className="flex flex-col">
-              <span className="text-2xl">Notification</span>
+              <div className="flex flex-row gap-x-2">
+                <NotificationsOutline cssClasses={"!text-white !fill-white !w-8 !h-8"} />
+                <span className="text-2xl">Notification</span>
+              </div>
               <span>{this.state.notText}</span>
             </div>
             <button onClick={() => {this.setState({windNotify: false})}}>
-              <CloseCircleOutline cssClasses={"!text-white !w-10 !h-10"} />
+              <CloseOutline cssClasses={"!text-white !w-7 !h-7"} />
             </button>
           </div>
           <div className="flex flex-col mb-1 bg-white w-full h-1" id="timeNotify"></div>

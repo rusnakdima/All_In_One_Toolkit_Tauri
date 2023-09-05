@@ -17,7 +17,7 @@ class JsonToXls extends React.Component {
   };
 
   convertDataFun = (data: {[key: string]: any}) => {
-    this.dataXls = data["root"].map((elem: {[key: string]: any}) => Object.values(elem).map((val: any) => {return String(val)}));
+    this.dataXls = data[Object.keys(data)[0]].map((elem: {[key: string]: any}) => Object.values(elem).map((val: any) => {return String(val)}));
     this.dataXls.unshift(Object.keys(data["root"][0]));
 
     if (Array.isArray(this.dataXls)) {

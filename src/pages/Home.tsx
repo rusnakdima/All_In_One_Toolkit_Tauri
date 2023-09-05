@@ -47,6 +47,7 @@ class Home extends React.Component<{}, HomeState> {
       this.state.recentAction.splice((this.state.recentAction.findIndex((item: any) => item == tempObj)), 1);
       this.state.recentAction.unshift(tempObj);
     }
+    if(this.state.recentAction.length > 4) this.state.recentAction.pop();
     localStorage["recAct"] = JSON.stringify(this.state.recentAction);
   }
 
