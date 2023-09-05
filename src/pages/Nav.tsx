@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Link } from "react-router-dom";
 
-import { HomeOutline, ReaderOutline, CodeWorkingOutline, ColorFilterOutline, BugOutline, BarChartOutline, /* DocumentOutline,*/  CodeSlashOutline } from "react-ionicons";
+import { HomeOutline, ReaderOutline, CodeWorkingOutline, ColorFilterOutline, BugOutline, BarChartOutline, CodeSlashOutline } from "react-ionicons";
 
 class Nav extends React.Component {
   render(){

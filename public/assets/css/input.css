@@ -22,6 +22,10 @@
   @apply flex flex-row gap-x-2 items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700
 }
 
+.styleLinkBlock{
+  @apply flex flex-col gap-x-2 items-center text-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border-2 border-solid border-black dark:border-white
+}
+
 .styleLabel{
   @apply block mt-2 font-medium text-gray-900 dark:text-white
 }
