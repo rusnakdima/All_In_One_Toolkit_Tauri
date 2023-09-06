@@ -26,7 +26,7 @@ class Home extends React.Component<{}, HomeState> {
     const links = [];
     for(let i = 0; i < this.state.recentAction.length; i++){
       links.push(
-        <Link to={this.state.recentAction[i]['to']} className="styleLinkBlock" key={i}>
+        <Link onClick={() => this.addLink(this.state.recentAction[i]['to'], this.state.recentAction[i]['icon'], this.state.recentAction[i]['name'])} to={this.state.recentAction[i]['to']} className="styleLinkBlock" key={i}>
         {(this.state.recentAction[i]['icon'] == 'reader') && <ReaderOutline cssClasses="styleIonIcon" />}
         {(this.state.recentAction[i]['icon'] == 'codeworking') && <CodeWorkingOutline cssClasses="styleIonIcon" />}
         {(this.state.recentAction[i]['icon'] == 'colorfilter') && <ColorFilterOutline cssClasses="styleIonIcon" />}
@@ -41,10 +41,10 @@ class Home extends React.Component<{}, HomeState> {
 
   addLink(to: string, icon: string, name: string): void{
     let tempObj = { "to": to, "icon": icon, "name": name };
-    if(!this.state.recentAction.find((item: any) => item['to'] == tempObj['to'])){
-      this.state.recentAction.unshift(tempObj)
+    if(this.state.recentAction.find((item: any) => item['to'] == tempObj['to'])){
+      this.state.recentAction.splice(this.state.recentAction.findIndex((item: any) => item["to"] == tempObj["to"]), 1);
+      this.state.recentAction.unshift(tempObj);
     } else {
-      this.state.recentAction.splice((this.state.recentAction.findIndex((item: any) => item == tempObj)), 1);
       this.state.recentAction.unshift(tempObj);
     }
     if(this.state.recentAction.length > 4) this.state.recentAction.pop();

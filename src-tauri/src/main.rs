@@ -1,28 +1,23 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+extern crate chrono;
+
+use chrono::Local;
 use std::fs::File;
 use std::io::Write;
 use tauri::api::path;
-use rand::Rng;
 use rust_xlsxwriter::Workbook;
 
-fn generate_name() -> String {
-    let alphabetic = "abcdefghijklmnopqrstuvwxyz";
-    let mut name = String::new();
-    let mut rng = rand::thread_rng();
+fn get_current_date() -> String {
+    let current_datetime = Local::now();
 
-    for _ in 0..20 {
-        let digit = rng.gen_range(0..alphabetic.len());
-        name.push(alphabetic.chars().nth(digit).unwrap());
-    }
-
-    name
+    format!("{}", current_datetime.format("%Y_%m_%d_%H_%M_%S"))
 }
 
 #[tauri::command]
-fn json_to_xml(data: String) -> String{
-    let name_file: String = format!("{}{}", generate_name(), ".xml");
+fn json_to_xml(name: String, data: String) -> String{
+    let name_file: String = format!("{}_{}{}", name, get_current_date(), ".xml");
     let document_folder = path::document_dir().expect("Failed to get document folder");
     let app_folder = document_folder.join("AllInOneToolkit");
     std::fs::create_dir_all(&app_folder).expect("Failed to create app folder");
@@ -34,8 +29,8 @@ fn json_to_xml(data: String) -> String{
 }
 
 #[tauri::command]
-fn xml_to_json(data: String) -> String{
-    let name_file: String = format!("{}{}", generate_name(), ".json");
+fn xml_to_json(name: String, data: String) -> String{
+    let name_file: String = format!("{}_{}{}", name, get_current_date(), ".json");
     let document_folder = path::document_dir().expect("Failed to get document folder");
     let app_folder = document_folder.join("AllInOneToolkit");
     std::fs::create_dir_all(&app_folder).expect("Failed to create app folder");
@@ -47,8 +42,8 @@ fn xml_to_json(data: String) -> String{
 }
 
 #[tauri::command]
-fn xls_to_json(data: String) -> String{
-    let name_file: String = format!("{}{}", generate_name(), ".json");
+fn xls_to_json(name: String, data: String) -> String{
+    let name_file: String = format!("{}_{}{}", name, get_current_date(), ".json");
     let document_folder = path::document_dir().expect("Failed to get document folder");
     let app_folder = document_folder.join("AllInOneToolkit");
     std::fs::create_dir_all(&app_folder).expect("Failed to create app folder");
@@ -81,8 +76,8 @@ fn save_xlsx(data: String, name_file: String) -> Result<(), serde_json::Error> {
 }
 
 #[tauri::command]
-fn json_to_xls(data: String) -> String{
-    let name_file: String = format!("{}{}", generate_name(), ".xlsx");
+fn json_to_xls(name: String, data: String) -> String{
+    let name_file: String = format!("{}_{}{}", name, get_current_date(), ".xlsx");
     let document_folder = path::document_dir().expect("Failed to get document folder");
     let app_folder = document_folder.join("AllInOneToolkit");
     std::fs::create_dir_all(&app_folder).expect("Failed to create app folder");
@@ -109,26 +104,20 @@ async fn virus_total(url: String, key: String) -> String {
     format!("{}", data)
 }
 
-// async fn file_read(handle: tauri::AppHandle) -> std::io::Result<()> {
-//     let resource_path = handle.path_resolver()
-//         .resolve_resource("db/css_library.json")
-//         .expect("failed to resolve resource");
-
-//     let mut file = File::open(&resource_path)?;
-//     let mut data = String::new();
-//     file.read_to_string(&mut data)?;
-//     Ok(())
-// }
-
-// #[tauri::command]
-// async fn get_json() -> String {
-//     let data = std::fs::read_to_string("./../db/css_library.json").unwrap();
-//     format!("{}", data)
-// }
+#[tauri::command]
+async fn get_json() -> String {
+    let document_folder = path::document_dir().expect("Failed to get document folder");
+    let app_folder = document_folder.join("AllInOneToolkit");
+    std::fs::create_dir_all(&app_folder).expect("Failed to create app folder");
+    let file_path = app_folder.join("css_library.json");
+    let file_path_str = file_path.to_str().unwrap_or_default();
+    let data = std::fs::read_to_string(file_path_str.to_string()).unwrap();
+    format!("{}", data)
+}
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, json_to_xls, virus_total/* , get_json */])
+        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, json_to_xls, virus_total, get_json])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

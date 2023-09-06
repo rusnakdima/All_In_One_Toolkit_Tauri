@@ -61,7 +61,7 @@ class XlsToJson extends React.Component {
 
   saveDataFileFun = async () => {
     if(this.file != null || Object.keys(this.dataJson).length > 0){
-      await invoke("xls_to_json", {"data": JSON.stringify(this.dataJson)})
+      await invoke("xls_to_json", {"name": (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'xls_to_json', "data": JSON.stringify(this.dataJson)})
       .then((data: any) => {
         this.alertNotify("bg-green-700", `The data has been successfully saved to a file "${data}"!`);
       })

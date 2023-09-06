@@ -66,7 +66,7 @@ class JsonToXml extends React.Component {
 
   saveDataFileFun = async () => {
     if(this.file != null || this.dataXml != ''){
-      await invoke("json_to_xml", {"data": this.dataXml})
+      await invoke("json_to_xml", {"name": (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'json_to_xml', "data": this.dataXml})
       .then((data: any) => {
         this.alertNotify("bg-green-700", `The data has been successfully saved to a file "${data}"!`);
       })

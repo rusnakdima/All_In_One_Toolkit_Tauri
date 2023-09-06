@@ -2,9 +2,7 @@ import React from "react";
 
 import WindNotify from "./WindNotify";
 
-// import { invoke } from "@tauri-apps/api/tauri";
-// import { resourceDir } from "@tauri-apps/api/path";
-// import { readTextFile } from "@tauri-apps/api/fs";
+import { invoke } from "@tauri-apps/api/tauri";
 
 class CssConverter extends React.Component {
   childRef: any = React.createRef();
@@ -20,29 +18,32 @@ class CssConverter extends React.Component {
     blockTable: false,
   };
 
+  componentDidMount(): void {
+    this.getDataFile();
+  }
+
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
   };
 
   getDataFile = async () => {
-    // await invoke("get_json")
-    // .then((json: any) => {
-    //   console.log(json)
-    //   if(json && json != '') this.dataArr = JSON.parse(json)["root"];
-    // })
-    // .catch((err: any) => console.error(err));
-    if(this.file != null){
-      const fileUrl = URL.createObjectURL(this.file);
-      const response = await fetch(fileUrl);
-      const text = await response.text();
-      if(text != null && text != ''){
-        const dataJson = JSON.parse(text);
-        this.dataArr = dataJson["root"];
-      }
-      this.alertNotify("bg-green-700", "Data has been successfully extracted!");
-    } else {
-      this.alertNotify("bg-red-700", "You have not selected a file!");
-    }
+    await invoke("get_json")
+    .then((json: any) => {
+      if(json && json != '') this.dataArr = JSON.parse(json)["root"];
+    })
+    .catch((err: any) => console.error(err));
+    // if(this.file != null){
+    //   const fileUrl = URL.createObjectURL(this.file);
+    //   const response = await fetch(fileUrl);
+    //   const text = await response.text();
+    //   if(text != null && text != ''){
+    //     const dataJson = JSON.parse(text);
+    //     this.dataArr = dataJson["root"];
+    //   }
+    //   this.alertNotify("bg-green-700", "Data has been successfully extracted!");
+    // } else {
+    //   this.alertNotify("bg-red-700", "You have not selected a file!");
+    // }
   }
 
   searchElemData = (item: string, style: string) => {
@@ -119,7 +120,7 @@ class CssConverter extends React.Component {
   }
 
   convertData = async () => {
-    if(this.file && this.dataArr.length > 0 && this.dataField != '' && this.typeStyle != ''){
+    if(/* this.file && */ this.dataArr.length > 0 && this.dataField != '' && this.typeStyle != ''){
       this.setState({
         blockTable: true,
       });
@@ -166,7 +167,7 @@ class CssConverter extends React.Component {
           blockTable.appendChild(table);
         }
       }, 500);
-    } else if (!this.file && this.dataArr.length == 0) {
+    } else if (/* !this.file && */ this.dataArr.length == 0) {
       this.alertNotify("bg-red-700", "You have not selected the css_library file.json with data!");
     } else if (this.typeStyle == '') {
       this.alertNotify("bg-red-700", "You have not selected the type of source styles!");
@@ -181,7 +182,7 @@ class CssConverter extends React.Component {
         <div className="flex flex-col gap-y-3">
           <span className="text-2xl font-bold border-b-2 styleBorderSolid">CSS Converter to classes CSS Frameworks</span>
 
-          <details className="styleDetails">
+          {/* <details className="styleDetails">
             <summary>
               <span className="text-xl font-bold">Select the file <span className="italic">css_library.json</span> with the data</span>
             </summary>
@@ -190,7 +191,7 @@ class CssConverter extends React.Component {
               <input className="styleFileInput" type="file" onChange={(event: any) => {this.file = event.target.files[0]}} accept=".json" />
               <button className="styleBut w-max" onClick={() => {this.getDataFile()}}>Get a data</button>
             </div>
-          </details>
+          </details> */}
 
           <span className="styleLabel">Choose a style type</span>
           <div className="flex flex-row gap-x-5">

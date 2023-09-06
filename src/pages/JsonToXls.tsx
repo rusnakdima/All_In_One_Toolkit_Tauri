@@ -9,7 +9,6 @@ class JsonToXls extends React.Component {
 
   file: any = null;
   dataField: string = "";
-  // dataJson: {[key: string]: any} = {};
   dataXls: any[] = [];
 
   alertNotify(color: string, title: string) {
@@ -52,7 +51,7 @@ class JsonToXls extends React.Component {
 
   saveDataFileFun = async () => {
     if(this.file != null || this.dataXls.length > 0){
-      await invoke("json_to_xls", {"data": JSON.stringify(this.dataXls)})
+      await invoke("json_to_xls", {"name": (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'json_to_xls', "data": JSON.stringify(this.dataXls)})
       .then((data: any) => {
         this.alertNotify("bg-green-700", `The data has been successfully saved to a file "${data}"!`);
       })
