@@ -106,7 +106,7 @@ class JsonToTable extends React.Component {
   };
 
   parseDataFileFun = async () => {
-    if(this.file != null){
+    if (this.file != null){
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();

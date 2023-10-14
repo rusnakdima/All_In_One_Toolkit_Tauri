@@ -77,6 +77,7 @@ class Home extends React.Component<{}, HomeState> {
           <Link onClick={() => this.addLink('xml_to_json', 'codeslash', 'XML to JSON')} to="/xml_to_json" className="styleLinkBlock"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>XML to JSON</span></Link>
           <Link onClick={() => this.addLink('xls_to_json', 'codeslash', 'XLS to JSON')} to="/xls_to_json" className="styleLinkBlock"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>XLS to JSON</span></Link>
           <Link onClick={() => this.addLink('json_to_xls', 'codeslash', 'JSON to XLS')} to="/json_to_xls" className="styleLinkBlock"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>JSON to XLS</span></Link>
+          <Link onClick={() => this.addLink('plist_to_table', 'codeslash', 'Plist to Table data')} to="/plist_to_table" className="styleLinkBlock"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>Plist to Table data</span></Link>
           <Link onClick={() => this.addLink('css_converter', 'codeslash', 'CSS Converter')} to="/css_converter" className="styleLinkBlock"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>CSS Converter</span></Link>
         </div>
       </div>

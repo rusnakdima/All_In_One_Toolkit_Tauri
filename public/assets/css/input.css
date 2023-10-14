@@ -55,7 +55,7 @@
 }
 
 .styleTD{
-  @apply border-2 styleBorderSolid p-1
+  @apply border-2 styleBorderSolid p-1 !border-gray-300 dark:!border-gray-600
 }
 
 .styleDetails{

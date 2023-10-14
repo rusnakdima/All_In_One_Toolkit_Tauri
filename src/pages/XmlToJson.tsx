@@ -15,16 +15,15 @@ class XmlToJson extends React.Component {
     this.childRef.current.alertNotify(color, title);
   };
 
-  parseData(array: any[]){
+  parseData(array: any[]) {
     let tempObj: {[key: string]: any} = {};
     array.forEach((elem: any) => {
-      if([...elem.children].length > 0){
+      if ([...elem.children].length > 0) {
         let rez = this.parseData([...elem.children]);
-        if(tempObj[elem.nodeName] != undefined) {
-          tempObj[elem.nodeName].length == undefined ? tempObj[elem.nodeName] = [tempObj[elem.nodeName], rez] : tempObj[elem.nodeName].push(rez);
+        if (tempObj[elem.nodeName] != undefined) {
+          ; (tempObj[elem.nodeName].length == undefined) ? tempObj[elem.nodeName] = [tempObj[elem.nodeName], rez] : tempObj[elem.nodeName].push(rez);
         } else tempObj[elem.nodeName] = rez;
-      }
-      else tempObj[elem.nodeName] = elem.textContent;
+      } else tempObj[elem.nodeName] = elem.textContent;
     });
     return tempObj;
   }
@@ -42,11 +41,11 @@ class XmlToJson extends React.Component {
   };
 
   parseDataFileFun = async () => {
-    if(this.file != null){
+    if (this.file != null) {
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();
-      if(text != null && text != ''){
+      if (text != null && text != '') {
         const dataXml = text;
         this.convertDataFun(dataXml);
       }
@@ -56,7 +55,7 @@ class XmlToJson extends React.Component {
   };
 
   parseDataFieldFun = () => {
-    if(this.dataField != ''){
+    if (this.dataField != '') {
       const dataXml = this.dataField;
       this.convertDataFun(dataXml);
     } else {
@@ -65,20 +64,20 @@ class XmlToJson extends React.Component {
   };
 
   saveDataFileFun = async () => {
-    if(this.file != null || Object.keys(this.dataJson).length != 0){
+    if (this.file != null || Object.keys(this.dataJson).length != 0) {
       await invoke("xml_to_json", {"name": (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'xml_to_json', "data": JSON.stringify(this.dataJson)})
       .then((data: any) => {
         this.alertNotify("bg-green-700", `The data has been successfully saved to a file "${data}"!`);
       })
       .catch((err: any) => console.error(err));
-    } else if(this.file == null){
+    } else if (this.file == null) {
       this.alertNotify("bg-red-700", "You have not selected a file!");
-    } else if (Object.keys(this.dataJson).length == 0){
+    } else if (Object.keys(this.dataJson).length == 0) {
       this.alertNotify("bg-red-700", "No data was received from the file!");
     }
   };
 
-  render(){
+  render() {
     return (
       <>
         <div className="flex flex-col gap-y-3">
