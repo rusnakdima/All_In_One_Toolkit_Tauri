@@ -1,8 +1,6 @@
 import React from "react";
-
 import { Link } from "react-router-dom";
-
-import { ReaderOutline, CodeWorkingOutline, ColorFilterOutline, BugOutline, BarChartOutline, CodeSlashOutline } from "react-ionicons";
+import { ReaderOutline, CodeWorkingOutline, ColorFilterOutline, BugOutline, BarChartOutline, CodeSlashOutline, LinkOutline } from "react-ionicons";
 
 interface HomeState {
   recentAction: Array<{ to: string; icon: string; name: string }>;
@@ -27,6 +25,7 @@ class Home extends React.Component<{}, HomeState> {
     for(let i = 0; i < this.state.recentAction.length; i++){
       links.push(
         <Link onClick={() => this.addLink(this.state.recentAction[i]['to'], this.state.recentAction[i]['icon'], this.state.recentAction[i]['name'])} to={this.state.recentAction[i]['to']} className="styleLinkBlock" key={i}>
+        {(this.state.recentAction[i]['icon'] == 'link') && <LinkOutline cssClasses="styleIonIcon" />}
         {(this.state.recentAction[i]['icon'] == 'reader') && <ReaderOutline cssClasses="styleIonIcon" />}
         {(this.state.recentAction[i]['icon'] == 'codeworking') && <CodeWorkingOutline cssClasses="styleIonIcon" />}
         {(this.state.recentAction[i]['icon'] == 'colorfilter') && <ColorFilterOutline cssClasses="styleIonIcon" />}
@@ -54,7 +53,7 @@ class Home extends React.Component<{}, HomeState> {
   render() {
     return (
       <div className="flex flex-col gap-y-5">
-        <span className="text-3xl">Home Page</span>
+        <span className="text-3xl font-bold border-b-2 styleBorderSolid">Home Page</span>
 
         {(this.state.recentAction.length > 0) && <span className="text-2xl">Recent Action</span>}
 
@@ -66,7 +65,7 @@ class Home extends React.Component<{}, HomeState> {
 
         <div className="grid grid-cols-4 gap-2">
           <Link onClick={() => this.addLink('count_words', 'reader', 'Count words')} to="/count_words" className="styleLinkBlock"><ReaderOutline cssClasses="styleIonIcon" /> <span>Count words</span></Link>
-          <Link onClick={() => this.addLink('url_enc_dec', 'codeworking', 'URL Encode/Decode')} to="/url_enc_dec" className="styleLinkBlock"><CodeWorkingOutline cssClasses="styleIonIcon" /> <span>URL Encode/Decode</span></Link>
+          <Link onClick={() => this.addLink('url_enc_dec', 'link', 'URL Encode/Decode')} to="/url_enc_dec" className="styleLinkBlock"><LinkOutline cssClasses="styleIonIcon" /> <span>URL Encode/Decode</span></Link>
           <Link onClick={() => this.addLink('base64_enc_dec', 'codeworking', 'Base64 Encode/Decode')} to="/base64_enc_dec" className="styleLinkBlock"><CodeWorkingOutline cssClasses="styleIonIcon" /> <span>Base64 Encode/Decode</span></Link>
           <Link onClick={() => this.addLink('color_palette', 'colorfilter', 'Color Palette')} to="/color_palette" className="styleLinkBlock"><ColorFilterOutline cssClasses="styleIonIcon" /> <span>Color Palette</span></Link>
           <Link onClick={() => this.addLink('virustotal', 'bug', 'VirusTotal')} to="/virustotal" className="styleLinkBlock"><BugOutline cssClasses="styleIonIcon" /> <span>VirusTotal</span></Link>

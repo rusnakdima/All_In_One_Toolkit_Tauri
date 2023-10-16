@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { ChevronBackCircleOutline } from 'react-ionicons';
 
 import * as XLSX from 'xlsx';
 
@@ -7,7 +9,7 @@ import WindNotify from "./WindNotify";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, ArcElement, Title, Tooltip, Legend } from "chart.js";
 import { Bar, Line, Pie, Doughnut } from "react-chartjs-2";
 
-ChartJS.register( CategoryScale, LinearScale, BarElement, PointElement, LineElement, ArcElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, ArcElement, Title, Tooltip, Legend);
 
 export const options = {
   responsive: true,
@@ -175,7 +177,10 @@ class DataToChart extends React.Component {
     return (
       <>
         <div className="flex flex-col">
-          <span className="text-2xl font-bold border-b-2 styleBorderSolid">Visualization data on chart</span>
+          <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
+            <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+            <span>Visualization data on chart</span>
+          </div>
 
           <details className="styleDetails">
             <summary>
@@ -227,7 +232,7 @@ class DataToChart extends React.Component {
 
           {this.state.blockChart && <div className="flex flex-col gap-y-3">
             <label className="styleLabel">Select the chart type:</label>
-            <select className="styleSelect" defaultValue="bar" onChange={(event: any) => {this.state.chartType = event.target.value; console.log(event.target.value)}}>
+            <select className="styleSelect" defaultValue="bar" onChange={(event: any) => {this.setState({chartType: event.target.value})}}>
               <option value="bar">Bar chart</option>
               <option value="line">Line chart</option>
               <option value="pie">Pie chart</option>

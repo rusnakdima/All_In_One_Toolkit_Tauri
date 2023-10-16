@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { ChevronBackCircleOutline } from "react-ionicons";
 
 import WindNotify from "./WindNotify";
 
@@ -149,7 +151,11 @@ class PlistToTable extends React.Component {
     return (
       <>
         <div className="flex flex-col gap-y-3">
-          <span className="text-2xl font-bold border-b-2 styleBorderSolid">Plist Viewer</span>
+          <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
+            <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+            <span>Plist Viewer</span>
+          </div>
+
           <details className="styleDetails">
             <summary>
               <span className="text-xl font-bold">Select the PLIST file with the data</span>

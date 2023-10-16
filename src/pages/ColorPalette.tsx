@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { ChevronBackCircleOutline } from "react-ionicons";
 
 class ColorPalette extends React.Component {
   typeCol: string = "";
@@ -138,7 +140,10 @@ class ColorPalette extends React.Component {
   render(){
     return (
       <div className="flex flex-col gap-y-3">
-        <span className="text-2xl font-bold border-b-2 styleBorderSolid">Color Palette</span>
+        <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
+          <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+          <span>Color Palette</span>
+        </div>
 
         <span className="styleLabel">Choose a color type</span>
         <div className="flex flex-row gap-x-5">

@@ -1,8 +1,9 @@
 import React from "react";
+import { invoke } from "@tauri-apps/api/tauri";
+import { Link } from "react-router-dom";
+import { ChevronBackCircleOutline } from "react-ionicons";
 
 import WindNotify from "./WindNotify";
-
-import { invoke } from "@tauri-apps/api/tauri";
 
 class JsonToXml extends React.Component {
   childRef: any = React.createRef();
@@ -82,7 +83,10 @@ class JsonToXml extends React.Component {
     return (
       <>
         <div className="flex flex-col gap-y-3">
-          <span className="text-2xl font-bold border-b-2 styleBorderSolid">Converter JSON to XML</span>
+          <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
+            <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+            <span>Converter JSON to XML</span>
+          </div>
 
           <details className="styleDetails">
             <summary>

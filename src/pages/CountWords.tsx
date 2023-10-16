@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { ChevronBackCircleOutline } from "react-ionicons";
 
 class CountWords extends React.Component {
   state = {
@@ -41,7 +43,10 @@ class CountWords extends React.Component {
   render() {
     return (
       <div className="flex flex-col gap-y-3">
-        <span className="text-2xl font-bold border-b-2 styleBorderSolid">Counting the number of words in the text</span>
+        <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
+          <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+          <span>Counting the number of words in the text</span>
+        </div>
         
         <span className="text-xl font-bold">Choose a file</span>
 

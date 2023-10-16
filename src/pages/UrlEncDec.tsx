@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { ChevronBackCircleOutline } from "react-ionicons";
 
 class UrlEncDec extends React.Component {
   urlInput: string = "";
@@ -31,7 +33,10 @@ class UrlEncDec extends React.Component {
   render() {
     return (
       <div className="flex flex-col gap-y-3">
-        <span className="text-2xl font-bold border-b-2 styleBorderSolid">Encode/Decode URL</span>
+        <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
+          <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+          <span>Encode/Decode URL</span>
+        </div>
         
         <label className="styleLabel">Enter the link:</label>
         <textarea className="styleField" onChange={(event: any) => { this.urlInput = event.target.value }}></textarea>

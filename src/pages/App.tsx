@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Header from "./Header";
-import Footer from "./Footer";
 import Nav from "./Nav";
 
 import Home from "./Home";
@@ -20,6 +19,7 @@ import XlsToJson from "./XlsToJson";
 import JsonToXls from "./JsonToXls";
 import PlistToTable from "./PlistToTable";
 import CssConverter from "./CssConverter";
+import About from "./About";
 
 class App extends React.Component {
 
@@ -46,10 +46,10 @@ class App extends React.Component {
               <Route path="/json_to_xls" element={<JsonToXls />} />
               <Route path="/plist_to_table" element={<PlistToTable />} />
               <Route path="/css_converter" element={<CssConverter />} />
+              <Route path="/about" element={<About />} />
             </Routes>
           </BrowserRouter>
         </div>
-        <Footer />
       </div>
     );
   };

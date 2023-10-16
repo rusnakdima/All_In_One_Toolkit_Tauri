@@ -68,6 +68,7 @@ class WindNotify extends React.Component {
           <div className="flex flex-col mb-1 bg-white w-full h-1" id="timeNotify"></div>
         </div>}
         <span className="hidden bg-green-700"></span>
+        <span className="hidden bg-yellow-500"></span>
         <span className="hidden bg-red-700"></span>
       </>
     );

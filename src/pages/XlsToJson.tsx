@@ -1,10 +1,11 @@
 import React from "react";
+import { invoke } from "@tauri-apps/api/tauri";
+import { Link } from "react-router-dom";
+import { ChevronBackCircleOutline } from "react-ionicons";
 
 import * as XLSX from "xlsx";
 
 import WindNotify from "./WindNotify";
-
-import { invoke } from "@tauri-apps/api/tauri";
 
 class XlsToJson extends React.Component {
   childRef: any = React.createRef();
@@ -77,7 +78,10 @@ class XlsToJson extends React.Component {
     return (
       <>
         <div className="flex flex-col">
-          <span className="text-2xl font-bold border-b-2 styleBorderSolid">Converter XLS to JSON</span>
+          <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
+            <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+            <span>Converter XLS to JSON</span>
+          </div>
 
           <details className="styleDetails">
             <summary>

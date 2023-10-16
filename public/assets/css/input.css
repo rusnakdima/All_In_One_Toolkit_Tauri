@@ -18,12 +18,20 @@
   @apply fixed left-0 top-0 m-0 bg-white/30 dark:bg-black/30 w-full h-[100vh]
 }
 
+.styleWind{
+  @apply top-[25%] left-[25%] z-50 p-4 bg-white dark:bg-zinc-900 absolute mx-auto w-1/2 rounded-xl border styleBorderSolid
+}
+
 .styleLinkMenu{
   @apply flex flex-row gap-x-2 items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700
 }
 
 .styleLinkBlock{
   @apply flex flex-col gap-x-2 items-center text-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border-2 border-solid border-black dark:border-white
+}
+
+.styleLink{
+  @apply no-underline text-blue-700 dark:text-red-500
 }
 
 .styleLabel{

@@ -1,8 +1,9 @@
 import React from "react";
+import { invoke } from "@tauri-apps/api/tauri";
+import { Link } from "react-router-dom";
+import { ChevronBackCircleOutline } from "react-ionicons";
 
 import WindNotify from "./WindNotify";
-
-import { invoke } from "@tauri-apps/api/tauri";
 
 class CssConverter extends React.Component {
   childRef: any = React.createRef();
@@ -180,7 +181,10 @@ class CssConverter extends React.Component {
     return (
       <>
         <div className="flex flex-col gap-y-3">
-          <span className="text-2xl font-bold border-b-2 styleBorderSolid">CSS Converter to classes CSS Frameworks</span>
+          <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
+            <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+            <span>CSS Converter to classes CSS Frameworks</span>
+          </div>
 
           {/* <details className="styleDetails">
             <summary>
@@ -224,9 +228,9 @@ class CssConverter extends React.Component {
           </div>
 
           {this.state.blockTable && <div className="overflow-x-auto" id="blockTable"></div>}
-
-          <WindNotify ref={this.childRef} />
         </div>
+
+        <WindNotify ref={this.childRef} />
       </>
     );
   };

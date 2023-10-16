@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { ChevronBackCircleOutline } from "react-ionicons";
 
 class Base64EncDec extends React.Component {
   baseInput: string = "";
@@ -39,7 +41,10 @@ class Base64EncDec extends React.Component {
   render(){
     return(
       <div className="flex flex-col gap-y-3">
-        <span className="text-2xl font-bold border-b-2 styleBorderSolid">Encode data to base64 / Decode data from base64</span>
+        <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
+          <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+          <span>Encode data to base64 / Decode data from base64</span>
+        </div>
         
         <label className="styleLabel">Enter the data:</label>
         <textarea className="styleField" onChange={(event: any) => { this.baseInput = event.target.value }}></textarea>

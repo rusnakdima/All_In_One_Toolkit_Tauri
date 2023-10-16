@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { ChevronBackCircleOutline } from "react-ionicons";
 
 import { invoke } from "@tauri-apps/api/tauri";
 
@@ -87,7 +89,10 @@ class VirusTotal extends React.Component {
     return (
       <div className="flex flex-col">
         <div className="flex flex-col gap-y-3">
-          <span className="text-2xl font-bold border-b-2 styleBorderSolid">Checking the link via VirusTotal</span>
+          <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
+            <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+            <span>Checking the link via VirusTotal</span>
+          </div>
 
           <label className="styleLabel">Enter the link:</label>
           <input className="styleField" type="text" onChange={(event: any) => {this.urlInput = event.target.value;}}/>
