@@ -3,24 +3,40 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { Link } from "react-router-dom";
 import { ChevronBackCircleOutline } from "react-ionicons";
 
+import * as XLSX from "xlsx";
+
 import WindNotify from "./WindNotify";
 
-class JsonToXls extends React.Component {
+class XlsToXml extends React.Component {
   childRef: any = React.createRef();
 
   file: any = null;
   dataField: string = "";
-  dataXls: Array<any> = [];
+  dataXml: string = "";
 
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
   };
 
-  convertDataFun = (data: {[key: string]: any}) => {
-    this.dataXls = data[Object.keys(data)[0]].map((elem: {[key: string]: any}) => Object.values(elem).map((val: any) => {return String(val)}));
-    this.dataXls.unshift(Object.keys(data["root"][0]));
+  parseData = (data: Array<any>) => {
+    let tempXml = "";
+    let strokeF = data[0];
+    data.splice(0, 1);
+    data.forEach((elem: any) => {
+      tempXml += `<array>`;
+      elem.forEach((elem1: any, index: number) => {
+        const key: string = strokeF[index].replace(/[\" \"]/gi,"");
+        tempXml += `<${key}>${elem1}</${key}>`;
+      });
+      tempXml += `</array>`;
+    });
+    return tempXml;
+  }
 
-    if (Array.isArray(this.dataXls)) {
+  convertDataFun = (data: any[]) => {
+    this.dataXml = `<root>${this.parseData(data)}</root>`;
+
+    if (this.dataXml != '') {
       this.alertNotify("bg-green-700", "The data has been successfully converted!");
     } else {
       this.alertNotify("bg-red-700", "No data was received from the file!");
@@ -29,15 +45,19 @@ class JsonToXls extends React.Component {
 
   parseDataFileFun = async () => {
     if(this.file != null){
-      const fileUrl = URL.createObjectURL(this.file);
-      const response = await fetch(fileUrl);
-      const text = await response.text();
-      if (text != null && text != '') {
-        const dataJson = JSON.parse(text);
-        this.convertDataFun(dataJson);
-      } else {
-        this.alertNotify("bg-red-700", "The file is empty!");
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const text = (e.target.result);
+        const workbook = XLSX.read(text, {type:'binary'});
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        if (worksheet) {
+          const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+          this.convertDataFun(data);
+        } else {
+          this.alertNotify("bg-red-700", "The file is empty!");
+        }
       }
+      reader.readAsBinaryString(this.file)
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");
     }
@@ -45,7 +65,7 @@ class JsonToXls extends React.Component {
 
   parseDataFieldFun = () => {
     if(this.dataField != ''){
-      const data = JSON.parse(this.dataField);
+      const data = this.dataField.split("\n").map((elem) => elem.split("\t"));
       this.convertDataFun(data);
     } else {
       this.alertNotify("bg-red-700", "The field is empty! Insert the data!");
@@ -53,15 +73,15 @@ class JsonToXls extends React.Component {
   };
 
   saveDataFileFun = async () => {
-    if(this.file != null || this.dataXls.length > 0){
-      await invoke("json_to_xls", {"name": (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'json_to_xls', "data": JSON.stringify(this.dataXls)})
+    if(this.file != null || this.dataXml != ''){
+      await invoke("xls_to_xml", {"name": (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'xls_to_xml', "data": this.dataXml})
       .then((data: any) => {
         this.alertNotify("bg-green-700", `The data has been successfully saved to a file "${data}"!`);
       })
       .catch((err: any) => console.error(err));
     } else if(this.file == null){
       this.alertNotify("bg-red-700", "You have not selected a file!");
-    } else if (this.dataXls.length == 0){
+    } else if (this.dataXml == ''){
       this.alertNotify("bg-red-700", "No data was received from the file!");
     }
   };
@@ -72,23 +92,23 @@ class JsonToXls extends React.Component {
         <div className="flex flex-col">
           <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
             <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
-            <span>Converter JSON to XLS</span>
+            <span>Converter XLS to XML</span>
           </div>
 
           <details className="styleDetails">
             <summary>
-              <span className="text-xl font-bold">Select the JSON file with the data</span>
+              <span className="text-xl font-bold">Select a tabular document with data</span>
             </summary>
 
             <div className="flex flex-col gap-y-3">
-              <input className="styleFileInput" type="file" onChange={(event: any) => {this.file = event.target.files[0]}} accept=".json" />
+              <input className="styleFileInput" type="file" onChange={(event: any) => {this.file = event.target.files[0]}} accept=".xls, .xlsx, .xlsm" />
               <button className="styleBut w-max" onClick={() => {this.parseDataFileFun()}}>Convert a data</button>
             </div>
           </details>
 
           <details className="styleDetails">
             <summary>
-              <span className="text-xl font-bold">Insert JSON data</span>
+              <span className="text-xl font-bold">Insert data from a table (copy a table from any source)</span>
             </summary>
 
             <div className="flex flex-col gap-y-3">
@@ -108,4 +128,4 @@ class JsonToXls extends React.Component {
   };
 };
 
-export default JsonToXls;
+export default XlsToXml;

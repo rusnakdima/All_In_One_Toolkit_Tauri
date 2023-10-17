@@ -19,13 +19,16 @@ class XlsToJson extends React.Component {
   };
 
   convertDataFun = (data: any[]) => {
-    this.dataJson = {"root": []};
+    this.dataJson = {"root": {"array": []}};
     let strokeF = data[0];
     data.splice(0, 1);
-    data.forEach((element) => {
+    data.forEach((elem: any) => {
       let tempObj: {[key: string]: any} = {};
-      element.forEach((elem: any, index: number) => tempObj[strokeF[index]] = elem);
-      this.dataJson["root"].push(tempObj);
+      elem.forEach((elem: any, index: number) => {
+        const key: string = strokeF[index].replace(/[\" \"]/gi,"");
+        tempObj[key] = elem;
+      });
+      this.dataJson["root"]["array"].push(tempObj);
     });
 
     if (Object.keys(this.dataJson).length > 0) {
@@ -42,8 +45,12 @@ class XlsToJson extends React.Component {
         const text = (e.target.result);
         const workbook = XLSX.read(text, {type:'binary'});
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        this.convertDataFun(data);
+        if (worksheet) {
+          const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+          this.convertDataFun(data);
+        } else {
+          this.alertNotify("bg-red-700", "The file is empty!");
+        }
       }
       reader.readAsBinaryString(this.file)
     } else {

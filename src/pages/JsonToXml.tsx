@@ -17,16 +17,16 @@ class JsonToXml extends React.Component {
   };
 
   parseData(object: {[key: string]: any}, stroke: string = ''){
-    var tempElement = '';
+    let tempElement = '';
     Object.entries(object).forEach(([key, value]) => {
       if(Array.isArray(value)) {
         tempElement += `${this.parseData(value, key)}`;
       } else if(typeof value != 'string'){
         key = (isNaN(+key)) ? key : stroke;
-        key = key.replace(" ", "");
+        key = key.replace(/[\" \"]/gi,"");
         tempElement += `<${key}>${this.parseData(value, key)}</${key}>`;
       } else {
-        key = key.replace(" ", "");
+        key = key.replace(/[\" \"]/gi,"");
         tempElement += `<${key}>${value}</${key}>`;
       }
     });
@@ -47,9 +47,11 @@ class JsonToXml extends React.Component {
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();
-      if(text != null && text != ''){
+      if (text != null && text != '') {
         const dataJson = JSON.parse(text);
         this.convertDataFun(dataJson);
+      } else {
+        this.alertNotify("bg-red-700", "The file is empty!");
       }
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");

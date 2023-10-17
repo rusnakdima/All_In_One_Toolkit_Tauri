@@ -141,6 +141,8 @@ class PlistToTable extends React.Component {
       if (text != null && text != '') {
         const dataXml = text;
         this.createList(dataXml);
+      } else {
+        this.alertNotify("bg-red-700", "The file is empty!");
       }
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");

@@ -47,8 +47,12 @@ class CsvToTable extends React.Component {
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();
-      const data: any[] = text.split("\r\n").map((line: any) => line.split(","));
-      this.createTableFun(data);
+      if (text != null && text != '') {
+        const data: any[] = text.split("\r\n").map((line: any) => line.split(","));
+        this.createTableFun(data);
+      } else {
+        this.alertNotify("bg-red-700", "The file is empty!");
+      }
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");
     }

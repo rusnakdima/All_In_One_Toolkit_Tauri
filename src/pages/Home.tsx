@@ -4,12 +4,33 @@ import { ReaderOutline, CodeWorkingOutline, ColorFilterOutline, BugOutline, BarC
 
 interface HomeState {
   recentAction: Array<{ to: string; icon: string; name: string }>;
+  tempLinks: Array<{ to: string; icon: string; name: string }>;
 }
 
 class Home extends React.Component<{}, HomeState> {
   state: HomeState = {
     recentAction: [],
+    tempLinks: [],
   };
+
+  links: Array<any> = [
+    { "to": 'count_words', "icon": 'reader', "name": 'Count words' },
+    { "to": 'url_enc_dec', "icon": 'link', "name": 'URL Encode/Decode' },
+    { "to": 'base64_enc_dec', "icon": 'codeworking', "name": 'Base64 Encode/Decode' },
+    { "to": 'color_palette', "icon": 'colorfilter', "name": 'Color Palette' },
+    { "to": 'virustotal', "icon": 'bug', "name": 'VirusTotal' },
+    { "to": 'data_to_chart', "icon": 'barchart', "name": 'Visualization data on chart' },
+    { "to": 'csv_to_table', "icon": 'codeslash', "name": 'CSV to Table data' },
+    { "to": 'json_to_table', "icon": 'codeslash', "name": 'JSON to Table data' },
+    { "to": 'xml_to_table', "icon": 'codeslash', "name": 'XML to Table data' },
+    { "to": 'plist_to_table', "icon": 'codeslash', "name": 'Plist to Table data' },
+    { "to": 'json_to_xml', "icon": 'codeslash', "name": 'JSON to XML' },
+    { "to": 'xml_to_json', "icon": 'codeslash', "name": 'XML to JSON' },
+    { "to": 'xls_to_json', "icon": 'codeslash', "name": 'XLS to JSON' },
+    { "to": 'json_to_xls', "icon": 'codeslash', "name": 'JSON to XLS' },
+    { "to": 'xls_to_xml', "icon": 'codeslash', "name": 'XLS to XML' },
+    { "to": 'css_converter', "icon": 'codeslash', "name": 'CSS Converter' },
+  ];
 
   componentDidMount(): void {
     let recAct = localStorage["recAct"];
@@ -18,21 +39,27 @@ class Home extends React.Component<{}, HomeState> {
         recentAction: JSON.parse(recAct)
       });
     }
+    if (this.state.tempLinks.length == 0) {
+      this.setState({
+        tempLinks: this.links,
+      });
+    }
   }
 
   generateLinks(): Array<any>{
     const links = [];
-    for(let i = 0; i < this.state.recentAction.length; i++){
+    for (let i = 0; i < this.state.recentAction.length; i++) {
+      const element = this.state.recentAction[i];
       links.push(
-        <Link onClick={() => this.addLink(this.state.recentAction[i]['to'], this.state.recentAction[i]['icon'], this.state.recentAction[i]['name'])} to={this.state.recentAction[i]['to']} className="styleLinkBlock" key={i}>
-        {(this.state.recentAction[i]['icon'] == 'link') && <LinkOutline cssClasses="styleIonIcon" />}
-        {(this.state.recentAction[i]['icon'] == 'reader') && <ReaderOutline cssClasses="styleIonIcon" />}
-        {(this.state.recentAction[i]['icon'] == 'codeworking') && <CodeWorkingOutline cssClasses="styleIonIcon" />}
-        {(this.state.recentAction[i]['icon'] == 'colorfilter') && <ColorFilterOutline cssClasses="styleIonIcon" />}
-        {(this.state.recentAction[i]['icon'] == 'bug') && <BugOutline cssClasses="styleIonIcon" />}
-        {(this.state.recentAction[i]['icon'] == 'barchart') && <BarChartOutline cssClasses="styleIonIcon" />}
-        {(this.state.recentAction[i]['icon'] == 'codeslash') && <CodeSlashOutline cssClasses="styleIonIcon" />}
-        <span>{this.state.recentAction[i]['name']}</span></Link>
+        <Link onClick={() => this.addLink(element['to'], element['icon'], element['name'])} to={element['to']} className="styleLinkBlock" key={i}>
+        {(element['icon'] == 'link') && <LinkOutline cssClasses="styleIonIcon" />}
+        {(element['icon'] == 'reader') && <ReaderOutline cssClasses="styleIonIcon" />}
+        {(element['icon'] == 'codeworking') && <CodeWorkingOutline cssClasses="styleIonIcon" />}
+        {(element['icon'] == 'colorfilter') && <ColorFilterOutline cssClasses="styleIonIcon" />}
+        {(element['icon'] == 'bug') && <BugOutline cssClasses="styleIonIcon" />}
+        {(element['icon'] == 'barchart') && <BarChartOutline cssClasses="styleIonIcon" />}
+        {(element['icon'] == 'codeslash') && <CodeSlashOutline cssClasses="styleIonIcon" />}
+        <span>{element['name']}</span></Link>
       );
     }
     return links;
@@ -40,14 +67,48 @@ class Home extends React.Component<{}, HomeState> {
 
   addLink(to: string, icon: string, name: string): void{
     let tempObj = { "to": to, "icon": icon, "name": name };
-    if(this.state.recentAction.find((item: any) => item['to'] == tempObj['to'])){
+    if (this.state.recentAction.find((item: any) => item['to'] == tempObj['to'])) {
       this.state.recentAction.splice(this.state.recentAction.findIndex((item: any) => item["to"] == tempObj["to"]), 1);
       this.state.recentAction.unshift(tempObj);
     } else {
       this.state.recentAction.unshift(tempObj);
     }
-    if(this.state.recentAction.length > 4) this.state.recentAction.pop();
+    if(this.state.recentAction.length > 7) this.state.recentAction.pop();
     localStorage["recAct"] = JSON.stringify(this.state.recentAction);
+  }
+
+  search = (substr: string) => {
+    const searchValue = substr.toLowerCase();
+    const tempLinks = [];
+    if (searchValue != '') {
+      tempLinks.push(...this.links.filter((item: any) => item.name.toLowerCase().indexOf(searchValue) >= 0));
+      this.setState({
+        tempLinks: tempLinks,
+      });
+    } else {
+      this.setState({
+        tempLinks: this.links,
+      });
+    }
+  }
+
+  outputLinks = () => {
+    const tempLinks = [];
+    for (let i = 0; i < this.state.tempLinks.length; i++) {
+      const element = this.state.tempLinks[i];
+      tempLinks.push(
+        <Link onClick={() => this.addLink(element['to'], element['icon'], element['name'])} to={element['to']} className="styleLinkBlock" key={i}>
+        {(element['icon'] == 'link') && <LinkOutline cssClasses="styleIonIcon" />}
+        {(element['icon'] == 'reader') && <ReaderOutline cssClasses="styleIonIcon" />}
+        {(element['icon'] == 'codeworking') && <CodeWorkingOutline cssClasses="styleIonIcon" />}
+        {(element['icon'] == 'colorfilter') && <ColorFilterOutline cssClasses="styleIonIcon" />}
+        {(element['icon'] == 'bug') && <BugOutline cssClasses="styleIonIcon" />}
+        {(element['icon'] == 'barchart') && <BarChartOutline cssClasses="styleIonIcon" />}
+        {(element['icon'] == 'codeslash') && <CodeSlashOutline cssClasses="styleIonIcon" />}
+        <span>{element['name']}</span></Link>
+      );
+    }
+    return tempLinks;
   }
 
   render() {
@@ -58,27 +119,15 @@ class Home extends React.Component<{}, HomeState> {
         {(this.state.recentAction.length > 0) && <span className="text-2xl">Recent Action</span>}
 
         {(this.state.recentAction.length > 0) && 
-          <div className="grid grid-cols-4 gap-2">{this.generateLinks()}</div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-2">{this.generateLinks()}</div>
         }
 
-        <span className="text-2xl">All Links</span>
-
-        <div className="grid grid-cols-4 gap-2">
-          <Link onClick={() => this.addLink('count_words', 'reader', 'Count words')} to="/count_words" className="styleLinkBlock"><ReaderOutline cssClasses="styleIonIcon" /> <span>Count words</span></Link>
-          <Link onClick={() => this.addLink('url_enc_dec', 'link', 'URL Encode/Decode')} to="/url_enc_dec" className="styleLinkBlock"><LinkOutline cssClasses="styleIonIcon" /> <span>URL Encode/Decode</span></Link>
-          <Link onClick={() => this.addLink('base64_enc_dec', 'codeworking', 'Base64 Encode/Decode')} to="/base64_enc_dec" className="styleLinkBlock"><CodeWorkingOutline cssClasses="styleIonIcon" /> <span>Base64 Encode/Decode</span></Link>
-          <Link onClick={() => this.addLink('color_palette', 'colorfilter', 'Color Palette')} to="/color_palette" className="styleLinkBlock"><ColorFilterOutline cssClasses="styleIonIcon" /> <span>Color Palette</span></Link>
-          <Link onClick={() => this.addLink('virustotal', 'bug', 'VirusTotal')} to="/virustotal" className="styleLinkBlock"><BugOutline cssClasses="styleIonIcon" /> <span>VirusTotal</span></Link>
-          <Link onClick={() => this.addLink('data_to_chart', 'barchart', 'Visualization data on chart')} to="/data_to_chart" className="styleLinkBlock"><BarChartOutline cssClasses="styleIonIcon" /> <span>Visualization data on chart</span></Link>
-          <Link onClick={() => this.addLink('csv_to_table', 'codeslash', 'CSV to Table data')} to="/csv_to_table" className="styleLinkBlock"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>CSV to Table data</span></Link>
-          <Link onClick={() => this.addLink('json_to_table', 'codeslash', 'JSON to Table data')} to="/json_to_table" className="styleLinkBlock"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>JSON to Table data</span></Link>
-          <Link onClick={() => this.addLink('json_to_xml', 'codeslash', 'JSON to XML')} to="/json_to_xml" className="styleLinkBlock"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>JSON to XML</span></Link>
-          <Link onClick={() => this.addLink('xml_to_json', 'codeslash', 'XML to JSON')} to="/xml_to_json" className="styleLinkBlock"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>XML to JSON</span></Link>
-          <Link onClick={() => this.addLink('xls_to_json', 'codeslash', 'XLS to JSON')} to="/xls_to_json" className="styleLinkBlock"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>XLS to JSON</span></Link>
-          <Link onClick={() => this.addLink('json_to_xls', 'codeslash', 'JSON to XLS')} to="/json_to_xls" className="styleLinkBlock"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>JSON to XLS</span></Link>
-          <Link onClick={() => this.addLink('plist_to_table', 'codeslash', 'Plist to Table data')} to="/plist_to_table" className="styleLinkBlock"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>Plist to Table data</span></Link>
-          <Link onClick={() => this.addLink('css_converter', 'codeslash', 'CSS Converter')} to="/css_converter" className="styleLinkBlock"><CodeSlashOutline cssClasses="styleIonIcon" /> <span>CSS Converter</span></Link>
+        <div className="flex flex-row justify-between">
+          <span className="text-2xl">All Links</span>
+          <input type="text" name="" id="" placeholder="Search" onChange={(event: any) => {this.search(event.target.value)}} className="styleField !w-auto" />
         </div>
+
+        {(this.state.tempLinks.length > 0) && <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-2">{this.outputLinks()}</div>}
       </div>
     );
   };

@@ -4,9 +4,9 @@ import { ChevronBackCircleOutline } from "react-ionicons";
 
 import WindNotify from "./WindNotify";
 
-class JsonToTable extends React.Component {
+class XmlToTable extends React.Component {
   childRef: any = React.createRef();
-  
+
   file: any = null;
   dataField: string = "";
 
@@ -18,53 +18,7 @@ class JsonToTable extends React.Component {
     this.childRef.current.alertNotify(color, title);
   };
 
-  parseArr = (arr: Array<any>) => {
-    const table = document.createElement('table');
-    const thead = document.createElement('thead');
-    let tr = document.createElement('tr');
-    const keys: Array<any> = [];
-    arr.forEach((elem: any) => {
-      Object.keys(elem).forEach((key: string) => {
-        if (!keys.includes(key)) {
-          keys.push(key);
-        }
-      });
-    });
-
-    keys.forEach((key: string) => {
-      let th = document.createElement('th');
-      th.innerText = key;
-      th.classList.add("styleTD");
-      tr.appendChild(th);
-    });
-    thead.appendChild(tr);
-    table.appendChild(thead);
-
-    const tbody = document.createElement('tbody');
-    arr.forEach((elem: any) => {
-      let tr = document.createElement('tr');
-      keys.forEach((key: string) => {
-        const element = elem[key];
-        let td = document.createElement('td');
-        td.classList.add("styleTD");
-        if(!element && element == null){
-          td.innerText = "";
-        } else if(Array.isArray(element) && typeof(element[0]) == "object") {
-          td.appendChild(this.parseArr(element));
-        } else if(!Array.isArray(element) && typeof(element) == "object"){
-          td.appendChild(this.parseObj(element));
-        } else {
-          td.innerText = element;
-        }
-        tr.appendChild(td);
-      });
-      tbody.appendChild(tr);
-    });
-    table.appendChild(tbody);
-    return table;
-  };
-
-  parseObj = (object: {[key: string]: any}) => {
+  parseData = (xmlNodes: Array<any>) => {
     const table = document.createElement('table');
     const thead = document.createElement('thead');
     let tr = document.createElement('tr');
@@ -80,39 +34,37 @@ class JsonToTable extends React.Component {
     table.appendChild(thead);
 
     const tbody = document.createElement('tbody');
-    Object.entries(object).forEach(([key, value]) => {
+    xmlNodes.forEach((elem: any) => {
       let tr = document.createElement('tr');
       let td = document.createElement('td');
-      td.innerText = key;
+      td.innerText = elem.nodeName;
       td.classList.add("styleTD");
       tr.appendChild(td);
       td = document.createElement('td');
       td.classList.add("styleTD");
-      if(value == null){
-        td.innerText = "null";
-      } else if(Array.isArray(value) && typeof(value[0]) == "object") {
-        td.appendChild(this.parseArr(value));
-      } else if(!Array.isArray(value) && typeof(value) == "object"){
-        td.appendChild(this.parseObj(value));
+      if ([...elem.children].length > 0) {
+        td.appendChild(this.parseData([...elem.children]));
       } else {
-        td.innerText = value;
+        td.innerText = elem.textContent;
       }
       tr.appendChild(td);
       tbody.appendChild(tr);
     });
     table.appendChild(tbody);
     return table;
-  };
-
-  createTableFun = (object: any) => {
+  }
+  
+  createTableFun = (dataXML: any) => {
     this.setState({
       blockTable: true
     });
     setTimeout(() => {
+      let parser = new DOMParser();
+      let xmlDoc = parser.parseFromString(dataXML, 'text/xml');
       const blockTable = document.querySelector('#blockTable') as HTMLDivElement | null;
       if(blockTable != null) {
         blockTable.innerHTML = "";
-        blockTable.appendChild(this.parseObj(object));
+        blockTable.appendChild(this.parseData([...xmlDoc.children]));
       }
     }, 50);
   };
@@ -122,9 +74,9 @@ class JsonToTable extends React.Component {
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();
-      if (text != null && text != '') {
-        const data: {[key: string]: any} = JSON.parse(text);
-        this.createTableFun(data);
+      if(text != null && text != ''){
+        const dataXml = text;
+        this.createTableFun(dataXml);
       } else {
         this.alertNotify("bg-red-700", "The file is empty!");
       }
@@ -135,8 +87,8 @@ class JsonToTable extends React.Component {
 
   parseDataFieldFun = () => {
     if(this.dataField != ''){
-      const data = JSON.parse(this.dataField);
-      this.createTableFun(data);
+      const dataXml = this.dataField;
+      this.createTableFun(dataXml);
     } else {
       this.alertNotify("bg-red-700", "The field is empty! Insert the data!");
     }
@@ -148,23 +100,23 @@ class JsonToTable extends React.Component {
         <div className="flex flex-col gap-y-3">
           <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
             <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
-            <span>Visualization data from JSON to Table</span>
+            <span>Visualization data from XML to Table</span>
           </div>
 
           <details className="styleDetails">
             <summary>
-              <span className="text-xl font-bold">Select the JSON file with the data</span>
+              <span className="text-xl font-bold">Select the XML file with the data</span>
             </summary>
             
             <div className="flex flex-col gap-y-3">
-              <input className="styleFileInput" type="file" onChange={(event: any) => {this.file = event.target.files[0]}} accept=".json" />
+              <input className="styleFileInput" type="file" onChange={(event: any) => {this.file = event.target.files[0]}} accept=".xml" />
               <button className="styleBut w-max" onClick={() => {this.parseDataFileFun()}}>Create a table</button>
             </div>
           </details>
 
           <details className="styleDetails">
             <summary>
-              <span className="text-xl font-bold">Insert JSON data</span>
+              <span className="text-xl font-bold">Insert XML data</span>
             </summary>
 
             <div className="flex flex-col gap-y-3">
@@ -182,4 +134,4 @@ class JsonToTable extends React.Component {
   };
 };
 
-export default JsonToTable;
+export default XmlToTable;

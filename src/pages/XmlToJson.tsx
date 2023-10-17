@@ -16,9 +16,9 @@ class XmlToJson extends React.Component {
     this.childRef.current.alertNotify(color, title);
   };
 
-  parseData(array: any[]) {
+  parseData(xmlNodes: Array<any>) {
     let tempObj: {[key: string]: any} = {};
-    array.forEach((elem: any) => {
+    xmlNodes.forEach((elem: any) => {
       if ([...elem.children].length > 0) {
         let rez = this.parseData([...elem.children]);
         if (tempObj[elem.nodeName] != undefined) {
@@ -34,7 +34,7 @@ class XmlToJson extends React.Component {
     let xmlDoc = parser.parseFromString(dataXML, 'text/xml');
     this.dataJson = this.parseData([...xmlDoc.children]);
 
-    if (Object.keys(this.dataJson).length > 0) {
+    if (this.dataJson && Object.keys(this.dataJson).length > 0) {
       this.alertNotify("bg-green-700", "The data has been successfully converted!");
     } else {
       this.alertNotify("bg-red-700", "No data was received from the file!");
@@ -49,6 +49,8 @@ class XmlToJson extends React.Component {
       if (text != null && text != '') {
         const dataXml = text;
         this.convertDataFun(dataXml);
+      } else {
+        this.alertNotify("bg-red-700", "The file is empty!");
       }
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");

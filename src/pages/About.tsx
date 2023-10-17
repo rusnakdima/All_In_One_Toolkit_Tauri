@@ -20,7 +20,7 @@ class About extends React.Component {
   matchVersion = (lastVer: string) => {
     let tempVer = lastVer.slice(1).split(".");
     let curVer = ENV.version.split(".");
-    return (tempVer[0] > curVer[0] || tempVer[1] > curVer[1] || tempVer[2] > curVer[2]);
+    return (Number(tempVer[0]) > Number(curVer[0]) || Number(tempVer[1]) > Number(curVer[1]) || Number(tempVer[2]) > Number(curVer[2]));
   }
 
   formatDate = (date: string) => {
@@ -103,8 +103,8 @@ class About extends React.Component {
 
         {this.state.windUpdates && <div className="styleBackWind">
           <div className="styleWind">
-            <div className="border-b-2 styleBorderSolid">
-              <span>Updating the program</span>
+            <div className="border-b-2 pb-2 styleBorderSolid">
+              <span className="text-xl font-bold">Updating the program</span>
             </div>
             <div className="flex flex-col my-3">
               <span>Do you want to download the update?</span>

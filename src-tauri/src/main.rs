@@ -15,9 +15,8 @@ fn get_current_date() -> String {
     format!("{}", current_datetime.format("%Y_%m_%d_%H_%M_%S"))
 }
 
-#[tauri::command]
-fn json_to_xml(name: String, data: String) -> String{
-    let name_file: String = format!("{}_{}{}", name, get_current_date(), ".xml");
+fn write_data(name: String, data: String, extension: String) -> String {
+    let name_file: String = format!("{}_{}{}", name, get_current_date(), extension);
     let document_folder = path::document_dir().expect("Failed to get document folder");
     let app_folder = document_folder.join("AllInOneToolkit");
     std::fs::create_dir_all(&app_folder).expect("Failed to create app folder");
@@ -29,29 +28,23 @@ fn json_to_xml(name: String, data: String) -> String{
 }
 
 #[tauri::command]
-fn xml_to_json(name: String, data: String) -> String{
-    let name_file: String = format!("{}_{}{}", name, get_current_date(), ".json");
-    let document_folder = path::document_dir().expect("Failed to get document folder");
-    let app_folder = document_folder.join("AllInOneToolkit");
-    std::fs::create_dir_all(&app_folder).expect("Failed to create app folder");
-    let file_path = app_folder.join(&name_file);
-    let mut data_file = File::create(&file_path).expect("creation failed");
-    data_file.write(data.as_bytes()).expect("write failed");
-    println!("Created a file {}", file_path.display());
-    format!("{}", file_path.display())
+fn json_to_xml(name: String, data: String) -> String {
+    format!("{}", write_data(name, data, ".xml".to_string()))
 }
 
 #[tauri::command]
-fn xls_to_json(name: String, data: String) -> String{
-    let name_file: String = format!("{}_{}{}", name, get_current_date(), ".json");
-    let document_folder = path::document_dir().expect("Failed to get document folder");
-    let app_folder = document_folder.join("AllInOneToolkit");
-    std::fs::create_dir_all(&app_folder).expect("Failed to create app folder");
-    let file_path = app_folder.join(&name_file);
-    let mut data_file = File::create(&file_path).expect("creation failed");
-    data_file.write(data.as_bytes()).expect("write failed");
-    println!("Created a file {}", file_path.display());
-    format!("{}", file_path.display())
+fn xml_to_json(name: String, data: String) -> String {
+    format!("{}", write_data(name, data, ".json".to_string()))
+}
+
+#[tauri::command]
+fn xls_to_json(name: String, data: String) -> String {
+    format!("{}", write_data(name, data, ".json".to_string()))
+}
+
+#[tauri::command]
+fn xls_to_xml(name: String, data: String) -> String {
+    format!("{}", write_data(name, data, ".xml".to_string()))
 }
 
 fn parse_str(str: String) -> Result<Vec<Vec<String>>, serde_json::Error>{
@@ -117,7 +110,7 @@ async fn get_json() -> String {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, json_to_xls, virus_total, get_json])
+        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, xls_to_xml, json_to_xls, virus_total, get_json])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

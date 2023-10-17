@@ -5,6 +5,8 @@ import Header from "./Header";
 import Nav from "./Nav";
 
 import Home from "./Home";
+import About from "./About";
+
 import CountWords from "./CountWords";
 import UrlEncDec from "./UrlEncDec";
 import Base64EncDec from "./Base64EncDec";
@@ -13,13 +15,14 @@ import VirusTotal from "./VirusTotal";
 import DataToChart from "./DataToChart";
 import CsvToTable from "./CsvToTable";
 import JsonToTable from "./JsonToTable";
+import XmlToTable from "./XmlToTable";
+import PlistToTable from "./PlistToTable";
 import JsonToXml from "./JsonToXml";
 import XmlToJson from "./XmlToJson";
 import XlsToJson from "./XlsToJson";
 import JsonToXls from "./JsonToXls";
-import PlistToTable from "./PlistToTable";
+import XlsToXml from "./XlsToXml";
 import CssConverter from "./CssConverter";
-import About from "./About";
 
 class App extends React.Component {
 
@@ -32,6 +35,7 @@ class App extends React.Component {
             <Nav />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
               <Route path="/count_words" element={<CountWords />} />
               <Route path="/url_enc_dec" element={<UrlEncDec />} />
               <Route path="/base64_enc_dec" element={<Base64EncDec />} />
@@ -40,13 +44,14 @@ class App extends React.Component {
               <Route path="/data_to_chart" element={<DataToChart />} />
               <Route path="/csv_to_table" element={<CsvToTable />} />
               <Route path="/json_to_table" element={<JsonToTable />} />
+              <Route path="/xml_to_table" element={<XmlToTable />} />
+              <Route path="/plist_to_table" element={<PlistToTable />} />
               <Route path="/json_to_xml" element={<JsonToXml />} />
               <Route path="/xml_to_json" element={<XmlToJson />} />
               <Route path="/xls_to_json" element={<XlsToJson />} />
               <Route path="/json_to_xls" element={<JsonToXls />} />
-              <Route path="/plist_to_table" element={<PlistToTable />} />
+              <Route path="/xls_to_xml" element={<XlsToXml />} />
               <Route path="/css_converter" element={<CssConverter />} />
-              <Route path="/about" element={<About />} />
             </Routes>
           </BrowserRouter>
         </div>
