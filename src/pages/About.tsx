@@ -5,12 +5,20 @@ import { ChevronBackCircleOutline } from "react-ionicons";
 import { ENV } from "../env";
 import WindNotify from "./WindNotify";
 
-class About extends React.Component {
+class About extends React.Component<{numWind: number, onChangeData: any}> {
+  constructor(props: any){
+    super(props);
+  }
+
   childRef: any = React.createRef();
 
   state = {
     dateLastUpdate: '',
     windUpdates: false,
+  }
+
+  changeNumWind = (numWind: number) => {
+    this.props.onChangeData(Number(numWind));
   }
 
   alertNotify(color: string, title: string) {
@@ -64,14 +72,21 @@ class About extends React.Component {
     this.getDate();
     return (
       <>
-        <div className="flex flex-col gap-y-3">
-          <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
-            <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
-            <span>About program</span>
+        <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>
+          <div className="flex flex-row justify-between items-center border-b-2 styleBorderSolid pb-2">
+            <div className="flex flex-row gap-x-2 text-2xl font-bold">
+              <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+              <span>About program</span>
+            </div>
+            <select className="styleSelect !w-min" onChange={(event: any) => {this.changeNumWind(event.target.value)}} value={this.props.numWind}>
+              <option value={1}>1 window</option>
+              <option value={2}>2 windows</option>
+              <option value={3}>3 windows</option>
+            </select>
           </div>
 
           <div className="flex flex-col items-center">
-            <img alt="Icon program" src="./assets/img/icon.png" className="!w-1/5 !h-1/5" />
+            <img alt="Icon program" src="./assets/img/icon.png" className="!w-1/5" />
             <span className="text-3xl font-bold">All In One Toolkit</span>
             <div className="mt-3 text-xl font-bold">
               <div className="flex flex-row gap-x-3 justify-center">

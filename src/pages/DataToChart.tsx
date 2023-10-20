@@ -23,7 +23,11 @@ export const options = {
   },
 };
 
-class DataToChart extends React.Component {
+class DataToChart extends React.Component<{numWind: number, onChangeData: any}> {
+  constructor(props: any){
+    super(props);
+  }
+
   childRef: any = React.createRef();
 
   file: any = null;
@@ -35,11 +39,16 @@ class DataToChart extends React.Component {
     blockTable: false,
     blockChart: false,
     outChart: false,
+    dataTable: {"thead": [], "tbody": []},
     chartType: "bar",
     dataChart: {
       labels: [],
       datasets: [],
     }
+  }
+
+  changeNumWind = (numWind: number) => {
+    this.props.onChangeData(Number(numWind));
   }
 
   alertNotify(color: string, title: string) {
@@ -52,39 +61,27 @@ class DataToChart extends React.Component {
       blockChart: true
     })
     setTimeout(() => {
-      const dataTable = document.querySelector("#dataTable") as HTMLTableElement | null;
-      if(dataTable != null){
-        dataTable.innerHTML = "";
-  
-        this.rows = data.length;
-        this.columns = data[0].length;
-        let thead = document.createElement("thead");
-        let tr = document.createElement("tr");
-        data[0].forEach((val: any) => {
-          let th = document.createElement("th");
-          th.innerHTML = val;
-          th.setAttribute("class", "styleTD");
-          th.contentEditable = "true";
-          tr.appendChild(th);
+      this.rows = data.length;
+      this.columns = data[0].length;
+      let tempHead: Array<any> = [];
+      data[0].forEach((val: any) => {
+        tempHead.push(val);
+      });
+      let tempBody: Array<any> = [];
+      data.splice(0, 1);
+      data.forEach((row: any) => {
+        let tempRow: Array<any> = [];
+        row.forEach((val: any) => {
+          tempRow.push(val);
         });
-        thead.appendChild(tr);
-        dataTable.appendChild(thead);
-  
-        data.splice(0, 1);
-        let tbody = document.createElement("tbody");
-        data.forEach((elem: any) => {
-          let tr = document.createElement("tr");
-          elem.forEach((val: any) => {
-            let td = document.createElement("td");
-            td.innerHTML = val;
-            td.setAttribute("class", "styleTD w-min h-[40px] p-5");
-            td.contentEditable = "true";
-            tr.appendChild(td);
-          });
-          tbody.appendChild(tr);
-        });
-        dataTable.appendChild(tbody);
-      }
+        tempBody.push(tempRow);
+      });
+      this.setState({
+        dataTable: {
+          "thead": tempHead,
+          "tbody": tempBody,
+        }
+      });
     }, 20);
   };
 
@@ -98,8 +95,7 @@ class DataToChart extends React.Component {
         const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
         this.createTableFun(data);
       }
-      reader.readAsBinaryString(this.file)
-
+      reader.readAsBinaryString(this.file);
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");
     }
@@ -116,7 +112,6 @@ class DataToChart extends React.Component {
 
   createTableManual = () => {
     if(this.columns > 0 && this.rows > 0){
-
       let data = [];
       for(let i = 0; i < this.rows; i++){
         let tempArr = [];
@@ -137,49 +132,37 @@ class DataToChart extends React.Component {
       outChart: true
     });
     setTimeout(() => {
-      const dataTable = document.querySelector("#dataTable") as HTMLTableElement | null;
-      const outChart = document.querySelector("#outChart") as HTMLDivElement | null;
-      if(dataTable != null && outChart != null) {
-        const data: any[] = [];
-        const rowLab: any[] = [];
-        const colLab: any[] = [];
-        for (let i = 0; i < this.rows; i++) {
-          let row = dataTable.rows[i];
-          let rowData = [];
-          for (let j = 0; j < this.columns; j++) {
-            let cell = row.cells[j];
-            if (i === 0 && j > 0) {
-              colLab.push(cell.innerHTML);
-            } else if (i > 0 && j === 0) {
-              rowLab.push(cell.innerHTML);
-            } else if (i != 0 && j != 0) {
-              rowData.push(cell.innerHTML);
-            }
-          }
-          if (rowData.length > 0) data.push(rowData);
+      const data: any[] = this.state.dataTable.tbody.map((item: any) => item.slice(1).map((item1: any) => item1));
+      const rowLab: any[] = this.state.dataTable.tbody.map((item: any) => item[0]);
+      const colLab: any[] = this.state.dataTable.thead.map((item: any) => item).slice(1);
+
+      this.setState({
+        dataChart: {
+          labels: colLab,
+          datasets: data.map((rowData, index) => ({
+            label: `${rowLab[index]}`,
+            data: rowData,
+            backgroundColor: `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`
+          })),
         }
-  
-        this.setState({
-          dataChart: {
-            labels: colLab,
-            datasets: data.map((rowData, index) => ({
-              label: `${rowLab[index]}`,
-              data: rowData,
-              backgroundColor: `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`
-            })),
-          }
-        });
-      }
+      });
     }, 50);
   };
 
   render(){
     return (
       <>
-        <div className="flex flex-col">
-          <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
-            <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
-            <span>Visualization data on chart</span>
+        <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>
+          <div className="flex flex-row justify-between items-center border-b-2 styleBorderSolid pb-2">
+            <div className="flex flex-row gap-x-2 text-2xl font-bold">
+              <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+              <span>Visualization data on chart</span>
+            </div>
+            <select className="styleSelect !w-min" onChange={(event: any) => {this.changeNumWind(event.target.value)}} value={this.props.numWind}>
+              <option value={1}>1 window</option>
+              <option value={2}>2 windows</option>
+              <option value={3}>3 windows</option>
+            </select>
           </div>
 
           <details className="styleDetails">
@@ -227,7 +210,24 @@ class DataToChart extends React.Component {
 
           {this.state.blockTable && <div className="flex flex-col gap-y-2">
             <span className="text-2xl font-bold">Table data</span>
-            <table id="dataTable" className="border styleBorderSolid"></table>
+            <table className="border styleBorderSolid">
+              <thead>
+                <tr>
+                  {this.state.dataTable.thead.map((cell: any, index: number) => {
+                    return <th className='styleTD' suppressContentEditableWarning={true} contentEditable={true} key={index}>{cell}</th>
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.dataTable.tbody.map((row: any, index: number) => {
+                  return <tr key={index}>
+                    {row.map((cell: any, index1: number) => {
+                      return <td className='styleTD w-min h-[40px] p-5' suppressContentEditableWarning={true} contentEditable={true} key={index1}>{cell}</td>
+                    })}
+                  </tr>
+                })}
+              </tbody>
+            </table>
           </div>}
 
           {this.state.blockChart && <div className="flex flex-col gap-y-3">

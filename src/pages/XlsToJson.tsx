@@ -7,12 +7,20 @@ import * as XLSX from "xlsx";
 
 import WindNotify from "./WindNotify";
 
-class XlsToJson extends React.Component {
+class XlsToJson extends React.Component<{numWind: number, onChangeData: any}> {
+  constructor(props: any){
+    super(props);
+  }
+
   childRef: any = React.createRef();
 
   file: any = null;
   dataField: string = "";
   dataJson: {[key: string]: any} = {};
+
+  changeNumWind = (numWind: number) => {
+    this.props.onChangeData(Number(numWind));
+  }
 
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
@@ -84,10 +92,17 @@ class XlsToJson extends React.Component {
   render(){
     return (
       <>
-        <div className="flex flex-col">
-          <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
-            <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
-            <span>Converter XLS to JSON</span>
+        <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>
+          <div className="flex flex-row justify-between items-center border-b-2 styleBorderSolid pb-2">
+            <div className="flex flex-row gap-x-2 text-2xl font-bold">
+              <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+              <span>Converter XLS to JSON</span>
+            </div>
+            <select className="styleSelect !w-min" onChange={(event: any) => {this.changeNumWind(event.target.value)}} value={this.props.numWind}>
+              <option value={1}>1 window</option>
+              <option value={2}>2 windows</option>
+              <option value={3}>3 windows</option>
+            </select>
           </div>
 
           <details className="styleDetails">

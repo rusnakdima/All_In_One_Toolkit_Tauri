@@ -2,12 +2,20 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ChevronBackCircleOutline } from "react-ionicons";
 
-class CountWords extends React.Component {
+class CountWords extends React.Component<{numWind: number, onChangeData: any}> {
+  constructor(props: any){
+    super(props);
+  }
+  
   state = {
     dataField: "",
     outputText: ""
   };
   file = null;
+
+  changeNumWind = (numWind: number) => {
+    this.props.onChangeData(Number(numWind));
+  }
 
   changeFile = (event: any) => {
     this.file = event.target.files[0];
@@ -20,7 +28,6 @@ class CountWords extends React.Component {
         });
       }
       reader.readAsText(this.file)
-      
     }
   };
 
@@ -31,21 +38,24 @@ class CountWords extends React.Component {
     let num_words = text.split(' ').length;
 
     result = `Results: ${num_chars} characters, ${num_words} words`;
-    const outputEl = document.querySelector("output") as HTMLOutputElement | null;
-    if(outputEl != null){
-      outputEl.setAttribute("style", "display: block");
-      this.setState({
-        outputText: result 
-      });
-    }
+    this.setState({
+      outputText: result 
+    });
   };
 
   render() {
     return (
-      <div className="flex flex-col gap-y-3">
-        <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
-          <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
-          <span>Counting the number of words in the text</span>
+      <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>
+        <div className="flex flex-row justify-between items-center border-b-2 styleBorderSolid pb-2">
+          <div className="flex flex-row gap-x-2 text-2xl font-bold">
+            <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+            <span>Counting the number of words in the text</span>
+          </div>
+          <select className="styleSelect !w-min" onChange={(event: any) => {this.changeNumWind(event.target.value)}} value={this.props.numWind}>
+            <option value={1}>1 window</option>
+            <option value={2}>2 windows</option>
+            <option value={3}>3 windows</option>
+          </select>
         </div>
         
         <span className="text-xl font-bold">Choose a file</span>
@@ -62,7 +72,7 @@ class CountWords extends React.Component {
         
         <button className="styleBut w-min" onClick={() => {this.calc()}}>Calculate</button>
         
-        <output className="border styleBorderSolid p-3 rounded-lg" style={{"display": "none"}}>{this.state.outputText}</output>
+        {this.state.outputText != "" && <output className="border styleBorderSolid p-3 rounded-lg">{this.state.outputText}</output>}
       </div>
     );
   };

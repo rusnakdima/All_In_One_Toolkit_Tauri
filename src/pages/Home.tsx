@@ -7,11 +7,19 @@ interface HomeState {
   tempLinks: Array<{ to: string; icon: string; name: string }>;
 }
 
-class Home extends React.Component<{}, HomeState> {
+class Home extends React.Component<{numWind: number, onChangeData: any}, HomeState> {
+  constructor(props: any){
+    super(props);
+  }
+  
   state: HomeState = {
     recentAction: [],
     tempLinks: [],
   };
+
+  changeNumWind = (numWind: number) => {
+    this.props.onChangeData(Number(numWind));
+  }
 
   links: Array<any> = [
     { "to": 'count_words', "icon": 'reader', "name": 'Count words' },
@@ -27,7 +35,7 @@ class Home extends React.Component<{}, HomeState> {
     { "to": 'json_to_xml', "icon": 'codeslash', "name": 'JSON to XML' },
     { "to": 'xml_to_json', "icon": 'codeslash', "name": 'XML to JSON' },
     { "to": 'xls_to_json', "icon": 'codeslash', "name": 'XLS to JSON' },
-    { "to": 'json_to_xls', "icon": 'codeslash', "name": 'JSON to XLS' },
+    // { "to": 'json_to_xls', "icon": 'codeslash', "name": 'JSON to XLS' },
     { "to": 'xls_to_xml', "icon": 'codeslash', "name": 'XLS to XML' },
     { "to": 'css_converter', "icon": 'codeslash', "name": 'CSS Converter' },
   ];
@@ -113,21 +121,28 @@ class Home extends React.Component<{}, HomeState> {
 
   render() {
     return (
-      <div className="flex flex-col gap-y-5">
-        <span className="text-3xl font-bold border-b-2 styleBorderSolid">Home Page</span>
+      <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>
+        <div className="flex flex-row justify-between border-b-2 styleBorderSolid pb-2">
+          <span className="text-3xl font-bold">Home Page</span>
+          <select className="styleSelect !w-min" onChange={(event: any) => {this.changeNumWind(event.target.value)}} value={this.props.numWind}>
+            <option value={1}>1 window</option>
+            <option value={2}>2 windows</option>
+            <option value={3}>3 windows</option>
+          </select>
+        </div>
 
         {(this.state.recentAction.length > 0) && <span className="text-2xl">Recent Action</span>}
 
         {(this.state.recentAction.length > 0) && 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-2">{this.generateLinks()}</div>
+          <div className={`grid ${(this.props.numWind > 2) ? 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4' : (this.props.numWind > 1) ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5' : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7'} gap-2`}>{this.generateLinks()}</div>
         }
 
         <div className="flex flex-row justify-between">
           <span className="text-2xl">All Links</span>
-          <input type="text" name="" id="" placeholder="Search" onChange={(event: any) => {this.search(event.target.value)}} className="styleField !w-auto" />
+          <input type="text" placeholder="Search" onChange={(event: any) => {this.search(event.target.value)}} className="styleField !w-auto" />
         </div>
 
-        {(this.state.tempLinks.length > 0) && <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-2">{this.outputLinks()}</div>}
+        {(this.state.tempLinks.length > 0) && <div className={`grid ${(this.props.numWind > 2) ? 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4' : (this.props.numWind > 1) ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5' : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7'} gap-2`}>{this.outputLinks()}</div>}
       </div>
     );
   };

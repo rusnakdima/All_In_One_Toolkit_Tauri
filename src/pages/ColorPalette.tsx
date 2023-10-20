@@ -2,7 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ChevronBackCircleOutline } from "react-ionicons";
 
-class ColorPalette extends React.Component {
+class ColorPalette extends React.Component<{numWind: number, onChangeData: any}> {
+  constructor(props: any){
+    super(props);
+  }
+
   typeCol: string = "";
   state = {
     resRGB: "rgb(0, 0, 0)",
@@ -12,9 +16,11 @@ class ColorPalette extends React.Component {
   dataField: string = "";
   colorOut: string = "";
 
+  changeNumWind = (numWind: number) => {
+    this.props.onChangeData(Number(numWind));
+  }
+
   hexToRGB = () => {
-    const colOut = document.querySelector("#colorOut") as HTMLInputElement | null;
-    if(colOut != null) colOut.value = this.dataField;
     const hex = this.dataField.replace("#", "");
     const r = parseInt(hex.substring(0, 2), 16);
     const g = parseInt(hex.substring(2, 4), 16);
@@ -27,7 +33,7 @@ class ColorPalette extends React.Component {
   };
 
   rgbToHEX = () => {
-    const data = this.dataField.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+    const data = this.dataField.match(/^rgb\((\d+),*\s*(\d+),*\s*(\d+)\);*$/);
     if(data != null){
       let r = parseInt(data[1]);
       let g = parseInt(data[2]);
@@ -36,8 +42,6 @@ class ColorPalette extends React.Component {
       const hexG = g.toString(16).padStart(2, '0');
       const hexB = b.toString(16).padStart(2, '0');
       const hexValue = `#${hexR}${hexG}${hexB}`;
-      const colOut = document.querySelector("#colorOut") as HTMLInputElement | null;
-      if(colOut != null) colOut.value = hexValue;
       this.setState({
         resHEX: hexValue,
         resRGB: this.dataField
@@ -71,7 +75,7 @@ class ColorPalette extends React.Component {
   };
 
   hsvToRGB = () => {
-    const data = this.dataField.match(/^hsv\((\d+)°?,\s*(\d+)%?,\s*(\d+)%?\)$/);
+    const data = this.dataField.match(/^hsv\((\d+)°?,*\s*(\d+)%?,*\s*(\d+)%?\);*$/);
     if (data != null){
       let h = parseFloat(data[1]), s = parseFloat(data[2]), v = parseFloat(data[3]);
 
@@ -139,10 +143,17 @@ class ColorPalette extends React.Component {
 
   render(){
     return (
-      <div className="flex flex-col gap-y-3">
-        <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
-          <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
-          <span>Color Palette</span>
+      <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>
+        <div className="flex flex-row justify-between items-center border-b-2 styleBorderSolid pb-2">
+          <div className="flex flex-row gap-x-2 text-2xl font-bold">
+            <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+            <span>Color Palette</span>
+          </div>
+          <select className="styleSelect !w-min" onChange={(event: any) => {this.changeNumWind(event.target.value)}} value={this.props.numWind}>
+            <option value={1}>1 window</option>
+            <option value={2}>2 windows</option>
+            <option value={3}>3 windows</option>
+          </select>
         </div>
 
         <span className="styleLabel">Choose a color type</span>
@@ -173,7 +184,7 @@ class ColorPalette extends React.Component {
         <input type="text" onChange={(event: any) => { this.convertColor(event) }} className="styleField" />
 
         <div id="blockCol" className="flex flex-col gap-y-3 mt-5">
-          <input type="color" id="colorOut" onChange={(event: any) => { this.changeColorOut(event.target.value) }} className="w-40 h-40" />
+          <input type="color" id="colorOut" value={this.state.resHEX} onChange={(event: any) => { this.changeColorOut(event.target.value) }} className="w-40 h-40" />
 
           <div className="grid grid-cols-2 gap-3 w-max">
             <span>RGB</span>

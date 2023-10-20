@@ -5,7 +5,11 @@ import { ChevronBackCircleOutline } from "react-ionicons";
 
 import WindNotify from "./WindNotify";
 
-class CssConverter extends React.Component {
+class CssConverter extends React.Component<{numWind: number, onChangeData: any}> {
+  constructor(props: any){
+    super(props);
+  }
+
   childRef: any = React.createRef();
 
   file: any = null;
@@ -17,7 +21,12 @@ class CssConverter extends React.Component {
 
   state = {
     blockTable: false,
+    dataTable: {"thead": [], "tbody": []},
   };
+
+  changeNumWind = (numWind: number) => {
+    this.props.onChangeData(Number(numWind));
+  }
 
   componentDidMount(): void {
     this.getDataFile();
@@ -48,9 +57,7 @@ class CssConverter extends React.Component {
   }
 
   searchElemData = (item: string, style: string) => {
-    let td = document.createElement('td');
-    td.classList.add("styleTD");
-    td.classList.add("whitespace-nowrap");
+    let textElem = '';
     try {
       let tempObj: {[key: string]: any} = { "color": "text", "background-color": "bg", "border-color": "border", "border-top-color": "border-t", "border-bottom-color": "border-b", "border-left-color": "border-l", "border-right-color": "border-r", "border-inline-start-color": "border-s", "border-inline-end-color": "border-e" };
       let regCSS = /([\w\-]*):\s*([\s\w\d\%\,\(\)\#\-]*);/;
@@ -85,39 +92,39 @@ class CssConverter extends React.Component {
       }
       let objItem;
       if(this.typeStyle == style){
-        td.innerText = item;
+        textElem = item;
       } else if(objItem = this.dataArr.find((obj: any) => obj[this.typeStyle] == item)){
         if(propCSS && Object.keys(tempObj).includes(propCSS![1])){
-          td.innerText = (objItem[style]) ? `${tempObj[String(propCSS![1])]}-${objItem[style]}` : "";
+          textElem = (objItem[style]) ? `${tempObj[String(propCSS![1])]}-${objItem[style]}` : "";
         } else {
-          td.innerText = (objItem[style]) ? objItem[style] : "";
+          textElem = (objItem[style]) ? objItem[style] : "";
         }
       } else if((propCSS && Object.keys(tempObj).includes(propCSS![1])) ||
                 (propTailwind && Object.values(tempObj).includes(propTailwind![1]))){
         if(this.typeStyle == "css" && (objItem = this.dataArr.find((obj: any) => obj["css"] == `color: ${propCSS![2]};`))){
-          if(objItem) td.innerText = (objItem[style]) ? `${tempObj[String(propCSS![1])]}-${objItem[style]}` : "";
-          else td.innerText = "";
+          if(objItem) textElem = (objItem[style]) ? `${tempObj[String(propCSS![1])]}-${objItem[style]}` : "";
+          else textElem = "";
         } else if(this.typeStyle != "css" && style == "css" && (objItem = this.dataArr.find((obj: any) => obj[this.typeStyle] == propTailwind![2]))){
-          if(objItem) td.innerText = (objItem[style]) ? `${Object.keys(tempObj).find((elem: string) => tempObj[elem] == propTailwind![1])}: ${regCSS.exec(objItem["css"])![2]};` : "";
-          else td.innerText = "";
+          if(objItem) textElem = (objItem[style]) ? `${Object.keys(tempObj).find((elem: string) => tempObj[elem] == propTailwind![1])}: ${regCSS.exec(objItem["css"])![2]};` : "";
+          else textElem = "";
         } else if(this.typeStyle != "css" && style != "css" && (objItem = this.dataArr.find((obj: any) => obj[this.typeStyle] == propTailwind![2]))){
-          if(objItem) td.innerText = (objItem[style]) ? `${propTailwind![1]}-${objItem[style]}` : "";
-          else td.innerText = "";
+          if(objItem) textElem = (objItem[style]) ? `${propTailwind![1]}-${objItem[style]}` : "";
+          else textElem = "";
         } else if(this.typeStyle == "css" && style == "tailwind" && propCSS){
           let key = this.dataArr.find((obj: any) => obj[style].indexOf(propCSS![1]))!["tailwind_custom"];
           if(Object.keys(tempObj).includes(propCSS![1])) key = tempObj[propCSS![1]];
-          td.innerText = key + "-[" + propCSS![2] + "]";
+          textElem = key + "-[" + propCSS![2] + "]";
         }
       } else if(this.typeStyle == "css" && style == "tailwind" && propCSS){
         let key = this.dataArr.find((obj: any) => obj[style].indexOf(propCSS![1]))!["tailwind_custom"];
         if(Object.keys(tempObj).includes(propCSS![1])) key = tempObj[propCSS![1]];
-        td.innerText = key + "-[" + propCSS![2] + "]";
+        textElem = key + "-[" + propCSS![2] + "]";
       }
     } catch (err: any) {
       this.alertNotify("bg-red-700", err);
       console.error(err);
     }
-    return td;
+    return textElem;
   }
 
   convertData = async () => {
@@ -128,48 +135,39 @@ class CssConverter extends React.Component {
 
       let listField = (this.typeStyle != "css") ? this.dataField.match(/[\w\d\/\[\]\-]*[^\s*\n*]/gm) : this.dataField.match(/[\w\-]*:\s*[\s\w\d\%\,\(\)\#\-]*;/gm);
 
-      const table = document.createElement('table');
-
-      if(listField){
-        let tr = document.createElement('tr');
+      let tempHead: Array<any> = [];
+      if (listField) {
         listField.unshift("Data Field");
         listField.forEach((item: string) => {
-          let th = document.createElement('th');
-          th.innerText = item;
-          th.classList.add("styleTD");
-          th.classList.add("whitespace-nowrap");
-          tr.appendChild(th);
+          tempHead.push(item);
         });
         listField.shift();
-        table.appendChild(tr);
       }
-
+      
       let objStyles = {"css": "CSS", "bootstrap": "Bootstrap 5", "tailwind": "Tailwind CSS"};
-
+      
+      let tempBody: Array<any> = [];
       Object.entries(objStyles).forEach(([key, value]) => {
-        let tr = document.createElement('tr');
-        let th = document.createElement('th');
-        th.innerText = value;
-        th.classList.add("styleTD");
-        th.classList.add("whitespace-nowrap");
-        tr.appendChild(th);
+        let tempRow: Array<any> = [];
+        tempRow.push({"elem": "th", "text": value});
         if(listField){
           listField.forEach((item: string) => {
-            tr.appendChild(this.searchElemData(item, key));
+            tempRow.push({"elem": "td", "text": this.searchElemData(item, key)});
           });
         }
-        table.appendChild(tr);
+        tempBody.push(tempRow);
       });
 
       setTimeout(() => {
-        const blockTable = document.querySelector('#blockTable') as HTMLDivElement | null;
-        if(blockTable != null) {
-          blockTable.innerHTML = "";
-          blockTable.appendChild(table);
-        }
+        this.setState({
+          dataTable: {
+            "thead": tempHead,
+            "tbody": tempBody,
+          }
+        });
       }, 500);
     } else if (/* !this.file && */ this.dataArr.length == 0) {
-      this.alertNotify("bg-red-700", "You have not selected the css_library file.json with data!");
+      this.alertNotify("bg-red-700", "You don't have a style library! Download it from the git repository from this program!");
     } else if (this.typeStyle == '') {
       this.alertNotify("bg-red-700", "You have not selected the type of source styles!");
     } else if (this.dataField == '') {
@@ -180,10 +178,17 @@ class CssConverter extends React.Component {
   render (){
     return (
       <>
-        <div className="flex flex-col gap-y-3">
-          <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
-            <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
-            <span>CSS Converter to classes CSS Frameworks</span>
+        <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>
+          <div className="flex flex-row justify-between items-center border-b-2 styleBorderSolid pb-2">
+            <div className="flex flex-row gap-x-2 text-2xl font-bold">
+              <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+              <span>CSS Converter to classes CSS Frameworks</span>
+            </div>
+            <select className="styleSelect !w-min" onChange={(event: any) => {this.changeNumWind(event.target.value)}} value={this.props.numWind}>
+              <option value={1}>1 window</option>
+              <option value={2}>2 windows</option>
+              <option value={3}>3 windows</option>
+            </select>
           </div>
 
           {/* <details className="styleDetails">
@@ -227,7 +232,27 @@ class CssConverter extends React.Component {
             <button className="styleBut w-max" onClick={() => {this.convertData()}}>Convert data</button>
           </div>
 
-          {this.state.blockTable && <div className="overflow-x-auto" id="blockTable"></div>}
+          {this.state.blockTable && <div className="overflow-x-auto" id="blockTable">
+            <table className="border styleBorderSolid">
+              <thead>
+                <tr>
+                  {this.state.dataTable.thead.map((elem: any, index: number) => {
+                    return <th className='styleTD whitespace-nowrap' key={index}>{elem}</th>
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.dataTable.tbody.map((elem: any, index: number) => {
+                  return <tr key={index}>
+                    {elem.map((val: any, index1: number) => {
+                      if (val.elem == "th") { return <th className='styleTD whitespace-nowrap' key={index1}>{val.text}</th> }
+                      else { return <td className='styleTD whitespace-nowrap' key={index1}>{val.text}</td> }
+                    })}
+                  </tr>
+                })}
+              </tbody>
+            </table>
+          </div>}
         </div>
 
         <WindNotify ref={this.childRef} />

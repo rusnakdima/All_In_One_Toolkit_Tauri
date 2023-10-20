@@ -4,7 +4,51 @@ import { ChevronBackCircleOutline } from "react-ionicons";
 
 import WindNotify from "./WindNotify";
 
-class JsonToTable extends React.Component {
+interface TableData {
+  thead: string[];
+  tbody: (string | TableData)[][];
+}
+
+interface TableProps {
+  data: TableData;
+}
+
+const RecursiveTable: React.FC<TableProps> = ({ data }) => {
+  return (
+    <table className="border styleBorderSolid">
+      <thead>
+        <tr>
+          {data.thead.map((header, index) => (
+            <th className='styleTD' key={index}>{header}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {data.tbody.map((row, rowIndex) => (
+          <tr key={rowIndex}>
+            {
+              row.map((cellData, cellIndex) => (
+                <td className='styleTD' key={cellIndex}>
+                  {typeof cellData === 'string' ? (
+                    cellData
+                  ) : (
+                    <RecursiveTable data={cellData} />
+                  )}
+                </td>
+              ))
+            }
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+class JsonToTable extends React.Component<{numWind: number, onChangeData: any}> {
+  constructor(props: any){
+    super(props);
+  }
+
   childRef: any = React.createRef();
   
   file: any = null;
@@ -12,16 +56,19 @@ class JsonToTable extends React.Component {
 
   state = {
     blockTable: false,
+    dataTable: {thead: [], tbody: []},
   };
+
+  changeNumWind = (numWind: number) => {
+    this.props.onChangeData(Number(numWind));
+  }
 
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
   };
 
   parseArr = (arr: Array<any>) => {
-    const table = document.createElement('table');
-    const thead = document.createElement('thead');
-    let tr = document.createElement('tr');
+    let table: TableData = {thead: [], tbody: []};
     const keys: Array<any> = [];
     arr.forEach((elem: any) => {
       Object.keys(elem).forEach((key: string) => {
@@ -30,77 +77,43 @@ class JsonToTable extends React.Component {
         }
       });
     });
+    table.thead = keys;
 
-    keys.forEach((key: string) => {
-      let th = document.createElement('th');
-      th.innerText = key;
-      th.classList.add("styleTD");
-      tr.appendChild(th);
-    });
-    thead.appendChild(tr);
-    table.appendChild(thead);
-
-    const tbody = document.createElement('tbody');
     arr.forEach((elem: any) => {
-      let tr = document.createElement('tr');
+      let tempRow: (string | TableData)[] = [];
       keys.forEach((key: string) => {
         const element = elem[key];
-        let td = document.createElement('td');
-        td.classList.add("styleTD");
         if(!element && element == null){
-          td.innerText = "";
+          tempRow.push("");
         } else if(Array.isArray(element) && typeof(element[0]) == "object") {
-          td.appendChild(this.parseArr(element));
+          tempRow.push(this.parseArr(element));
         } else if(!Array.isArray(element) && typeof(element) == "object"){
-          td.appendChild(this.parseObj(element));
+          tempRow.push(this.parseObj(element));
         } else {
-          td.innerText = element;
+          tempRow.push(element);
         }
-        tr.appendChild(td);
       });
-      tbody.appendChild(tr);
+      table.tbody.push(tempRow);
     });
-    table.appendChild(tbody);
     return table;
   };
 
   parseObj = (object: {[key: string]: any}) => {
-    const table = document.createElement('table');
-    const thead = document.createElement('thead');
-    let tr = document.createElement('tr');
-    let th = document.createElement('th');
-    th.innerText = "Key";
-    th.classList.add("styleTD");
-    tr.appendChild(th);
-    th = document.createElement('th');
-    th.innerText = "Value";
-    th.classList.add("styleTD");
-    tr.appendChild(th);
-    thead.appendChild(tr);
-    table.appendChild(thead);
-
-    const tbody = document.createElement('tbody');
+    let table: TableData = {thead: ["Key", "Value"], tbody: []};
     Object.entries(object).forEach(([key, value]) => {
-      let tr = document.createElement('tr');
-      let td = document.createElement('td');
-      td.innerText = key;
-      td.classList.add("styleTD");
-      tr.appendChild(td);
-      td = document.createElement('td');
-      td.classList.add("styleTD");
-      if(value == null){
-        td.innerText = "null";
+      let tempRow: (string | TableData)[] = [];
+      tempRow.push(key);
+      if (value == null) {
+        tempRow.push("null");
       } else if(Array.isArray(value) && typeof(value[0]) == "object") {
-        td.appendChild(this.parseArr(value));
+        tempRow.push(this.parseArr(value));
       } else if(!Array.isArray(value) && typeof(value) == "object"){
-        td.appendChild(this.parseObj(value));
+        tempRow.push(this.parseObj(value));
       } else {
-        td.innerText = value;
+        tempRow.push(value);
       }
-      tr.appendChild(td);
-      tbody.appendChild(tr);
+      table.tbody.push(tempRow);
     });
-    table.appendChild(tbody);
     return table;
   };
 
@@ -109,11 +122,9 @@ class JsonToTable extends React.Component {
       blockTable: true
     });
     setTimeout(() => {
-      const blockTable = document.querySelector('#blockTable') as HTMLDivElement | null;
-      if(blockTable != null) {
-        blockTable.innerHTML = "";
-        blockTable.appendChild(this.parseObj(object));
-      }
+      this.setState({
+        dataTable: this.parseObj(object)
+      });
     }, 50);
   };
 
@@ -145,10 +156,17 @@ class JsonToTable extends React.Component {
   render(){
     return (
       <>
-        <div className="flex flex-col gap-y-3">
-          <div className="flex flex-row gap-x-2 text-2xl font-bold border-b-2 styleBorderSolid">
-            <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
-            <span>Visualization data from JSON to Table</span>
+        <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>
+          <div className="flex flex-row justify-between items-center border-b-2 styleBorderSolid pb-2">
+            <div className="flex flex-row gap-x-2 text-2xl font-bold">
+              <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
+              <span>Visualization data from JSON to Table</span>
+            </div>
+            <select className="styleSelect !w-min" onChange={(event: any) => {this.changeNumWind(event.target.value)}} value={this.props.numWind}>
+              <option value={1}>1 window</option>
+              <option value={2}>2 windows</option>
+              <option value={3}>3 windows</option>
+            </select>
           </div>
 
           <details className="styleDetails">
@@ -173,7 +191,9 @@ class JsonToTable extends React.Component {
             </div>
           </details>
 
-          {this.state.blockTable && <div className="flex flex-col" id="blockTable"></div>}
+          {this.state.blockTable && <div className="flex flex-col">
+            <RecursiveTable data={this.state.dataTable} />
+          </div>}
         </div>
 
         <WindNotify ref={this.childRef} />
