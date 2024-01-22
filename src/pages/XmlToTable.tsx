@@ -59,15 +59,15 @@ class XmlToTable extends React.Component<{numWind: number, onChangeData: any}> {
     dataTable: {thead: [], tbody: []},
   };
 
-  changeNumWind = (numWind: number) => {
+  changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
   }
 
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
-  };
+  }
 
-  parseData = (xmlNodes: Array<any>) => {
+  parseData(xmlNodes: Array<any>) {
     let table: TableData = {thead: ["Key", "Value"], tbody: []};
     xmlNodes.forEach((elem: any) => {
       let tempRow: (string | TableData)[] = [];
@@ -82,7 +82,7 @@ class XmlToTable extends React.Component<{numWind: number, onChangeData: any}> {
     return table;
   }
   
-  createTableFun = (dataXML: any) => {
+  createTableFun(dataXML: any) {
     this.setState({
       blockTable: true
     });
@@ -93,9 +93,9 @@ class XmlToTable extends React.Component<{numWind: number, onChangeData: any}> {
         dataTable: this.parseData([...xmlDoc.children])
       });
     }, 50);
-  };
+  }
 
-  parseDataFileFun = async () => {
+  async parseDataFileFun() {
     if (this.file != null){
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
@@ -109,18 +109,18 @@ class XmlToTable extends React.Component<{numWind: number, onChangeData: any}> {
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");
     }
-  };
+  }
 
-  parseDataFieldFun = () => {
+  parseDataFieldFun() {
     if(this.dataField != ''){
       const dataXml = this.dataField;
       this.createTableFun(dataXml);
     } else {
       this.alertNotify("bg-red-700", "The field is empty! Insert the data!");
     }
-  };
+  }
 
-  render(){
+  render() {
     return (
       <>
         <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>

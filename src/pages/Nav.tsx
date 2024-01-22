@@ -32,7 +32,7 @@ class Nav extends React.Component<{}, HomeState> {
     localStorage["recAct"] = JSON.stringify(this.state.recentAction);
   }
 
-  render(){
+  render() {
     return (
       <div className="fixed top-0 left-0 m-0 p-0 z-40 w-full h-screen -translate-x-full bg-white/60 dark:bg-black/30" id="menuBack">
         <div className="w-64 p-4 bg-gray-200 dark:bg-zinc-800 h-screen transition-transform -translate-x-full">

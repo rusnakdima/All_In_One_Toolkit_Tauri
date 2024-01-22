@@ -16,11 +16,11 @@ class ColorPalette extends React.Component<{numWind: number, onChangeData: any}>
   dataField: string = "";
   colorOut: string = "";
 
-  changeNumWind = (numWind: number) => {
+  changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
   }
 
-  hexToRGB = () => {
+  hexToRGB() {
     const hex = this.dataField.replace("#", "");
     const r = parseInt(hex.substring(0, 2), 16);
     const g = parseInt(hex.substring(2, 4), 16);
@@ -30,9 +30,9 @@ class ColorPalette extends React.Component<{numWind: number, onChangeData: any}>
       resRGB: `rgb(${r}, ${g}, ${b})`
     });
     this.rgbToHSV(r, g, b);
-  };
+  }
 
-  rgbToHEX = () => {
+  rgbToHEX() {
     const data = this.dataField.match(/^rgb\((\d+),*\s*(\d+),*\s*(\d+)\);*$/);
     if(data != null){
       let r = parseInt(data[1]);
@@ -48,9 +48,9 @@ class ColorPalette extends React.Component<{numWind: number, onChangeData: any}>
       });
       this.rgbToHSV(r, g, b);
     }
-  };
+  }
 
-  rgbToHSV = (r: number, g: number, b: number) => {
+  rgbToHSV(r: number, g: number, b: number) {
     r = r / 255.0;
     g = g / 255.0;
     b = b / 255.0;
@@ -72,9 +72,9 @@ class ColorPalette extends React.Component<{numWind: number, onChangeData: any}>
       resHSV: `hsv(${h.toFixed(0)}°, ${s.toFixed(0)}%, ${v.toFixed(0)}%)`
     });
     return;
-  };
+  }
 
-  hsvToRGB = () => {
+  hsvToRGB() {
     const data = this.dataField.match(/^hsv\((\d+)°?,*\s*(\d+)%?,*\s*(\d+)%?\);*$/);
     if (data != null){
       let h = parseFloat(data[1]), s = parseFloat(data[2]), v = parseFloat(data[3]);
@@ -113,14 +113,13 @@ class ColorPalette extends React.Component<{numWind: number, onChangeData: any}>
       g = Math.round((g + m) * 255);
       b = Math.round((b + m) * 255);
     
-      // Return the RGB values as an array.
       this.dataField = `rgb(${r}, ${g}, ${b})`;
       this.rgbToHEX();
       return;
     }
-  };
+  }
 
-  convertColor = (event: any) => {
+  convertColor(event: any) {
     this.dataField = event.target.value;
     if (this.typeCol != '') {
       if (this.typeCol == "rgb") {
@@ -134,14 +133,14 @@ class ColorPalette extends React.Component<{numWind: number, onChangeData: any}>
         return;
       }
     }
-  };
+  }
 
-  changeColorOut(data: string){
+  changeColorOut(data: string) {
     this.dataField = data;
     this.hexToRGB();
-  };
+  }
 
-  render(){
+  render() {
     return (
       <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>
         <div className="flex flex-row justify-between items-center border-b-2 styleBorderSolid pb-2">

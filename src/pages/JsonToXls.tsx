@@ -16,26 +16,52 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
   dataField: string = "";
   dataXls: Array<any> = [];
 
-  changeNumWind = (numWind: number) => {
+  changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
   }
 
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
-  };
+  }
 
-  convertDataFun = (data: {[key: string]: any}) => {
-    this.dataXls = data[Object.keys(data)[0]].map((elem: {[key: string]: any}) => Object.values(elem).map((val: any) => {return String(val)}));
-    this.dataXls.unshift(Object.keys(data["root"][0]));
+  parseData(obj: {[key: string]: any}) {
+    let tempArray: any[] = [];
+    Object.keys(obj).forEach((key: string) => {
+      console.log(key, obj[key], Object.keys(obj))
+      if (Array.isArray(obj[key])) {
+        this.dataXls.push(Object.keys(obj[key][0]));
+        obj[key].forEach((item: string) => {
+          this.dataXls.push(Object.values(item));
+        });
+      } else if (typeof obj[key] === "object") {
+        console.log(obj)
+        tempArray.push(key);
+        tempArray.push(this.parseData(obj[key]));
+        // this.dataXls.push(Object.keys(obj));
+        // this.parseData(obj[key]);
+      } else {
+        tempArray.push(key);
+        tempArray.push(obj[key]);
+        // this.dataXls.push(Object.keys(obj));
+        // this.dataXls.push((obj[key]));
+      }
+    });
+    return tempArray;
+  }
+
+  convertDataFun(dataJson: {[key: string]: any}) {
+    console.log(dataJson)
+    this.dataXls = this.parseData(dataJson);
+    console.log(this.dataXls)
 
     if (Array.isArray(this.dataXls)) {
       this.alertNotify("bg-green-700", "The data has been successfully converted!");
     } else {
       this.alertNotify("bg-red-700", "No data was received from the file!");
     }
-  };
+  }
 
-  parseDataFileFun = async () => {
+  async parseDataFileFun() {
     if(this.file != null){
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
@@ -49,18 +75,18 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");
     }
-  };
+  }
 
-  parseDataFieldFun = () => {
+  parseDataFieldFun() {
     if(this.dataField != ''){
-      const data = JSON.parse(this.dataField);
-      this.convertDataFun(data);
+      const dataJson = JSON.parse(this.dataField);
+      this.convertDataFun(dataJson);
     } else {
       this.alertNotify("bg-red-700", "The field is empty! Insert the data!");
     }
-  };
+  }
 
-  saveDataFileFun = async () => {
+  async saveDataFileFun() {
     if(this.file != null || this.dataXls.length > 0){
       await invoke("json_to_xls", {"name": (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'json_to_xls', "data": JSON.stringify(this.dataXls)})
       .then((data: any) => {
@@ -72,9 +98,9 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
     } else if (this.dataXls.length == 0){
       this.alertNotify("bg-red-700", "No data was received from the file!");
     }
-  };
+  }
 
-  render(){
+  render() {
     return (
       <>
         <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>

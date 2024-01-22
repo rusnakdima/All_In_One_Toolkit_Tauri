@@ -16,13 +16,13 @@ class XmlToJson extends React.Component<{numWind: number, onChangeData: any}> {
   dataField: string = "";
   dataJson: {[key: string]: any} = {};
 
-  changeNumWind = (numWind: number) => {
+  changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
   }
 
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
-  };
+  }
 
   parseData(xmlNodes: Array<any>) {
     let tempObj: {[key: string]: any} = {};
@@ -37,7 +37,7 @@ class XmlToJson extends React.Component<{numWind: number, onChangeData: any}> {
     return tempObj;
   }
 
-  convertDataFun = (dataXML: string) => {
+  convertDataFun(dataXML: string) {
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(dataXML, 'text/xml');
     this.dataJson = this.parseData([...xmlDoc.children]);
@@ -47,9 +47,9 @@ class XmlToJson extends React.Component<{numWind: number, onChangeData: any}> {
     } else {
       this.alertNotify("bg-red-700", "No data was received from the file!");
     }
-  };
+  }
 
-  parseDataFileFun = async () => {
+  async parseDataFileFun() {
     if (this.file != null) {
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
@@ -63,18 +63,18 @@ class XmlToJson extends React.Component<{numWind: number, onChangeData: any}> {
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");
     }
-  };
+  }
 
-  parseDataFieldFun = () => {
+  parseDataFieldFun() {
     if (this.dataField != '') {
       const dataXml = this.dataField;
       this.convertDataFun(dataXml);
     } else {
       this.alertNotify("bg-red-700", "The field is empty! Insert the data!");
     }
-  };
+  }
 
-  saveDataFileFun = async () => {
+  async saveDataFileFun() {
     if (this.file != null || Object.keys(this.dataJson).length != 0) {
       await invoke("xml_to_json", {"name": (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'xml_to_json', "data": JSON.stringify(this.dataJson)})
       .then((data: any) => {
@@ -86,7 +86,7 @@ class XmlToJson extends React.Component<{numWind: number, onChangeData: any}> {
     } else if (Object.keys(this.dataJson).length == 0) {
       this.alertNotify("bg-red-700", "No data was received from the file!");
     }
-  };
+  }
 
   render() {
     return (

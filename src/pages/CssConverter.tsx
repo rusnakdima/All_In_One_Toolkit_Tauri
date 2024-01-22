@@ -6,7 +6,7 @@ import { ChevronBackCircleOutline } from "react-ionicons";
 import WindNotify from "./WindNotify";
 
 class CssConverter extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 
@@ -24,7 +24,7 @@ class CssConverter extends React.Component<{numWind: number, onChangeData: any}>
     dataTable: {"thead": [], "tbody": []},
   };
 
-  changeNumWind = (numWind: number) => {
+  changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
   }
 
@@ -34,19 +34,19 @@ class CssConverter extends React.Component<{numWind: number, onChangeData: any}>
 
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
-  };
+  }
 
-  getDataFile = async () => {
+  async getDataFile() {
     await invoke("get_json")
     .then((json: any) => {
-      if(json && json != '') this.dataArr = JSON.parse(json)["root"];
+      if (json && json != '') this.dataArr = JSON.parse(json)["root"];
     })
     .catch((err: any) => console.error(err));
-    // if(this.file != null){
+    // if (this.file != null) {
     //   const fileUrl = URL.createObjectURL(this.file);
     //   const response = await fetch(fileUrl);
     //   const text = await response.text();
-    //   if(text != null && text != ''){
+    //   if (text != null && text != '') {
     //     const dataJson = JSON.parse(text);
     //     this.dataArr = dataJson["root"];
     //   }
@@ -56,21 +56,21 @@ class CssConverter extends React.Component<{numWind: number, onChangeData: any}>
     // }
   }
 
-  searchElemData = (item: string, style: string) => {
+  searchElemData(item: string, style: string) {
     let textElem = '';
     try {
       let tempObj: {[key: string]: any} = { "color": "text", "background-color": "bg", "border-color": "border", "border-top-color": "border-t", "border-bottom-color": "border-b", "border-left-color": "border-l", "border-right-color": "border-r", "border-inline-start-color": "border-s", "border-inline-end-color": "border-e" };
       let regCSS = /([\w\-]*):\s*([\s\w\d\%\,\(\)\#\-]*);/;
       let propCSS = regCSS.exec(item);
-      if(propCSS && propCSS![2].indexOf("rgb") >= 0) {
+      if (propCSS && propCSS![2].indexOf("rgb") >= 0) {
         for(let i = 0; i < 3; i++) {
           propCSS[2] = propCSS![2].replace(/\,\s*/, " ");
           item = item.replace(/\,\s*/, " ");
         }
       }
       let propTailwind = /^(\w+)(?:-([\w\/\[\]]+))?(?:-([\w\/\[\]]+))?(?:-([\w\/\[\]]+))?$/.exec(item);
-      if(propTailwind && propTailwind![3] && propTailwind![4]){
-        if(Object.values(tempObj).includes(propTailwind![1] + '-' + propTailwind![2])){
+      if (propTailwind && propTailwind![3] && propTailwind![4]) {
+        if (Object.values(tempObj).includes(propTailwind![1] + '-' + propTailwind![2])) {
           propTailwind![1] = propTailwind![1] + '-' + propTailwind![2];
           propTailwind![2] = propTailwind![3] + '-' + propTailwind![4];
           propTailwind![3] = '';
@@ -80,8 +80,8 @@ class CssConverter extends React.Component<{numWind: number, onChangeData: any}>
           propTailwind![3] = '';
           propTailwind![4] = '';
         }
-      } else if(propTailwind && propTailwind![3]){
-        if(Object.values(tempObj).includes(propTailwind![1] + '-' + propTailwind![2])){
+      } else if (propTailwind && propTailwind![3]) {
+        if (Object.values(tempObj).includes(propTailwind![1] + '-' + propTailwind![2])) {
           propTailwind![1] = propTailwind![1] + '-' + propTailwind![2];
           propTailwind![2] = propTailwind![3];
           propTailwind![3] = '';
@@ -91,33 +91,46 @@ class CssConverter extends React.Component<{numWind: number, onChangeData: any}>
         }
       }
       let objItem;
-      if(this.typeStyle == style){
+      if (this.typeStyle == style) {
         textElem = item;
-      } else if(objItem = this.dataArr.find((obj: any) => obj[this.typeStyle] == item)){
-        if(propCSS && Object.keys(tempObj).includes(propCSS![1])){
+      } else if (objItem = this.dataArr.find((obj: any) => obj[this.typeStyle] == item)) {
+        if (propCSS && Object.keys(tempObj).includes(propCSS![1])) {
           textElem = (objItem[style]) ? `${tempObj[String(propCSS![1])]}-${objItem[style]}` : "";
         } else {
           textElem = (objItem[style]) ? objItem[style] : "";
         }
-      } else if((propCSS && Object.keys(tempObj).includes(propCSS![1])) ||
-                (propTailwind && Object.values(tempObj).includes(propTailwind![1]))){
-        if(this.typeStyle == "css" && (objItem = this.dataArr.find((obj: any) => obj["css"] == `color: ${propCSS![2]};`))){
-          if(objItem) textElem = (objItem[style]) ? `${tempObj[String(propCSS![1])]}-${objItem[style]}` : "";
-          else textElem = "";
-        } else if(this.typeStyle != "css" && style == "css" && (objItem = this.dataArr.find((obj: any) => obj[this.typeStyle] == propTailwind![2]))){
-          if(objItem) textElem = (objItem[style]) ? `${Object.keys(tempObj).find((elem: string) => tempObj[elem] == propTailwind![1])}: ${regCSS.exec(objItem["css"])![2]};` : "";
-          else textElem = "";
-        } else if(this.typeStyle != "css" && style != "css" && (objItem = this.dataArr.find((obj: any) => obj[this.typeStyle] == propTailwind![2]))){
-          if(objItem) textElem = (objItem[style]) ? `${propTailwind![1]}-${objItem[style]}` : "";
-          else textElem = "";
-        } else if(this.typeStyle == "css" && style == "tailwind" && propCSS){
+      } else if ((propCSS && Object.keys(tempObj).includes(propCSS![1])) ||
+                (propTailwind && Object.values(tempObj).includes(propTailwind![1]))) {
+        if (this.typeStyle == "css" && (objItem = this.dataArr.find((obj: any) => obj["css"] == `color: ${propCSS![2]};`))) {
+          if (objItem) {
+            textElem = (objItem[style]) ? `${tempObj[String(propCSS![1])]}-${objItem[style]}` : "";
+          } else {
+            textElem = "";
+          }
+        } else if (this.typeStyle != "css" && style == "css" && (objItem = this.dataArr.find((obj: any) => obj[this.typeStyle] == propTailwind![2]))) {
+          if (objItem) {
+            textElem = (objItem[style]) ? `${Object.keys(tempObj).find((elem: string) => tempObj[elem] == propTailwind![1])}: ${regCSS.exec(objItem["css"])![2]};` : "";
+          } else {
+            textElem = "";
+          }
+        } else if (this.typeStyle != "css" && style != "css" && (objItem = this.dataArr.find((obj: any) => obj[this.typeStyle] == propTailwind![2]))) {
+          if (objItem) {
+            textElem = (objItem[style]) ? `${propTailwind![1]}-${objItem[style]}` : "";
+          } else {
+            textElem = "";
+          }
+        } else if (this.typeStyle == "css" && style == "tailwind" && propCSS) {
           let key = this.dataArr.find((obj: any) => obj[style].indexOf(propCSS![1]))!["tailwind_custom"];
-          if(Object.keys(tempObj).includes(propCSS![1])) key = tempObj[propCSS![1]];
+          if (Object.keys(tempObj).includes(propCSS![1])) {
+            key = tempObj[propCSS![1]];
+          }
           textElem = key + "-[" + propCSS![2] + "]";
         }
-      } else if(this.typeStyle == "css" && style == "tailwind" && propCSS){
+      } else if (this.typeStyle == "css" && style == "tailwind" && propCSS) {
         let key = this.dataArr.find((obj: any) => obj[style].indexOf(propCSS![1]))!["tailwind_custom"];
-        if(Object.keys(tempObj).includes(propCSS![1])) key = tempObj[propCSS![1]];
+        if (Object.keys(tempObj).includes(propCSS![1])) {
+          key = tempObj[propCSS![1]];
+        }
         textElem = key + "-[" + propCSS![2] + "]";
       }
     } catch (err: any) {
@@ -127,8 +140,8 @@ class CssConverter extends React.Component<{numWind: number, onChangeData: any}>
     return textElem;
   }
 
-  convertData = async () => {
-    if(/* this.file && */ this.dataArr.length > 0 && this.dataField != '' && this.typeStyle != ''){
+  async convertData() {
+    if (/* this.file && */ this.dataArr.length > 0 && this.dataField != '' && this.typeStyle != '') {
       this.setState({
         blockTable: true,
       });
@@ -150,7 +163,7 @@ class CssConverter extends React.Component<{numWind: number, onChangeData: any}>
       Object.entries(objStyles).forEach(([key, value]) => {
         let tempRow: Array<any> = [];
         tempRow.push({"elem": "th", "text": value});
-        if(listField){
+        if (listField) {
           listField.forEach((item: string) => {
             tempRow.push({"elem": "td", "text": this.searchElemData(item, key)});
           });
@@ -173,9 +186,9 @@ class CssConverter extends React.Component<{numWind: number, onChangeData: any}>
     } else if (this.dataField == '') {
       this.alertNotify("bg-red-700", "The field is empty! Insert the data!");
     }
-  };
+  }
 
-  render (){
+  render() {
     return (
       <>
         <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>

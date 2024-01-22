@@ -13,11 +13,11 @@ class CountWords extends React.Component<{numWind: number, onChangeData: any}> {
   };
   file = null;
 
-  changeNumWind = (numWind: number) => {
+  changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
   }
 
-  changeFile = (event: any) => {
+  changeFile(event: any) {
     this.file = event.target.files[0];
     if(this.file) {
       const reader = new FileReader();
@@ -29,9 +29,9 @@ class CountWords extends React.Component<{numWind: number, onChangeData: any}> {
       }
       reader.readAsText(this.file)
     }
-  };
+  }
 
-  calc = () => {
+  calc() {
     let text = this.state.dataField;
     let result = '';
     let num_chars = text.split('').length;
@@ -41,7 +41,7 @@ class CountWords extends React.Component<{numWind: number, onChangeData: any}> {
     this.setState({
       outputText: result 
     });
-  };
+  }
 
   render() {
     return (
@@ -67,7 +67,7 @@ class CountWords extends React.Component<{numWind: number, onChangeData: any}> {
         <span className="my-3 text-xl font-bold">Or enter/paste text in the field below</span>
         
         <div className="flex flex-row">
-          <textarea onChange={(event: any) => {this.state.dataField = event.target.value}} rows={6} className="styleTextarea" value={this.state.dataField}></textarea>
+          <textarea onChange={(event: any) => {this.setState({ dataField: event.target.value })}} rows={6} className="styleTextarea" value={this.state.dataField}></textarea>
         </div>
         
         <button className="styleBut w-min" onClick={() => {this.calc()}}>Calculate</button>

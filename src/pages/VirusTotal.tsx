@@ -19,11 +19,11 @@ class VirusTotal extends React.Component<{numWind: number, onChangeData: any}> {
   
   urlInput: string = "";
 
-  changeNumWind = (numWind: number) => {
+  changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
   }
 
-  reqFun = async () => {
+  async reqFun() {
     this.setState({
       reqText: "The request is being executed! Wait..."
     });
@@ -65,7 +65,7 @@ class VirusTotal extends React.Component<{numWind: number, onChangeData: any}> {
     } catch (err) {
       console.error(err);
     }
-  };
+  }
 
   render() {
     return (

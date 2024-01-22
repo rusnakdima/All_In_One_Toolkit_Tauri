@@ -47,7 +47,7 @@ class WindNotify extends React.Component {
         }, 10);
       }
     }, 10);
-  };
+  }
 
   render () {
     return (

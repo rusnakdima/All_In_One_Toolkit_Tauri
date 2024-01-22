@@ -37,7 +37,9 @@ class Home extends React.Component<{numWind: number, onChangeData: any}, HomeSta
     { "to": 'xls_to_json', "icon": 'codeslash', "name": 'XLS to JSON' },
     // { "to": 'json_to_xls', "icon": 'codeslash', "name": 'JSON to XLS' },
     { "to": 'xls_to_xml', "icon": 'codeslash', "name": 'XLS to XML' },
+    // { "to": 'xml_to_xls', "icon": 'codeslash', "name": 'XML to XLS' },
     { "to": 'css_converter', "icon": 'codeslash', "name": 'CSS Converter' },
+    { "to": 'markdown_editor', "icon": 'codeslash', "name": 'Markdown Editor' },
   ];
 
   componentDidMount(): void {
@@ -85,7 +87,7 @@ class Home extends React.Component<{numWind: number, onChangeData: any}, HomeSta
     localStorage["recAct"] = JSON.stringify(this.state.recentAction);
   }
 
-  search = (substr: string) => {
+  search(substr: string): void {
     const searchValue = substr.toLowerCase();
     const tempLinks = [];
     if (searchValue != '') {
@@ -100,7 +102,7 @@ class Home extends React.Component<{numWind: number, onChangeData: any}, HomeSta
     }
   }
 
-  outputLinks = () => {
+  outputLinks(): Array<any> {
     const tempLinks = [];
     for (let i = 0; i < this.state.tempLinks.length; i++) {
       const element = this.state.tempLinks[i];

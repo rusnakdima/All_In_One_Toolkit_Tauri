@@ -18,19 +18,19 @@ class XlsToXml extends React.Component<{numWind: number, onChangeData: any}> {
   dataField: string = "";
   dataXml: string = "";
 
-  changeNumWind = (numWind: number) => {
+  changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
   }
 
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
-  };
+  }
 
-  parseData = (data: Array<any>) => {
+  parseData(dataArr: Array<any>) {
     let tempXml = "";
-    let strokeF = data[0];
-    data.splice(0, 1);
-    data.forEach((elem: any) => {
+    let strokeF = dataArr[0];
+    dataArr.splice(0, 1);
+    dataArr.forEach((elem: any) => {
       tempXml += `<array>`;
       elem.forEach((elem1: any, index: number) => {
         const key: string = strokeF[index].replace(/[\" \"]/gi,"");
@@ -41,17 +41,17 @@ class XlsToXml extends React.Component<{numWind: number, onChangeData: any}> {
     return tempXml;
   }
 
-  convertDataFun = (data: any[]) => {
-    this.dataXml = `<root>${this.parseData(data)}</root>`;
+  convertDataFun(dataArr: any[]) {
+    this.dataXml = `<root>${this.parseData(dataArr)}</root>`;
 
     if (this.dataXml != '') {
       this.alertNotify("bg-green-700", "The data has been successfully converted!");
     } else {
       this.alertNotify("bg-red-700", "No data was received from the file!");
     }
-  };
+  }
 
-  parseDataFileFun = async () => {
+  async parseDataFileFun() {
     if(this.file != null){
       const reader = new FileReader();
       reader.onload = (e: any) => {
@@ -59,8 +59,8 @@ class XlsToXml extends React.Component<{numWind: number, onChangeData: any}> {
         const workbook = XLSX.read(text, {type:'binary'});
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         if (worksheet) {
-          const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-          this.convertDataFun(data);
+          const dataArr = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+          this.convertDataFun(dataArr);
         } else {
           this.alertNotify("bg-red-700", "The file is empty!");
         }
@@ -69,18 +69,18 @@ class XlsToXml extends React.Component<{numWind: number, onChangeData: any}> {
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");
     }
-  };
+  }
 
-  parseDataFieldFun = () => {
+  parseDataFieldFun() {
     if(this.dataField != ''){
-      const data = this.dataField.split("\n").map((elem) => elem.split("\t"));
-      this.convertDataFun(data);
+      const dataArr = this.dataField.split("\n").map((elem) => elem.split("\t"));
+      this.convertDataFun(dataArr);
     } else {
       this.alertNotify("bg-red-700", "The field is empty! Insert the data!");
     }
-  };
+  }
 
-  saveDataFileFun = async () => {
+  async saveDataFileFun() {
     if(this.file != null || this.dataXml != ''){
       await invoke("xls_to_xml", {"name": (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'xls_to_xml', "data": this.dataXml})
       .then((data: any) => {
@@ -92,9 +92,9 @@ class XlsToXml extends React.Component<{numWind: number, onChangeData: any}> {
     } else if (this.dataXml == ''){
       this.alertNotify("bg-red-700", "No data was received from the file!");
     }
-  };
+  }
 
-  render(){
+  render() {
     return (
       <>
         <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>

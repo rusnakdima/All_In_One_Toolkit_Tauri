@@ -85,15 +85,15 @@ class PlistToTable extends React.Component<{numWind: number, onChangeData: any}>
     dataDetails: {head: {"key": "", "type": "", "value": "", "padLeft": 0, "open": false}, list: []},
   };
 
-  changeNumWind = (numWind: number) => {
+  changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
   }
 
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
-  };
+  }
 
-  parseData = (array: any, key: string, padLeft: number) => {
+  parseData(array: any, key: string, padLeft: number) {
     const tempDetails: DetailsData = {head: {"key": key, "type": "Dictonary", "value": String(array.length/2), "padLeft": padLeft - 20, "open": false}, list: []};
     padLeft += 20;
     let tempRow: ({"key": string, "type": string, "value": string, "padLeft": number} | DetailsData)[] = [];
@@ -127,7 +127,7 @@ class PlistToTable extends React.Component<{numWind: number, onChangeData: any}>
     return tempDetails;
   }
 
-  createList = (dataXML: string) => {
+  createList(dataXML: string) {
     this.setState({
       blockList: true
     });
@@ -139,9 +139,9 @@ class PlistToTable extends React.Component<{numWind: number, onChangeData: any}>
         dataDetails: this.parseData([...dict.children], 'Root', 20)
       });
     }, 50);
-  };
+  }
 
-  parseDataFileFun = async () =>{
+  async parseDataFileFun() {
     if (this.file != null) {
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);

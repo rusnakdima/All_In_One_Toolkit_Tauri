@@ -11,7 +11,7 @@ import { Bar, Line, Pie, Doughnut } from "react-chartjs-2";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, ArcElement, Title, Tooltip, Legend);
 
-export const options = {
+const options = {
   responsive: true,
   plugins: {
     legend: {
@@ -47,29 +47,29 @@ class DataToChart extends React.Component<{numWind: number, onChangeData: any}> 
     }
   }
 
-  changeNumWind = (numWind: number) => {
+  changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
   }
 
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
-  };
+  }
 
-  createTableFun(data: any){
+  createTableFun(dataArr: any[]) {
     this.setState({
       blockTable: true,
       blockChart: true
-    })
+    });
     setTimeout(() => {
-      this.rows = data.length;
-      this.columns = data[0].length;
+      this.rows = dataArr.length;
+      this.columns = dataArr[0].length;
       let tempHead: Array<any> = [];
-      data[0].forEach((val: any) => {
+      dataArr[0].forEach((val: any) => {
         tempHead.push(val);
       });
       let tempBody: Array<any> = [];
-      data.splice(0, 1);
-      data.forEach((row: any) => {
+      dataArr.splice(0, 1);
+      dataArr.forEach((row: any) => {
         let tempRow: Array<any> = [];
         row.forEach((val: any) => {
           tempRow.push(val);
@@ -83,17 +83,17 @@ class DataToChart extends React.Component<{numWind: number, onChangeData: any}> 
         }
       });
     }, 20);
-  };
+  }
 
-  createTableFileData = () => {
+  createTableFileData() {
     if(this.file != null){
       const reader = new FileReader();
       reader.onload = (e: any) => {
         const text = (e.target.result);
         const workbook = XLSX.read(text, {type:'binary'});
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        this.createTableFun(data);
+        const dataArr = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        this.createTableFun(dataArr);
       }
       reader.readAsBinaryString(this.file);
     } else {
@@ -101,33 +101,33 @@ class DataToChart extends React.Component<{numWind: number, onChangeData: any}> 
     }
   };
 
-  createTableFieldData = () => {
+  createTableFieldData() {
     if(this.dataField != ''){
-      let data = this.dataField.split("\n").map((elem) => elem.split("\t"))
-      this.createTableFun(data);
+      const dataArr = this.dataField.split("\n").map((elem) => elem.split("\t"))
+      this.createTableFun(dataArr);
     } else {
       this.alertNotify("bg-red-700", "The field is empty! Insert the data!");
     }
-  };
+  }
 
-  createTableManual = () => {
+  createTableManual() {
     if(this.columns > 0 && this.rows > 0){
-      let data = [];
+      let dataArr = [];
       for(let i = 0; i < this.rows; i++){
         let tempArr = [];
         for(let j = 0; j < this.columns; j++){
           tempArr.push("");
         }
-        data.push(tempArr);
+        dataArr.push(tempArr);
       }
 
-      this.createTableFun(data);
+      this.createTableFun(dataArr);
     } else {
       this.alertNotify("bg-red-700", "The fields are empty! Enter the data!");
     }
-  };
+  }
 
-  createChart = () => {
+  createChart() {
     this.setState({
       outChart: true
     });
@@ -147,9 +147,9 @@ class DataToChart extends React.Component<{numWind: number, onChangeData: any}> 
         }
       });
     }, 50);
-  };
+  }
 
-  render(){
+  render() {
     return (
       <>
         <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>

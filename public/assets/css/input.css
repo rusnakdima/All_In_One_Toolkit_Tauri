@@ -78,6 +78,10 @@
   @apply text-black dark:text-white fill-black dark:fill-white !w-[35px] !h-[35px]
 }
 
+pre {
+  @apply w-full p-5 rounded-lg bg-slate-300 dark:bg-slate-700
+}
+
 ::-webkit-scrollbar {
   @apply bg-transparent w-2 h-2
 }

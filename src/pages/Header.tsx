@@ -21,23 +21,23 @@ class Header extends React.Component {
         this.closeNav();
       });
     });
-  };
+  }
   
-  handleTheme = (theme: string) => {
+  handleTheme(theme: string) {
     localStorage["theme"] = theme;
     document.querySelector("html")?.setAttribute("class", theme);
-  };
+  }
   
-  openNav = () => {
+  openNav() {
     const menuBack = document.querySelector("#menuBack") as HTMLDivElement | null;
     if(menuBack != null){
       menuBack.classList.add("block");
       menuBack.classList.remove("-translate-x-full");
       menuBack.children[0].classList.remove("-translate-x-full");
     }
-  };
+  }
   
-  closeNav = () => {
+  closeNav() {
     const menuBack = document.querySelector("#menuBack") as HTMLDivElement | null;
     if(menuBack != null){
       menuBack.children[0].classList.add("-translate-x-full");
@@ -46,9 +46,9 @@ class Header extends React.Component {
         menuBack.classList.remove("block");
       }, 160);
     };
-  };
+  }
 
-  render(){
+  render() {
     return (
       <div className="styleHeader">
         <div className="flex flex-row" id="menuBut">

@@ -19,22 +19,22 @@ class CsvToTable extends React.Component<{numWind: number, onChangeData: any}> {
     dataTable: [],
   };
 
-  changeNumWind = (numWind: number) => {
+  changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
   }
 
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
-  };
+  }
 
-  createTableFun = (data: any) => {
+  createTableFun(dataCsv: any[]) {
     this.setState({
       blockTable: true
     });
     setTimeout(() => {
-      data.splice(-1, 1);
+      dataCsv.splice(-1, 1);
       let tempBody: Array<any[]> = [];
-      data.forEach((row: any) => {
+      dataCsv.forEach((row: any) => {
         let tempRow: Array<any> = [];
         row.forEach((cell: any) => {
           tempRow.push(cell);
@@ -45,35 +45,35 @@ class CsvToTable extends React.Component<{numWind: number, onChangeData: any}> {
         dataTable: tempBody,
       })
     }, 50);
-  };
+  }
 
-  parseDataFileFun = async () => {
+  async parseDataFileFun() {
     if(this.file != null){
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();
       if (text != null && text != '') {
-        const data: any[] = text.split("\r\n").map((line: any) => line.split(","));
-        this.createTableFun(data);
+        const dataCsv: any[] = text.split("\r\n").map((line: any) => line.split(","));
+        this.createTableFun(dataCsv);
       } else {
         this.alertNotify("bg-red-700", "The file is empty!");
       }
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");
     }
-  };
+  }
 
-  parseDataFieldFun = () => {
+  parseDataFieldFun() {
     if(this.dataField != ''){
       const lines = this.dataField.split("\n");
-      const data = lines.map((line: any) => line.split(","));
-      this.createTableFun(data);
+      const dataCsv = lines.map((line: any) => line.split(","));
+      this.createTableFun(dataCsv);
     } else {
       this.alertNotify("bg-red-700", "The field is empty! Insert the data!");
     }
-  };
+  }
 
-  render(){
+  render() {
     return (
       <>
         <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>

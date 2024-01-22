@@ -21,8 +21,10 @@ import JsonToXml from "./JsonToXml";
 import XmlToJson from "./XmlToJson";
 import XlsToJson from "./XlsToJson";
 import JsonToXls from "./JsonToXls";
+import XmlToXls from "./XmlToXls";
 import XlsToXml from "./XlsToXml";
 import CssConverter from "./CssConverter";
+import MarkdownEditor from "./MarkdownEditor";
 
 const Router = (data: any) => {
   const routes = [
@@ -47,8 +49,10 @@ const Router = (data: any) => {
         { path: 'xml_to_json', element: <XmlToJson numWind={data.numWind} onChangeData={data.onChangeData} /> },
         { path: 'xls_to_json', element: <XlsToJson numWind={data.numWind} onChangeData={data.onChangeData} /> },
         { path: 'json_to_xls', element: <JsonToXls numWind={data.numWind} onChangeData={data.onChangeData} /> },
+        { path: 'xml_to_xls', element: <XmlToXls numWind={data.numWind} onChangeData={data.onChangeData} /> },
         { path: 'xls_to_xml', element: <XlsToXml numWind={data.numWind} onChangeData={data.onChangeData} /> },
         { path: 'css_converter', element: <CssConverter numWind={data.numWind} onChangeData={data.onChangeData} /> },
+        { path: 'markdown_editor', element: <MarkdownEditor numWind={data.numWind} onChangeData={data.onChangeData} /> },
       ]
     }
   ];
@@ -62,7 +66,7 @@ class App extends React.Component {
     numWind: 1,
   };
 
-  changeNumWind = (numWind: number) => {
+  changeNumWind(numWind: number) {
     this.setState({
       numWind: numWind,
     });
@@ -75,17 +79,17 @@ class App extends React.Component {
         <div className={`flex ${this.state.numWind > 1 ? 'flex-row gap-x-3' : 'flex-col'} m-2 mt-14`}>
           <BrowserRouter>
             <Nav />
-            <Router numWind={this.state.numWind} onChangeData={this.changeNumWind} />
+            <Router numWind={this.state.numWind} onChangeData={(value: number) => {this.changeNumWind(value)}} />
           </BrowserRouter>
           {this.state.numWind > 1 && <div className="border-l-2 styleBorderSolid"></div>}
           {this.state.numWind > 1 && <BrowserRouter>
             <Nav />
-            <Router numWind={this.state.numWind} onChangeData={this.changeNumWind} />
+            <Router numWind={this.state.numWind} onChangeData={(value: number) => {this.changeNumWind(value)}} />
           </BrowserRouter>}
           {this.state.numWind > 2 && <div className="border-l-2 styleBorderSolid"></div>}
           {this.state.numWind > 2 && <BrowserRouter>
             <Nav />
-            <Router numWind={this.state.numWind} onChangeData={this.changeNumWind} />
+            <Router numWind={this.state.numWind} onChangeData={(value: number) => {this.changeNumWind(value)}} />
           </BrowserRouter>}
         </div>
       </div>

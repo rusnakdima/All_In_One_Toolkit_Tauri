@@ -59,15 +59,15 @@ class JsonToTable extends React.Component<{numWind: number, onChangeData: any}> 
     dataTable: {thead: [], tbody: []},
   };
 
-  changeNumWind = (numWind: number) => {
+  changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
   }
 
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
-  };
+  }
 
-  parseArr = (arr: Array<any>) => {
+  parseArr(arr: Array<any>) {
     let table: TableData = {thead: [], tbody: []};
     const keys: Array<any> = [];
     arr.forEach((elem: any) => {
@@ -96,11 +96,11 @@ class JsonToTable extends React.Component<{numWind: number, onChangeData: any}> 
       table.tbody.push(tempRow);
     });
     return table;
-  };
+  }
 
-  parseObj = (object: {[key: string]: any}) => {
+  parseObj(obj: {[key: string]: any}) {
     let table: TableData = {thead: ["Key", "Value"], tbody: []};
-    Object.entries(object).forEach(([key, value]) => {
+    Object.entries(obj).forEach(([key, value]) => {
       let tempRow: (string | TableData)[] = [];
       tempRow.push(key);
       if (value == null) {
@@ -115,9 +115,9 @@ class JsonToTable extends React.Component<{numWind: number, onChangeData: any}> 
       table.tbody.push(tempRow);
     });
     return table;
-  };
+  }
 
-  createTableFun = (object: any) => {
+  createTableFun(object: any) {
     this.setState({
       blockTable: true
     });
@@ -126,34 +126,34 @@ class JsonToTable extends React.Component<{numWind: number, onChangeData: any}> 
         dataTable: this.parseObj(object)
       });
     }, 50);
-  };
+  }
 
-  parseDataFileFun = async () => {
+  async parseDataFileFun() {
     if (this.file != null){
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();
       if (text != null && text != '') {
-        const data: {[key: string]: any} = JSON.parse(text);
-        this.createTableFun(data);
+        const dataJson: {[key: string]: any} = JSON.parse(text);
+        this.createTableFun(dataJson);
       } else {
         this.alertNotify("bg-red-700", "The file is empty!");
       }
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");
     }
-  };
+  }
 
-  parseDataFieldFun = () => {
+  parseDataFieldFun() {
     if(this.dataField != ''){
-      const data = JSON.parse(this.dataField);
-      this.createTableFun(data);
+      const dataJson = JSON.parse(this.dataField);
+      this.createTableFun(dataJson);
     } else {
       this.alertNotify("bg-red-700", "The field is empty! Insert the data!");
     }
-  };
+  }
 
-  render(){
+  render() {
     return (
       <>
         <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>

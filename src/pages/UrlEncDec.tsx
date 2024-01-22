@@ -16,15 +16,15 @@ class UrlEncDec extends React.Component<{numWind: number, onChangeData: any}> {
     outputText: ""
   };
 
-  changeNumWind = (numWind: number) => {
+  changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
   }
 
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
-  };
+  }
 
-  encodeFun = () => {
+  encodeFun() {
     try {
       const encodeUrl = encodeURIComponent(this.urlInput);
       this.setState({
@@ -34,9 +34,9 @@ class UrlEncDec extends React.Component<{numWind: number, onChangeData: any}> {
       console.error(error);
       this.alertNotify("bg-red-700", "An unexpected error has occurred! Check the entered data!");
     }
-  };
+  }
 
-  decodeFun = () => {
+  decodeFun() {
     try {
       const decodeUrl = decodeURIComponent(this.urlInput);
       this.setState({
@@ -46,7 +46,7 @@ class UrlEncDec extends React.Component<{numWind: number, onChangeData: any}> {
       console.error(error);
       this.alertNotify("bg-red-700", "An unexpected error has occurred! Check the entered data!");
     }
-  };
+  }
 
   render() {
     return (

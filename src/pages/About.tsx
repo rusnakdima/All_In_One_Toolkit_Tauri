@@ -17,25 +17,25 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
     windUpdates: false,
   }
 
-  changeNumWind = (numWind: number) => {
+  changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
   }
 
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
-  };
+  }
 
-  matchVersion = (lastVer: string) => {
+  matchVersion(lastVer: string) {
     let tempVer = lastVer.slice(1).split(".");
     let curVer = ENV.version.split(".");
     return (Number(tempVer[0]) > Number(curVer[0]) || Number(tempVer[1]) > Number(curVer[1]) || Number(tempVer[2]) > Number(curVer[2]));
   }
 
-  formatDate = (date: string) => {
+  formatDate(date: string) {
     return new Date(date).toISOString().split("T")[0];
   }
 
-  getDate = async () => {
+  async getDate() {
     await fetch('https://api.github.com/repos/rusnakdima/All_In_One_Toolkit_Tauri/releases/latest')
       .then(response => response.json())
       .then(json => {
@@ -49,7 +49,7 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
       });
   }
 
-  checkUpdates = async () => {
+  async checkUpdates() {
     await fetch('https://api.github.com/repos/rusnakdima/All_In_One_Toolkit_Tauri/releases/latest')
       .then(response => response.json())
       .then(json => {
@@ -68,7 +68,7 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
       });
   }
 
-  render () {
+  render() {
     this.getDate();
     return (
       <>
