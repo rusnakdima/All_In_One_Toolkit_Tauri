@@ -99,7 +99,7 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
               </div>
               <div className="flex flex-row gap-x-3 justify-center">
                 <span className="text-gray-600 dark:text-gray-300">Company</span>
-                <span>DmitriyDev</span>
+                <span>TechCraft Solutions</span>
               </div>
               <div className="flex flex-row gap-x-3 justify-center">
                 <span className="text-gray-600 dark:text-gray-300">Year of creation</span>
