@@ -52,11 +52,11 @@ class Header extends React.Component {
     return (
       <div className="styleHeader">
         <div className="flex flex-row" id="menuBut">
-          <MenuOutline cssClasses="text-black dark:text-white !w-[35px] !h-[35px]" onClick={() => {this.openNav()}} />
+          <MenuOutline cssClasses="styleIonIcon" onClick={() => {this.openNav()}} />
         </div>
         <div>
-          <SunnyOutline cssClasses="block dark:hidden text-black dark:text-white !w-[35px] !h-[35px]" onClick={() => {this.handleTheme('dark')}} />
-          <MoonOutline cssClasses="hidden dark:block text-black dark:text-white !w-[35px] !h-[35px]" onClick={() => {this.handleTheme('')}} />
+          <SunnyOutline cssClasses="block dark:hidden styleIonIcon" onClick={() => {this.handleTheme('dark')}} />
+          <MoonOutline cssClasses="hidden dark:block styleIonIcon" onClick={() => {this.handleTheme('')}} />
         </div>
       </div>
     );

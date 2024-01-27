@@ -15,6 +15,7 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
   state = {
     dateLastUpdate: '',
     windUpdates: false,
+    downloadProgress: 0,
   }
 
   changeNumWind(numWind: number) {
@@ -53,13 +54,18 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
     await fetch('https://api.github.com/repos/rusnakdima/All_In_One_Toolkit_Tauri/releases/latest')
       .then(response => response.json())
       .then(json => {
-        if (this.matchVersion(json.tag_name)) {
-          this.alertNotify("bg-yellow-500", "A new version is available!");
-          this.setState({
-            windUpdates: true
-          });
-        } else {
-          this.alertNotify("bg-green-700", "You have the latest version!");
+        if (json) {
+          const lastVer: string = json!.tag_name;
+          setTimeout(() => {
+            if (this.matchVersion(lastVer)) {
+              this.alertNotify("bg-yellow-500", "A new version is available!");
+              this.setState({
+                windUpdates: true
+              });
+            } else {
+              this.alertNotify("bg-green-700", "You have the latest version!");
+            }
+          }, 1000);
         }
       })
       .catch(err => {
@@ -68,11 +74,18 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
       });
   }
 
+  downloadFile() {
+    window.open(`https://github.com/rusnakdima/All_In_One_Toolkit_Tauri/releases/download/v${ENV.version}/all_in_one_toolkit.exe`, 'blank');
+    this.setState({
+      windUpdates: false
+    });
+  }
+
   render() {
     this.getDate();
     return (
       <>
-        <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>
+        <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-full lg:w-1/3' : (this.props.numWind > 1) ? 'w-full lg:w-1/2' : 'w-full'}`}>
           <div className="flex flex-row justify-between items-center border-b-2 styleBorderSolid pb-2">
             <div className="flex flex-row gap-x-2 text-2xl font-bold">
               <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>
@@ -111,7 +124,7 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
               </div>
             </div>
             <div className="text-xl font-bold mt-3">
-              <button className="styleLink" onClick={this.checkUpdates}> Check for updates...</button>
+              <button className="styleLink" onClick={() => {this.checkUpdates()}}> Check for updates...</button>
             </div>
           </div>
         </div>
@@ -121,12 +134,12 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
             <div className="border-b-2 pb-2 styleBorderSolid">
               <span className="text-xl font-bold">Updating the program</span>
             </div>
-            <div className="flex flex-col my-3">
+            <div className="flex flex-col my-3 gap-y-2">
               <span>Do you want to download the update?</span>
             </div>
             <div className="flex flex-row justify-end gap-x-3 pt-2 border-t-2 styleBorderSolid">
               <button className="styleBut" onClick={() => {this.setState({windUpdates: false})}}>No</button>
-              <button className="styleBut" onClick={() => {this.setState({windUpdates: false}); window.open('https://github.com/rusnakdima/All_In_One_Toolkit_Tauri/releases/latest', 'blank')}}>Yes</button>
+              <button className="styleBut" onClick={() => {this.downloadFile()}}>Yes</button>
             </div>
           </div>
         </div>}

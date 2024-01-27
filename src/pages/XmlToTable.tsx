@@ -123,7 +123,7 @@ class XmlToTable extends React.Component<{numWind: number, onChangeData: any}> {
   render() {
     return (
       <>
-        <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>
+        <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-full lg:w-1/3' : (this.props.numWind > 1) ? 'w-full lg:w-1/2' : 'w-full'}`}>
           <div className="flex flex-row justify-between items-center border-b-2 styleBorderSolid pb-2">
             <div className="flex flex-row gap-x-2 text-2xl font-bold">
               <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>

@@ -24,28 +24,33 @@ class XmlToXls extends React.Component<{numWind: number, onChangeData: any}> {
     this.childRef.current.alertNotify(color, title);
   }
 
-  parseData(xmlNodes: Array<any>) {
-    // Object.keys(obj).forEach((key: string) => {
-    //   if (Array.isArray(obj[key])) {
-    //     this.dataXls.push(Object.keys(obj[key][0]));
-    //     obj[key].forEach((item: string) => {
-    //       this.dataXls.push(Object.values(item));
-    //     });
-    //   } else {
-    //     this.dataXls.push([key]);
-    //     this.parseData(obj[key]);
-    //   }
-    // });
-    console.log(xmlNodes)
-    console.log(this.parseData([...xmlNodes[0].children]));
+  parseData(xmlNodes: Array<any>, startPos: number = 0, row: number = 0) {
+    xmlNodes.forEach((elem: any, index: number) => {
+      if (this.dataXls[row] && this.dataXls.length -1 != row) {
+        const lenKeys = this.dataXls[this.dataXls.length -1].length - this.dataXls[row].length;
+        Array(lenKeys).fill("").forEach((val: any) => {
+          this.dataXls[row].push(val);
+        });
+        this.dataXls[row].push(elem.nodeName);
+      } else {
+        this.dataXls.splice(row, 0, [elem.nodeName]);
+        Array(startPos).fill("").forEach((val: any) => this.dataXls[row].unshift(val));
+      }
+      if ([...elem.children].length > 0) {
+        this.parseData([...elem.children], startPos + index, row+1);
+      } else {
+        this.dataXls[this.dataXls.length -1].push(elem.textContent);
+      }
+    });
+    return;
   }
 
   convertDataFun(dataXml: string) {
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(dataXml, 'text/xml');
-    console.log(this.parseData([...xmlDoc.children]))
-    // this.dataXls = data[Object.keys(data)[0]].map((elem: {[key: string]: any}) => Object.values(elem).map((val: any) => {return String(val)}));
-    // this.dataXls.unshift(Object.keys(data["root"][0]));
+    this.dataXls = [];
+    this.dataXls.push([], []);
+    this.parseData([...xmlDoc.children]);
 
     if (Array.isArray(this.dataXls)) {
       this.alertNotify("bg-green-700", "The data has been successfully converted!");
@@ -96,7 +101,7 @@ class XmlToXls extends React.Component<{numWind: number, onChangeData: any}> {
   render() {
     return (
       <>
-        <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>
+        <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-full lg:w-1/3' : (this.props.numWind > 1) ? 'w-full lg:w-1/2' : 'w-full'}`}>
           <div className="flex flex-row justify-between items-center border-b-2 styleBorderSolid pb-2">
             <div className="flex flex-row gap-x-2 text-2xl font-bold">
               <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>

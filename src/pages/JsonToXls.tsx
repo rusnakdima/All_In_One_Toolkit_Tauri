@@ -24,35 +24,39 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
     this.childRef.current.alertNotify(color, title);
   }
 
-  parseData(obj: {[key: string]: any}) {
-    let tempArray: any[] = [];
-    Object.keys(obj).forEach((key: string) => {
-      console.log(key, obj[key], Object.keys(obj))
-      if (Array.isArray(obj[key])) {
-        this.dataXls.push(Object.keys(obj[key][0]));
-        obj[key].forEach((item: string) => {
-          this.dataXls.push(Object.values(item));
+  parseData(obj: {[key: string]: any}, startPos: number = 0, row: number = 0) {
+    Object.keys(obj).forEach((key: string, index: number) => {
+      if (this.dataXls[row] && this.dataXls.length -1 != row) {
+        const lenKeys = this.dataXls[this.dataXls.length -1].length - this.dataXls[row].length;
+        Array(lenKeys).fill("").forEach((val: any) => {
+          this.dataXls[row].push(val);
         });
-      } else if (typeof obj[key] === "object") {
-        console.log(obj)
-        tempArray.push(key);
-        tempArray.push(this.parseData(obj[key]));
-        // this.dataXls.push(Object.keys(obj));
-        // this.parseData(obj[key]);
+        this.dataXls[row].push(key);
       } else {
-        tempArray.push(key);
-        tempArray.push(obj[key]);
-        // this.dataXls.push(Object.keys(obj));
-        // this.dataXls.push((obj[key]));
+        this.dataXls.splice(row, 0, [key]);
+        Array(startPos).fill("").forEach((val: any) => this.dataXls[row].unshift(val));
+      }
+      if (Array.isArray(obj[key])) {
+        let tmpArr: Array<any> = [];
+        Array.from(obj[key]).forEach((val: any) => {
+          if (val !== "object") {
+            tmpArr.push(val);
+          }
+        });
+        this.dataXls[this.dataXls.length -1].push(tmpArr.join(', '));
+      } else if (typeof obj[key] === "object") {
+        this.parseData(obj[key], startPos + index, row+1);
+      } else {
+        this.dataXls[this.dataXls.length -1].push(obj[key]);
       }
     });
-    return tempArray;
+    return;
   }
 
   convertDataFun(dataJson: {[key: string]: any}) {
-    console.log(dataJson)
-    this.dataXls = this.parseData(dataJson);
-    console.log(this.dataXls)
+    this.dataXls = [];
+    this.dataXls.push([], []);
+    this.parseData(dataJson);
 
     if (Array.isArray(this.dataXls)) {
       this.alertNotify("bg-green-700", "The data has been successfully converted!");
@@ -103,7 +107,7 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
   render() {
     return (
       <>
-        <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-1/3' : (this.props.numWind > 1) ? 'w-1/2' : 'w-full'}`}>
+        <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-full lg:w-1/3' : (this.props.numWind > 1) ? 'w-full lg:w-1/2' : 'w-full'}`}>
           <div className="flex flex-row justify-between items-center border-b-2 styleBorderSolid pb-2">
             <div className="flex flex-row gap-x-2 text-2xl font-bold">
               <Link to="/"><ChevronBackCircleOutline cssClasses="styleIonIcon" /></Link>

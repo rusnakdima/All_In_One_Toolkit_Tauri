@@ -76,7 +76,7 @@ class App extends React.Component {
     return (
       <div className="flex flex-col">
         <Header />
-        <div className={`flex ${this.state.numWind > 1 ? 'flex-row gap-x-3' : 'flex-col'} m-2 mt-14`}>
+        <div className={`flex ${this.state.numWind > 1 ? 'flex-col gap-y-3 lg:flex-row lg:gap-x-3' : 'flex-col'} m-2 mt-14`}>
           <BrowserRouter>
             <Nav />
             <Router numWind={this.state.numWind} onChangeData={(value: number) => {this.changeNumWind(value)}} />

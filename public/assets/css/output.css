@@ -994,10 +994,6 @@ input[type="range"]::-ms-fill-lower {
   height: 150px !important;
 }
 
-.\!h-\[35px\] {
-  height: 35px !important;
-}
-
 .\!h-\[90px\] {
   height: 90px !important;
 }
@@ -1044,10 +1040,6 @@ input[type="range"]::-ms-fill-lower {
 
 .\!w-\[150px\] {
   width: 150px !important;
-}
-
-.\!w-\[35px\] {
-  width: 35px !important;
 }
 
 .\!w-\[90px\] {
@@ -1301,9 +1293,9 @@ input[type="range"]::-ms-fill-lower {
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 
-.bg-gray-600 {
+.bg-gray-500 {
   --tw-bg-opacity: 1;
-  background-color: rgb(75 85 99 / var(--tw-bg-opacity));
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
 }
 
 .bg-green-700 {
@@ -1328,11 +1320,6 @@ input[type="range"]::-ms-fill-lower {
 .bg-yellow-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(194 120 3 / var(--tw-bg-opacity));
-}
-
-.bg-gray-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
 }
 
 .\!fill-gray-500 {
@@ -2076,9 +2063,9 @@ pre {
   background-color: rgb(0 0 0 / 0.3);
 }
 
-:is(.dark .dark\:bg-gray-400) {
+:is(.dark .dark\:bg-gray-600) {
   --tw-bg-opacity: 1;
-  background-color: rgb(156 163 175 / var(--tw-bg-opacity));
+  background-color: rgb(75 85 99 / var(--tw-bg-opacity));
 }
 
 :is(.dark .dark\:bg-gray-800) {
@@ -2089,11 +2076,6 @@ pre {
 :is(.dark .dark\:bg-zinc-800) {
   --tw-bg-opacity: 1;
   background-color: rgb(39 39 42 / var(--tw-bg-opacity));
-}
-
-:is(.dark .dark\:bg-gray-600) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(75 85 99 / var(--tw-bg-opacity));
 }
 
 :is(.dark .dark\:text-gray-300) {
@@ -2128,6 +2110,14 @@ pre {
 }
 
 @media (min-width: 1024px) {
+  .lg\:w-1\/2 {
+    width: 50%;
+  }
+
+  .lg\:w-1\/3 {
+    width: 33.333333%;
+  }
+
   .lg\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -2138,6 +2128,15 @@ pre {
 
   .lg\:grid-cols-5 {
     grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .lg\:flex-row {
+    flex-direction: row;
+  }
+
+  .lg\:gap-x-3 {
+    -moz-column-gap: 0.75rem;
+         column-gap: 0.75rem;
   }
 }
 

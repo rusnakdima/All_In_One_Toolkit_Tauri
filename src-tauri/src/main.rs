@@ -84,6 +84,22 @@ fn json_to_xls(name: String, data: String) -> String{
     format!("{}", file_path.display())
 }
 
+#[tauri::command]
+fn xml_to_xls(name: String, data: String) -> String{
+    let name_file: String = format!("{}_{}{}", name, get_current_date(), ".xlsx");
+    let document_folder = path::document_dir().expect("Failed to get document folder");
+    let app_folder = document_folder.join("AllInOneToolkit");
+    std::fs::create_dir_all(&app_folder).expect("Failed to create app folder");
+    let file_path = app_folder.join(&name_file);
+    let file_path_str = file_path.to_str().unwrap_or_default();
+    if let Err(err) = save_xlsx(data, file_path_str.to_string()) {
+        eprintln!("Failed to save the Excel file: {:?}", err);
+    } else {
+        println!("Created a file {}", file_path.display());
+    }
+    format!("{}", file_path.display())
+}
+
 async fn req_site(url: String, key: String) -> Result<String, reqwest::Error> {
     let client = reqwest::Client::new();
     let response = client.get(url).header("x-apikey", key).send().await?;
@@ -110,7 +126,7 @@ async fn get_json() -> String {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, xls_to_xml, json_to_xls, virus_total, get_json])
+        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, xls_to_xml, json_to_xls, xml_to_xls, virus_total, get_json])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
