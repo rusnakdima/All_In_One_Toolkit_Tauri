@@ -89,3 +89,12 @@ pre {
 ::-webkit-scrollbar-thumb {
   @apply rounded-2xl bg-gray-600
 }
+
+@keyframes slide {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: 113px;
+  }
+}

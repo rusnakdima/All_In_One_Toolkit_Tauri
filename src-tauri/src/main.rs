@@ -5,7 +5,7 @@ extern crate chrono;
 
 use chrono::Local;
 use std::fs::File;
-use std::io::Write;
+use std::io::{Cursor, Write};
 use tauri::api::path;
 use rust_xlsxwriter::Workbook;
 
@@ -47,12 +47,20 @@ fn xls_to_xml(name: String, data: String) -> String {
     format!("{}", write_data(name, data, ".xml".to_string()))
 }
 
-fn parse_str(str: String) -> Result<Vec<Vec<String>>, serde_json::Error>{
+#[tauri::command]
+fn open_file(path: String) -> String {
+    if let Err(err) = opener::open(path) {
+        eprintln!("Failed to open file: {}", err);
+    }
+    format!("")
+}
+
+fn parse_str(str: String) -> core::result::Result<Vec<Vec<String>>, serde_json::Error>{
     let result: Vec<Vec<String>> = serde_json::from_str(&str)?;
     Ok(result)
 }
 
-fn save_xlsx(data: String, name_file: String) -> Result<(), serde_json::Error> {
+fn save_xlsx(data: String, name_file: String) -> core::result::Result<(), serde_json::Error> {
     let mut workbook = Workbook::new();
     let worksheet = workbook.add_worksheet();
     if let Ok(arr_data) = parse_str(data) {
@@ -69,7 +77,7 @@ fn save_xlsx(data: String, name_file: String) -> Result<(), serde_json::Error> {
 }
 
 #[tauri::command]
-fn json_to_xls(name: String, data: String) -> String{
+fn json_to_xls(name: String, data: String) -> String {
     let name_file: String = format!("{}_{}{}", name, get_current_date(), ".xlsx");
     let document_folder = path::document_dir().expect("Failed to get document folder");
     let app_folder = document_folder.join("AllInOneToolkit");
@@ -85,7 +93,7 @@ fn json_to_xls(name: String, data: String) -> String{
 }
 
 #[tauri::command]
-fn xml_to_xls(name: String, data: String) -> String{
+fn xml_to_xls(name: String, data: String) -> String {
     let name_file: String = format!("{}_{}{}", name, get_current_date(), ".xlsx");
     let document_folder = path::document_dir().expect("Failed to get document folder");
     let app_folder = document_folder.join("AllInOneToolkit");
@@ -100,7 +108,7 @@ fn xml_to_xls(name: String, data: String) -> String{
     format!("{}", file_path.display())
 }
 
-async fn req_site(url: String, key: String) -> Result<String, reqwest::Error> {
+async fn req_site(url: String, key: String) -> core::result::Result<String, reqwest::Error> {
     let client = reqwest::Client::new();
     let response = client.get(url).header("x-apikey", key).send().await?;
     let json = response.text().await.unwrap();
@@ -124,9 +132,26 @@ async fn get_json() -> String {
     format!("{}", data)
 }
 
+async fn download_file(url: String, file_name: String) -> core::result::Result<(), reqwest::Error> {
+    let response = reqwest::get(url).await?;
+    let download_folder = path::download_dir().expect("Failed to get download folder");
+    let file_path = download_folder.join(&file_name);
+    let mut file = File::create(file_path).expect("failed to create file");
+    let mut content = Cursor::new(response.bytes().await?);
+    // std::io::copy(&mut content, &mut file)?;
+    std::io::copy(&mut content, &mut file).expect("failed to copy content to file");
+    Ok(())
+}
+
+#[tauri::command]
+async fn download_update(url: String, file_name: String) -> String {
+    let _ = download_file(url, file_name).await;
+    format!("")
+}
+
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, xls_to_xml, json_to_xls, xml_to_xls, virus_total, get_json])
+        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, xls_to_xml, json_to_xls, xml_to_xls, virus_total, get_json, open_file, download_update])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { invoke } from "@tauri-apps/api/tauri";
 import { Link } from "react-router-dom";
 import { ChevronBackCircleOutline } from "react-ionicons";
 
@@ -15,7 +16,7 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
   state = {
     dateLastUpdate: '',
     windUpdates: false,
-    downloadProgress: 0,
+    downloadProgress: false,
   }
 
   changeNumWind(numWind: number) {
@@ -74,10 +75,19 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
       });
   }
 
-  downloadFile() {
-    window.open(`https://github.com/rusnakdima/All_In_One_Toolkit_Tauri/releases/download/v${ENV.version}/all_in_one_toolkit.exe`, 'blank');
+  async downloadFile() {
     this.setState({
-      windUpdates: false
+      downloadProgress: true
+    })
+    this.alertNotify("bg-yellow-500", "Wait until the program update is downloaded!");
+    await invoke("download_update", {"url": `https://github.com/rusnakdima/All_In_One_Toolkit_Tauri/releases/download/v${ENV.version}/all_in_one_toolkit.exe`, "fileName": "all_in_one_toolkit.exe"})
+    .then(() => {
+      this.alertNotify("bg-green-700", "The new version of the program has been uploaded to the downloads folder!");
+    })
+    .catch((err: any) => console.error(err));
+    this.setState({
+      windUpdates: false,
+      downloadProgress: false
     });
   }
 
@@ -136,6 +146,9 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
             </div>
             <div className="flex flex-col my-3 gap-y-2">
               <span>Do you want to download the update?</span>
+              {this.state.downloadProgress && <div className="w-full bg-gray-300 rounded-full mb-4 dark:bg-gray-700" style={{height: "20px"}}>
+                <div className="w-full rounded-full" style={{height: "20px", backgroundImage: 'repeating-linear-gradient( 45deg, transparent, transparent 10px, rgb(5 122 85) 10px, rgb(5 122 85) 20px )', animation: 'slide 4s linear infinite'}}></div>
+              </div>}
             </div>
             <div className="flex flex-row justify-end gap-x-3 pt-2 border-t-2 styleBorderSolid">
               <button className="styleBut" onClick={() => {this.setState({windUpdates: false})}}>No</button>

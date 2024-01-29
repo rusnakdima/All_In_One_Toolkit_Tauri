@@ -15,6 +15,10 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
   file: any = null;
   dataField: string = "";
   dataXls: Array<any> = [];
+  
+  state = {
+    pathNewFile: ""
+  }
 
   changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
@@ -39,7 +43,11 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
       if (Array.isArray(obj[key])) {
         let tmpArr: Array<any> = [];
         Array.from(obj[key]).forEach((val: any) => {
-          if (val !== "object") {
+          if (Array.isArray(val)) {
+            tmpArr.push(val.join(', '));
+          } else if (typeof val === "object") {
+            this.parseData(val, startPos + index, row+1);
+          } else {
             tmpArr.push(val);
           }
         });
@@ -92,8 +100,12 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
 
   async saveDataFileFun() {
     if(this.file != null || this.dataXls.length > 0){
-      await invoke("json_to_xls", {"name": (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'json_to_xls', "data": JSON.stringify(this.dataXls)})
+      const nameNewFile = (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'json_to_xls';
+      await invoke("json_to_xls", {"name": nameNewFile, "data": JSON.stringify(this.dataXls)})
       .then((data: any) => {
+        this.setState({
+          pathNewFile: data
+        });
         this.alertNotify("bg-green-700", `The data has been successfully saved to a file "${data}"!`);
       })
       .catch((err: any) => console.error(err));
@@ -101,6 +113,18 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
       this.alertNotify("bg-red-700", "You have not selected a file!");
     } else if (this.dataXls.length == 0){
       this.alertNotify("bg-red-700", "No data was received from the file!");
+    }
+  }
+
+  async openFileFun() {
+    if (this.state.pathNewFile != '') {
+      await invoke("open_file", {"path": this.state.pathNewFile})
+      .then(() => {
+        this.alertNotify("bg-green-700", "Wait a bit until the program starts to read this file format!");
+      })
+      .catch((err: any) => console.error(err));
+    } else {
+      this.alertNotify("bg-red-700", "You didn't save the file to open it!");
     }
   }
 
@@ -145,6 +169,10 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
           <div className="flex flex-row gap-x-3">
             <button className="styleBut" onClick={() => {this.saveDataFileFun()}}>Save a data</button>
           </div>
+
+          {this.state.pathNewFile != '' && <div className="flex flex-row gap-x-3">
+            <button className="styleBut" onClick={() => {this.openFileFun()}}>Open the last saved file</button>
+          </div>}
         </div>
 
         <WindNotify ref={this.childRef} />
