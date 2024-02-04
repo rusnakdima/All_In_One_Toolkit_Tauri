@@ -3,16 +3,16 @@ import { Link } from "react-router-dom";
 import { ChevronBackCircleOutline } from "react-ionicons";
 
 class ColorPalette extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 
-  typeCol: string = "";
   state = {
     resRGB: "rgb(0, 0, 0)",
     resHEX: "#000000",
     resHSV: "hsv(0°, 0%, 0%)"
   }
+  typeCol: string = "";
   dataField: string = "";
   colorOut: string = "";
 
@@ -34,7 +34,7 @@ class ColorPalette extends React.Component<{numWind: number, onChangeData: any}>
 
   rgbToHEX() {
     const data = this.dataField.match(/^rgb\((\d+),*\s*(\d+),*\s*(\d+)\);*$/);
-    if(data != null){
+    if (data != null) {
       let r = parseInt(data[1]);
       let g = parseInt(data[2]);
       let b = parseInt(data[3]);
@@ -76,15 +76,15 @@ class ColorPalette extends React.Component<{numWind: number, onChangeData: any}>
 
   hsvToRGB() {
     const data = this.dataField.match(/^hsv\((\d+)°?,*\s*(\d+)%?,*\s*(\d+)%?\);*$/);
-    if (data != null){
+    if (data != null) {
       let h = parseFloat(data[1]), s = parseFloat(data[2]), v = parseFloat(data[3]);
 
-      if( h<0 ) h=0;
-			if( s<0 ) s=0;
-			if( v<0 ) v=0;
-			if( h>=360 ) h=359;
-			if( s>100 ) s=100;
-			if( v>100 ) v=100;
+      if ( h<0 ) h=0;
+			if ( s<0 ) s=0;
+			if ( v<0 ) v=0;
+			if ( h>=360 ) h=359;
+			if ( s>100 ) s=100;
+			if ( v>100 ) v=100;
 			s/=100.0;
 			v/=100.0;
     

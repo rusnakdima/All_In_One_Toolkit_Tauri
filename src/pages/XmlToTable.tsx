@@ -45,7 +45,7 @@ const RecursiveTable: React.FC<TableProps> = ({ data }) => {
 };
 
 class XmlToTable extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 
@@ -57,7 +57,7 @@ class XmlToTable extends React.Component<{numWind: number, onChangeData: any}> {
   state = {
     blockTable: false,
     dataTable: {thead: [], tbody: []},
-  };
+  }
 
   changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
@@ -75,7 +75,7 @@ class XmlToTable extends React.Component<{numWind: number, onChangeData: any}> {
       if ([...elem.children].length > 0) {
         tempRow.push(this.parseData([...elem.children]));
       } else {
-        tempRow.push(elem.textContent);
+        tempRow.push(elem.textContent.toString());
       }
       table.tbody.push(tempRow);
     });
@@ -96,11 +96,11 @@ class XmlToTable extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   async parseDataFileFun() {
-    if (this.file != null){
+    if (this.file != null) {
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();
-      if(text != null && text != ''){
+      if (text != null && text != '') {
         const dataXml = text;
         this.createTableFun(dataXml);
       } else {
@@ -112,7 +112,7 @@ class XmlToTable extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   parseDataFieldFun() {
-    if(this.dataField != ''){
+    if (this.dataField != '') {
       const dataXml = this.dataField;
       this.createTableFun(dataXml);
     } else {

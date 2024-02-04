@@ -7,7 +7,7 @@ import { ENV } from "../env";
 import WindNotify from "./WindNotify";
 
 class About extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 

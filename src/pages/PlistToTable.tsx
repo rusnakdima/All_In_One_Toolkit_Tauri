@@ -72,7 +72,7 @@ const RecursiveDetails: React.FC<DetailsProps> = ({ data, indexKey }) => {
 };
 
 class PlistToTable extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 

@@ -5,7 +5,7 @@ import { ChevronBackCircleOutline } from "react-ionicons";
 import WindNotify from "./WindNotify";
 
 class Base64EncDec extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 
@@ -48,7 +48,7 @@ class Base64EncDec extends React.Component<{numWind: number, onChangeData: any}>
     }
   }
 
-  render(){
+  render() {
     return(
       <>
         <div className={`flex flex-col gap-y-5 ${(this.props.numWind > 2) ? 'w-full lg:w-1/3' : (this.props.numWind > 1) ? 'w-full lg:w-1/2' : 'w-full'}`}>

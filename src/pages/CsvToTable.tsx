@@ -5,7 +5,7 @@ import { ChevronBackCircleOutline } from "react-ionicons";
 import WindNotify from "./WindNotify";
 
 class CsvToTable extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 
@@ -17,7 +17,7 @@ class CsvToTable extends React.Component<{numWind: number, onChangeData: any}> {
   state = {
     blockTable: false,
     dataTable: [],
-  };
+  }
 
   changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
@@ -48,7 +48,7 @@ class CsvToTable extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   async parseDataFileFun() {
-    if(this.file != null){
+    if (this.file != null) {
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();
@@ -64,7 +64,7 @@ class CsvToTable extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   parseDataFieldFun() {
-    if(this.dataField != ''){
+    if (this.dataField != '') {
       const lines = this.dataField.split("\n");
       const dataCsv = lines.map((line: any) => line.split(","));
       this.createTableFun(dataCsv);

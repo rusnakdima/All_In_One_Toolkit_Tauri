@@ -4,10 +4,14 @@
 extern crate chrono;
 
 use chrono::Local;
+use tauri::api::dialog::FileDialogBuilder;
 use std::fs::File;
 use std::io::{Cursor, Write};
+use std::path::PathBuf;
 use tauri::api::path;
 use rust_xlsxwriter::Workbook;
+use calamine::{open_workbook, Reader, Xlsx};
+use tauri::{Manager, Window};
 
 fn get_current_date() -> String {
     let current_datetime = Local::now();
@@ -52,6 +56,52 @@ fn open_file(path: String) -> String {
     if let Err(err) = opener::open(path) {
         eprintln!("Failed to open file: {}", err);
     }
+    format!("")
+}
+
+struct ExcelData {
+    rows: Vec<Vec<String>>,
+}
+
+#[derive(Clone, serde::Serialize)]
+struct Payload {
+    data_xls: String,
+    file_path: String
+}
+
+fn read_xls(path: PathBuf, window: Window) -> Result<(), std::io::Error> {
+    let mut workbook: Xlsx<_> = open_workbook(&path).expect("Cannot open file");
+    let sheet_name = &workbook.sheet_names()[0];
+    let mut excel_data = ExcelData { rows: Vec::new() };
+    if let Ok(sheet) = workbook.worksheet_range(&sheet_name) {
+        for row in sheet.rows() {
+            let row_data: Vec<String> = row.iter().map(|cell| format!("{}", cell)).collect();
+            excel_data.rows.push(row_data);
+        }
+        let file_path: String = path.clone().as_path().display().to_string();
+        let _ = window.emit("data_xls", Payload { data_xls: serde_json::to_string(&excel_data.rows).unwrap(), file_path: file_path });
+    } else {
+        eprintln!("Failed read file xls!");
+    }
+    Ok(())
+}
+
+fn open_dialog_window(window: Window) -> Result<(), std::io::Error> {
+    FileDialogBuilder::default()
+    .add_filter("Excel Files", &[&"xls", &"xlsx", &"xlsm"])
+    .pick_file(|path_buf| match path_buf {
+        Some(p) => {
+            let _ = read_xls(p, window);
+        },
+        _ => {}
+    });
+    
+    Ok(())
+}
+
+#[tauri::command]
+fn open_xls(window: Window) -> String {
+    let _ = open_dialog_window(window).unwrap();
     format!("")
 }
 
@@ -151,7 +201,11 @@ async fn download_update(url: String, file_name: String) -> String {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, xls_to_xml, json_to_xls, xml_to_xls, virus_total, get_json, open_file, download_update])
+        .setup(|app| {
+            let _ = app.get_window("main").unwrap();
+            Ok(())
+        })
+        .invoke_handler(tauri::generate_handler![json_to_xml, xml_to_json, xls_to_json, xls_to_xml, json_to_xls, xml_to_xls, virus_total, get_json, open_file, open_xls, download_update])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "all_in_one_toolkit",
-    "version": "0.14.0"
+    "version": "0.15.0"
   },
   "tauri": {
     "allowlist": {
@@ -29,6 +29,14 @@
         "all": true,
         "request": true,
         "scope": ["https://**/*"] 
+      },
+      "dialog": {
+        "all": true,
+        "ask": true,
+        "confirm": true,
+        "message": true,
+        "open": true,
+        "save": true
       }
     },
     "bundle": {

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ReaderOutline, CodeWorkingOutline, ColorFilterOutline, BugOutline, BarChartOutline, CodeSlashOutline, LinkOutline } from "react-ionicons";
+import { ReaderOutline, CodeWorkingOutline, ColorFilterOutline, BugOutline, BarChartOutline, CodeSlashOutline, LinkOutline, GridOutline } from "react-ionicons";
+import Keyboard from "./keyboard";
 
 interface HomeState {
   [key: string]: any;
@@ -9,14 +10,14 @@ interface HomeState {
 }
 
 class Home extends React.Component<{numWind: number, onChangeData: any}, HomeState> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
   
   state: HomeState = {
     recentAction: [],
     tempLinks: [],
-  };
+  }
 
   changeNumWind = (numWind: number) => {
     this.props.onChangeData(Number(numWind));
@@ -29,6 +30,8 @@ class Home extends React.Component<{numWind: number, onChangeData: any}, HomeSta
     { "to": 'color_palette', "icon": 'colorfilter', "name": 'Color Palette' },
     { "to": 'virustotal', "icon": 'bug', "name": 'VirusTotal' },
     { "to": 'data_to_chart', "icon": 'barchart', "name": 'Visualization data on chart' },
+    { "to": 'keycode', "icon": 'keyboard', "name": 'JS Key Code Event' },
+    { "to": 'visual_array', "icon": 'grid', "name": 'Visualization of an array on JS code' },
     { "to": 'csv_to_table', "icon": 'codeslash', "name": 'CSV to Table data' },
     { "to": 'json_to_table', "icon": 'codeslash', "name": 'JSON to Table data' },
     { "to": 'xml_to_table', "icon": 'codeslash', "name": 'XML to Table data' },
@@ -45,7 +48,7 @@ class Home extends React.Component<{numWind: number, onChangeData: any}, HomeSta
 
   componentDidMount(): void {
     let recAct = localStorage["recAct"];
-    if(recAct && recAct != ''){
+    if (recAct && recAct != '') {
       this.setState({
         recentAction: JSON.parse(recAct)
       });
@@ -65,7 +68,9 @@ class Home extends React.Component<{numWind: number, onChangeData: any}, HomeSta
     } else {
       this.state.recentAction.unshift(tempObj);
     }
-    if(this.state.recentAction.length > 7) this.state.recentAction.pop();
+    if (this.state.recentAction.length > 7) {
+      this.state.recentAction.pop();
+    }
     localStorage["recAct"] = JSON.stringify(this.state.recentAction);
   }
 
@@ -96,6 +101,8 @@ class Home extends React.Component<{numWind: number, onChangeData: any}, HomeSta
         {(element['icon'] == 'colorfilter') && <ColorFilterOutline cssClasses="styleIonIcon" />}
         {(element['icon'] == 'bug') && <BugOutline cssClasses="styleIonIcon" />}
         {(element['icon'] == 'barchart') && <BarChartOutline cssClasses="styleIonIcon" />}
+        {(element['icon'] == 'keyboard') && <Keyboard /> }
+        {(element['icon'] == 'grid') && <GridOutline cssClasses="styleIonIcon" />}
         {(element['icon'] == 'codeslash') && <CodeSlashOutline cssClasses="styleIonIcon" />}
         <span>{element['name']}</span></Link>
       );

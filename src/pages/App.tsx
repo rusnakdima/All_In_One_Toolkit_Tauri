@@ -13,6 +13,8 @@ import Base64EncDec from "./Base64EncDec";
 import ColorPalette from "./ColorPalette";
 import VirusTotal from "./VirusTotal";
 import DataToChart from "./DataToChart";
+import KeyCode from "./KeyCode";
+import VisualArray from "./VisualArray";
 import CsvToTable from "./CsvToTable";
 import JsonToTable from "./JsonToTable";
 import XmlToTable from "./XmlToTable";
@@ -41,6 +43,8 @@ const Router = (data: any) => {
         { path: 'color_palette', element: <ColorPalette numWind={data.numWind} onChangeData={data.onChangeData} /> },
         { path: 'virustotal', element: <VirusTotal numWind={data.numWind} onChangeData={data.onChangeData} /> },
         { path: 'data_to_chart', element: <DataToChart numWind={data.numWind} onChangeData={data.onChangeData} /> },
+        { path: 'keycode', element: <KeyCode numWind={data.numWind} onChangeData={data.onChangeData} /> },
+        { path: 'visual_array', element: <VisualArray numWind={data.numWind} onChangeData={data.onChangeData} /> },
         { path: 'csv_to_table', element: <CsvToTable numWind={data.numWind} onChangeData={data.onChangeData} /> },
         { path: 'json_to_table', element: <JsonToTable numWind={data.numWind} onChangeData={data.onChangeData} /> },
         { path: 'xml_to_table', element: <XmlToTable numWind={data.numWind} onChangeData={data.onChangeData} /> },
@@ -64,7 +68,7 @@ const Router = (data: any) => {
 class App extends React.Component {
   state = {
     numWind: 1,
-  };
+  }
 
   changeNumWind(numWind: number) {
     this.setState({
@@ -81,12 +85,12 @@ class App extends React.Component {
             <Nav />
             <Router numWind={this.state.numWind} onChangeData={(value: number) => {this.changeNumWind(value)}} />
           </BrowserRouter>
-          {this.state.numWind > 1 && <div className="border-l-2 styleBorderSolid"></div>}
+          {this.state.numWind > 1 && <div className="border-l-2 border-t-2 styleBorderSolid"></div>}
           {this.state.numWind > 1 && <BrowserRouter>
             <Nav />
             <Router numWind={this.state.numWind} onChangeData={(value: number) => {this.changeNumWind(value)}} />
           </BrowserRouter>}
-          {this.state.numWind > 2 && <div className="border-l-2 styleBorderSolid"></div>}
+          {this.state.numWind > 2 && <div className="border-l-2 border-t-2 styleBorderSolid"></div>}
           {this.state.numWind > 2 && <BrowserRouter>
             <Nav />
             <Router numWind={this.state.numWind} onChangeData={(value: number) => {this.changeNumWind(value)}} />

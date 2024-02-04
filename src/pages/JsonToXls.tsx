@@ -6,7 +6,7 @@ import { ChevronBackCircleOutline } from "react-ionicons";
 import WindNotify from "./WindNotify";
 
 class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 
@@ -14,7 +14,7 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
 
   file: any = null;
   dataField: string = "";
-  dataXls: Array<any> = [];
+  dataXls: Array<Array<string>> = [];
   
   state = {
     pathNewFile: ""
@@ -28,43 +28,108 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
     this.childRef.current.alertNotify(color, title);
   }
 
-  parseData(obj: {[key: string]: any}, startPos: number = 0, row: number = 0) {
-    Object.keys(obj).forEach((key: string, index: number) => {
-      if (this.dataXls[row] && this.dataXls.length -1 != row) {
-        const lenKeys = this.dataXls[this.dataXls.length -1].length - this.dataXls[row].length;
-        Array(lenKeys).fill("").forEach((val: any) => {
-          this.dataXls[row].push(val);
-        });
-        this.dataXls[row].push(key);
-      } else {
-        this.dataXls.splice(row, 0, [key]);
-        Array(startPos).fill("").forEach((val: any) => this.dataXls[row].unshift(val));
-      }
-      if (Array.isArray(obj[key])) {
-        let tmpArr: Array<any> = [];
-        Array.from(obj[key]).forEach((val: any) => {
-          if (Array.isArray(val)) {
-            tmpArr.push(val.join(', '));
-          } else if (typeof val === "object") {
-            this.parseData(val, startPos + index, row+1);
+  parseArr(arr: Array<any>, startPos: number = 0) {
+    let table: Array<Array<string>> = [];
+    let tempHead: Array<string> = [];
+    tempHead.push(...Array(startPos).fill(""));
+    arr.forEach((elem: any) => {
+      Object.keys(elem).forEach((key: string) => {
+        if (!tempHead.includes(key)) {
+          if (Array.isArray(elem[key])) {
+            tempHead.push(...[key, ...Array(elem[key].length).fill('')]);
+          } else if (typeof elem[key] === "object" && !Array.isArray(elem[key])) {
+            tempHead.push(...[key, '']);
           } else {
-            tmpArr.push(val);
+            tempHead.push(key);
+          }
+        }
+      });
+    });
+    table.push(tempHead);
+
+    arr.forEach((elem: any) => {
+      let tempRow: Array<string> = [];
+      tempRow.push(...Array(startPos).fill(''));
+      tempHead.forEach((key: string) => {
+        if (elem[key] !== undefined && elem[key] !== null) {
+          tempRow.push(elem[key]);
+        }
+      });
+      table.push(tempRow);
+      // tempHead.forEach((key: string, index: number) => {
+      //   const value = elem[key];
+      //   if (value != undefined && value != null && Array.isArray(value) && typeof(value[0]) == "object") {
+      //     // tempRow.push(this.parseArr(value));
+      //     this.parseObj(elem, startPos + index).forEach((row: Array<string>, iRow: number) => {
+      //       console.log('58 line: ', row)
+      //       if (iRow == 0) {
+      //         tempRow.push(...row.slice(startPos + index));
+      //         table.push(tempRow);
+      //       } else {
+      //         table.push(row);
+      //       }
+      //     });
+      //   } else if (value != undefined && value != null && !Array.isArray(value) && typeof(value) == "object") {
+      //     console.log(startPos, index)
+      //     this.parseObj(value, /* startPos + */ index).forEach((row: Array<string>, iRow: number) => {
+      //       console.log('68 line: ', row)
+      //       if (iRow == 0) {
+      //         tempRow.push(...row.slice(/* startPos + */ index));
+      //         table.push(tempRow);
+      //       } else {
+      //         table.push(row);
+      //       }
+      //     });
+      //   } else if (value != undefined && value != null) {
+      //     tempRow.push(value.toString());
+      //   }
+      // });
+      // if (Object.values(elem).findIndex((value: any) => typeof value === "object" || Array.isArray(value)) == -1) {
+      //   table.push(tempRow);
+      // }
+    });
+    return table;
+  }
+
+  parseObj(obj: {[key: string]: any}, startPos: number = 0) {
+    let table: Array<Array<string>> = [];
+    let tempHead: Array<string> = [];
+    tempHead.push(...[...Array(startPos).fill(''), 'Key', 'Value']);
+    table.push(tempHead);
+    Object.entries(obj).forEach(([key, value]) => {
+      let tempRow: Array<string> = [];
+      tempRow.push(...[...Array(startPos).fill(''), key]);
+      if (value == null) {
+        tempRow.push("null");
+        table.push(tempRow);
+      } else if (Array.isArray(value) && typeof(value[0]) == "object") {
+        this.parseArr(value, startPos + 1).forEach((row: Array<string>, iRow: number) => {
+          if (iRow == 0) {
+            tempRow.push(...row.slice(startPos + 1));
+            table.push(tempRow);
+          } else {
+            table.push(row);
           }
         });
-        this.dataXls[this.dataXls.length -1].push(tmpArr.join(', '));
-      } else if (typeof obj[key] === "object") {
-        this.parseData(obj[key], startPos + index, row+1);
+      } else if (!Array.isArray(value) && typeof(value) == "object") {
+        this.parseObj(value, startPos + 1).forEach((row: Array<string>, iRow: number) => {
+          if (iRow == 0) {
+            tempRow.push(...row.slice(startPos + 1));
+            table.push(tempRow);
+          } else {
+            table.push(row);
+          }
+        });
       } else {
-        this.dataXls[this.dataXls.length -1].push(obj[key]);
+        tempRow.push(value.toString());
+        table.push(tempRow);
       }
     });
-    return;
+    return table;
   }
 
   convertDataFun(dataJson: {[key: string]: any}) {
-    this.dataXls = [];
-    this.dataXls.push([], []);
-    this.parseData(dataJson);
+    this.dataXls = this.parseObj(dataJson);
 
     if (Array.isArray(this.dataXls)) {
       this.alertNotify("bg-green-700", "The data has been successfully converted!");
@@ -74,7 +139,7 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   async parseDataFileFun() {
-    if(this.file != null){
+    if (this.file != null) {
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();
@@ -90,7 +155,7 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   parseDataFieldFun() {
-    if(this.dataField != ''){
+    if (this.dataField != '') {
       const dataJson = JSON.parse(this.dataField);
       this.convertDataFun(dataJson);
     } else {
@@ -99,7 +164,7 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   async saveDataFileFun() {
-    if(this.file != null || this.dataXls.length > 0){
+    if (this.file != null || this.dataXls.length > 0) {
       const nameNewFile = (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'json_to_xls';
       await invoke("json_to_xls", {"name": nameNewFile, "data": JSON.stringify(this.dataXls)})
       .then((data: any) => {
@@ -109,9 +174,9 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
         this.alertNotify("bg-green-700", `The data has been successfully saved to a file "${data}"!`);
       })
       .catch((err: any) => console.error(err));
-    } else if(this.file == null){
+    } else if (this.file == null) {
       this.alertNotify("bg-red-700", "You have not selected a file!");
-    } else if (this.dataXls.length == 0){
+    } else if (this.dataXls.length == 0) {
       this.alertNotify("bg-red-700", "No data was received from the file!");
     }
   }

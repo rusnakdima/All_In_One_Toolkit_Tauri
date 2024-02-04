@@ -9,11 +9,11 @@ interface HomeState {
 class Nav extends React.Component<{}, HomeState> {
   state: HomeState = {
     recentAction: [],
-  };
+  }
 
   componentDidMount(): void {
     let recAct = localStorage["recAct"];
-    if(recAct && recAct != ''){
+    if (recAct && recAct != '') {
       this.setState({
         recentAction: JSON.parse(recAct)
       });
@@ -22,13 +22,15 @@ class Nav extends React.Component<{}, HomeState> {
 
   addLink(to: string, icon: string, name: string): void{
     let tempObj = { "to": to, "icon": icon, "name": name };
-    if(!this.state.recentAction.find((item: any) => item['to'] == tempObj['to'])){
+    if (!this.state.recentAction.find((item: any) => item['to'] == tempObj['to'])) {
       this.state.recentAction.unshift(tempObj)
     } else {
       this.state.recentAction.splice((this.state.recentAction.findIndex((item: any) => item == tempObj)), 1);
       this.state.recentAction.unshift(tempObj);
     }
-    if(this.state.recentAction.length > 4) this.state.recentAction.pop();
+    if (this.state.recentAction.length > 4) {
+      this.state.recentAction.pop();
+    }
     localStorage["recAct"] = JSON.stringify(this.state.recentAction);
   }
 

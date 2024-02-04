@@ -45,7 +45,7 @@ const RecursiveTable: React.FC<TableProps> = ({ data }) => {
 };
 
 class JsonToTable extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 
@@ -57,7 +57,7 @@ class JsonToTable extends React.Component<{numWind: number, onChangeData: any}> 
   state = {
     blockTable: false,
     dataTable: {thead: [], tbody: []},
-  };
+  }
 
   changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));
@@ -83,14 +83,14 @@ class JsonToTable extends React.Component<{numWind: number, onChangeData: any}> 
       let tempRow: (string | TableData)[] = [];
       keys.forEach((key: string) => {
         const element = elem[key];
-        if(!element && element == null){
+        if (!element && element == null) {
           tempRow.push("");
-        } else if(Array.isArray(element) && typeof(element[0]) == "object") {
+        } else if (Array.isArray(element) && typeof(element[0]) == "object") {
           tempRow.push(this.parseArr(element));
-        } else if(!Array.isArray(element) && typeof(element) == "object"){
+        } else if (!Array.isArray(element) && typeof(element) == "object") {
           tempRow.push(this.parseObj(element));
         } else {
-          tempRow.push(element);
+          tempRow.push(element.toString());
         }
       });
       table.tbody.push(tempRow);
@@ -105,12 +105,12 @@ class JsonToTable extends React.Component<{numWind: number, onChangeData: any}> 
       tempRow.push(key);
       if (value == null) {
         tempRow.push("null");
-      } else if(Array.isArray(value) && typeof(value[0]) == "object") {
+      } else if (Array.isArray(value) && typeof(value[0]) == "object") {
         tempRow.push(this.parseArr(value));
-      } else if(!Array.isArray(value) && typeof(value) == "object"){
+      } else if (!Array.isArray(value) && typeof(value) == "object") {
         tempRow.push(this.parseObj(value));
       } else {
-        tempRow.push(value);
+        tempRow.push(value.toString());
       }
       table.tbody.push(tempRow);
     });
@@ -129,7 +129,7 @@ class JsonToTable extends React.Component<{numWind: number, onChangeData: any}> 
   }
 
   async parseDataFileFun() {
-    if (this.file != null){
+    if (this.file != null) {
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();
@@ -145,7 +145,7 @@ class JsonToTable extends React.Component<{numWind: number, onChangeData: any}> 
   }
 
   parseDataFieldFun() {
-    if(this.dataField != ''){
+    if (this.dataField != '') {
       const dataJson = JSON.parse(this.dataField);
       this.createTableFun(dataJson);
     } else {

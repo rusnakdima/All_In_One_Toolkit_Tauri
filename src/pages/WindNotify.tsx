@@ -8,7 +8,7 @@ class WindNotify extends React.Component {
     blockTable: false,
     notText: "",
     width: 0
-  };
+  }
   interval: any;
 
   alertNotify(color: string, title: string) {

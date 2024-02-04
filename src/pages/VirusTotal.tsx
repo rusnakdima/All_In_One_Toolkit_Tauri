@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { ChevronBackCircleOutline, CheckmarkCircleOutline, InformationCircleOutline, AlertCircleOutline, HelpCircleOutline } from "react-ionicons";
 
 class VirusTotal extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 
@@ -15,7 +15,7 @@ class VirusTotal extends React.Component<{numWind: number, onChangeData: any}> {
     milicious: '',
     allAntivirus: '',
     listAntiviruses: [],
-  };
+  }
   
   urlInput: string = "";
 

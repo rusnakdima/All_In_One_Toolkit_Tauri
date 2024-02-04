@@ -6,7 +6,7 @@ import { ChevronBackCircleOutline } from "react-ionicons";
 import WindNotify from "./WindNotify";
 
 class JsonToXml extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 
@@ -31,9 +31,9 @@ class JsonToXml extends React.Component<{numWind: number, onChangeData: any}> {
   parseData(obj: {[key: string]: any}, stroke: string = '') {
     let tempElement = '';
     Object.entries(obj).forEach(([key, value]) => {
-      if(Array.isArray(value)) {
+      if (Array.isArray(value)) {
         tempElement += `${this.parseData(value, key)}`;
-      } else if(typeof value != 'string'){
+      } else if (typeof value == 'object') {
         key = (isNaN(+key)) ? key : stroke;
         key = key.replace(/[\" \"]/gi,"");
         tempElement += `<${key}>${this.parseData(value, key)}</${key}>`;
@@ -55,7 +55,7 @@ class JsonToXml extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   async parseDataFileFun() {
-    if(this.file != null){
+    if (this.file != null) {
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();
@@ -71,7 +71,7 @@ class JsonToXml extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   parseDataFieldFun() {
-    if(this.dataField != ''){
+    if (this.dataField != '') {
       const dataJson = JSON.parse(this.dataField);
       this.convertDataFun(dataJson);
     } else {
@@ -80,8 +80,9 @@ class JsonToXml extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   async saveDataFileFun() {
-    if(this.file != null || this.dataXml != ''){
-      await invoke("json_to_xml", {"name": (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'json_to_xml', "data": this.dataXml})
+    if (this.file != null || this.dataXml != '') {
+      const nameNewFile = (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'json_to_xml';
+      await invoke("json_to_xml", {"name": nameNewFile, "data": this.dataXml})
       .then((data: any) => {
         this.setState({
           pathNewFile: data
@@ -89,9 +90,9 @@ class JsonToXml extends React.Component<{numWind: number, onChangeData: any}> {
         this.alertNotify("bg-green-700", `The data has been successfully saved to a file "${data}"!`);
       })
       .catch((err: any) => console.error(err));
-    } else if(this.file == null){
+    } else if (this.file == null) {
       this.alertNotify("bg-red-700", "You have not selected a file!");
-    } else if (this.dataXml == ''){
+    } else if (this.dataXml == '') {
       this.alertNotify("bg-red-700", "No data was received from the file!");
     }
   }

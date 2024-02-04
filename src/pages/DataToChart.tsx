@@ -24,7 +24,7 @@ const options = {
 };
 
 class DataToChart extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 
@@ -86,7 +86,7 @@ class DataToChart extends React.Component<{numWind: number, onChangeData: any}> 
   }
 
   createTableFileData() {
-    if(this.file != null){
+    if (this.file != null) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         const text = (e.target.result);
@@ -102,7 +102,7 @@ class DataToChart extends React.Component<{numWind: number, onChangeData: any}> 
   };
 
   createTableFieldData() {
-    if(this.dataField != ''){
+    if (this.dataField != '') {
       const dataArr = this.dataField.split("\n").map((elem) => elem.split("\t"))
       this.createTableFun(dataArr);
     } else {
@@ -111,11 +111,11 @@ class DataToChart extends React.Component<{numWind: number, onChangeData: any}> 
   }
 
   createTableManual() {
-    if(this.columns > 0 && this.rows > 0){
+    if (this.columns > 0 && this.rows > 0) {
       let dataArr = [];
-      for(let i = 0; i < this.rows; i++){
+      for (let i = 0; i < this.rows; i++) {
         let tempArr = [];
-        for(let j = 0; j < this.columns; j++){
+        for (let j = 0; j < this.columns; j++) {
           tempArr.push("");
         }
         dataArr.push(tempArr);

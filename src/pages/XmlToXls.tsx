@@ -6,7 +6,7 @@ import { ChevronBackCircleOutline } from "react-ionicons";
 import WindNotify from "./WindNotify";
 
 class XmlToXls extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 
@@ -28,33 +28,35 @@ class XmlToXls extends React.Component<{numWind: number, onChangeData: any}> {
     this.childRef.current.alertNotify(color, title);
   }
 
-  parseData(xmlNodes: Array<any>, startPos: number = 0, row: number = 0) {
-    xmlNodes.forEach((elem: any, index: number) => {
-      if (this.dataXls[row] && this.dataXls.length -1 != row) {
-        const lenKeys = this.dataXls[this.dataXls.length -1].length - this.dataXls[row].length;
-        Array(lenKeys).fill("").forEach((val: any) => {
-          this.dataXls[row].push(val);
-        });
-        this.dataXls[row].push(elem.nodeName);
-      } else {
-        this.dataXls.splice(row, 0, [elem.nodeName]);
-        Array(startPos).fill("").forEach((val: any) => this.dataXls[row].unshift(val));
-      }
+  parseData(xmlNodes: Array<any>, startPos: number = 0) {
+    let table: Array<Array<string>> = [];
+    let tempHead: Array<string> = [];
+    tempHead.push(...[...Array(startPos).fill(''), 'Key', 'Value']);
+    table.push(tempHead);
+    xmlNodes.forEach((elem: any) => {
+      let tempRow: Array<string> = [];
+      tempRow.push(...[...Array(startPos).fill(''), elem.nodeName]);
       if ([...elem.children].length > 0) {
-        this.parseData([...elem.children], startPos + index, row+1);
+        this.parseData([...elem.children], startPos + 1).forEach((row: Array<string>, iRow: number) => {
+          if (iRow == 0) {
+            tempRow.push(...row.slice(startPos + 1));
+            table.push(tempRow);
+          } else {
+            table.push(row);
+          }
+        });
       } else {
-        this.dataXls[this.dataXls.length -1].push(elem.textContent);
+        tempRow.push(elem.textContent.toString());
+        table.push(tempRow);
       }
     });
-    return;
+    return table;
   }
 
   convertDataFun(dataXml: string) {
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(dataXml, 'text/xml');
-    this.dataXls = [];
-    this.dataXls.push([], []);
-    this.parseData([...xmlDoc.children]);
+    this.dataXls = this.parseData([...xmlDoc.children]);
 
     if (Array.isArray(this.dataXls)) {
       this.alertNotify("bg-green-700", "The data has been successfully converted!");
@@ -64,7 +66,7 @@ class XmlToXls extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   async parseDataFileFun() {
-    if(this.file != null){
+    if (this.file != null) {
       const fileUrl = URL.createObjectURL(this.file);
       const response = await fetch(fileUrl);
       const text = await response.text();
@@ -80,7 +82,7 @@ class XmlToXls extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   parseDataFieldFun() {
-    if(this.dataField != ''){
+    if (this.dataField != '') {
       const dataXml = this.dataField;
       this.convertDataFun(dataXml);
     } else {
@@ -89,8 +91,9 @@ class XmlToXls extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   async saveDataFileFun() {
-    if(this.file != null || this.dataXls.length > 0){
-      await invoke("xml_to_xls", {"name": (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'xml_to_xls', "data": JSON.stringify(this.dataXls)})
+    if (this.file != null || this.dataXls.length > 0) {
+      const nameNewFile = (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'xml_to_xls';
+      await invoke("xml_to_xls", {"name": nameNewFile, "data": JSON.stringify(this.dataXls)})
       .then((data: any) => {
         this.setState({
           pathNewFile: data
@@ -98,9 +101,9 @@ class XmlToXls extends React.Component<{numWind: number, onChangeData: any}> {
         this.alertNotify("bg-green-700", `The data has been successfully saved to a file "${data}"!`);
       })
       .catch((err: any) => console.error(err));
-    } else if(this.file == null){
+    } else if (this.file == null) {
       this.alertNotify("bg-red-700", "You have not selected a file!");
-    } else if (this.dataXls.length == 0){
+    } else if (this.dataXls.length == 0) {
       this.alertNotify("bg-red-700", "No data was received from the file!");
     }
   }

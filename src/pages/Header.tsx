@@ -6,9 +6,9 @@ class Header extends React.Component {
 
   componentDidMount(): void {
     document.addEventListener('click', (event: any) => {
-      if(event.target.parentElement != null){
-        if((event.target.nodeName != "path" && event.target.parentElement.nodeName != "svg") && (event.target.nodeName != "svg" && event.target.parentElement.parentElement.id != "menuBut")){
-            this.closeNav();
+      if (event.target.parentElement != null) {
+        if ((event.target.nodeName != "path" && event.target.parentElement.nodeName != "svg") && (event.target.nodeName != "svg" && event.target.parentElement.parentElement.id != "menuBut")) {
+          this.closeNav();
         }
       } else {
         this.closeNav();
@@ -30,7 +30,7 @@ class Header extends React.Component {
   
   openNav() {
     const menuBack = document.querySelector("#menuBack") as HTMLDivElement | null;
-    if(menuBack != null){
+    if (menuBack != null) {
       menuBack.classList.add("block");
       menuBack.classList.remove("-translate-x-full");
       menuBack.children[0].classList.remove("-translate-x-full");
@@ -39,7 +39,7 @@ class Header extends React.Component {
   
   closeNav() {
     const menuBack = document.querySelector("#menuBack") as HTMLDivElement | null;
-    if(menuBack != null){
+    if (menuBack != null) {
       menuBack.children[0].classList.add("-translate-x-full");
       setTimeout(() => {
         menuBack.classList.add("-translate-x-full");

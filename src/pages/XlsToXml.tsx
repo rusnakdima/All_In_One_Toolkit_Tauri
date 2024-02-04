@@ -1,25 +1,30 @@
 import React from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import { Link } from "react-router-dom";
-import { ChevronBackCircleOutline } from "react-ionicons";
+import { listen } from "@tauri-apps/api/event";
 
-import * as XLSX from "xlsx";
+import { ChevronBackCircleOutline } from "react-ionicons";
 
 import WindNotify from "./WindNotify";
 
 class XlsToXml extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 
   childRef: any = React.createRef();
 
-  file: any = null;
+  dataArr: Array<any> = [];
   dataField: string = "";
   dataXml: string = "";
   
   state = {
+    fileName: '',
     pathNewFile: ""
+  }
+
+  componentDidMount(): void {
+    this.getDataFileXls();
   }
 
   changeNumWind(numWind: number) {
@@ -34,11 +39,11 @@ class XlsToXml extends React.Component<{numWind: number, onChangeData: any}> {
     let tempXml = "";
     let strokeF = dataArr[0];
     dataArr.splice(0, 1);
-    dataArr.forEach((elem: any) => {
+    dataArr.forEach((row: any) => {
       tempXml += `<array>`;
-      elem.forEach((elem1: any, index: number) => {
-        const key: string = strokeF[index].replace(/[\" \"]/gi,"");
-        tempXml += `<${key}>${elem1}</${key}>`;
+      row.forEach((cell: any, index: number) => {
+        const key: string = (strokeF[index]) ? strokeF[index].replace(/[\" \"]/gi,"") : `column${index}`;
+        tempXml += `<${key}>${cell}</${key}>`;
       });
       tempXml += `</array>`;
     });
@@ -55,28 +60,36 @@ class XlsToXml extends React.Component<{numWind: number, onChangeData: any}> {
     }
   }
 
+  async getDataFileXls() {
+    await listen('data_xls', (event: any) => {
+      this.setState({
+        fileName: event.payload['file_path'].split(/[\/\\]/g).pop()
+      })
+      this.dataArr = JSON.parse(event.payload['data_xls']);
+      this.alertNotify("bg-green-700", 'The data from the file has been successfully received!');
+    });
+  }
+
+  async openXlsFileFun(e: any) {
+    e.preventDefault();
+    await invoke("open_xls")
+    .then(() => {})
+    .catch((err: any) => {
+      console.error(err);
+      this.alertNotify("bg-red-700", 'The file cannot be read!');
+    });
+  }
+
   async parseDataFileFun() {
-    if(this.file != null){
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        const text = (e.target.result);
-        const workbook = XLSX.read(text, {type:'binary'});
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        if (worksheet) {
-          const dataArr = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-          this.convertDataFun(dataArr);
-        } else {
-          this.alertNotify("bg-red-700", "The file is empty!");
-        }
-      }
-      reader.readAsBinaryString(this.file)
+    if (this.state.fileName != '' && this.dataArr.length > 0) {
+      this.convertDataFun(this.dataArr);
     } else {
       this.alertNotify("bg-red-700", "You have not selected a file!");
     }
   }
 
   parseDataFieldFun() {
-    if(this.dataField != ''){
+    if (this.dataField != '') {
       const dataArr = this.dataField.split("\n").map((elem) => elem.split("\t"));
       this.convertDataFun(dataArr);
     } else {
@@ -85,8 +98,9 @@ class XlsToXml extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   async saveDataFileFun() {
-    if(this.file != null || this.dataXml != ''){
-      await invoke("xls_to_xml", {"name": (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'xls_to_xml', "data": this.dataXml})
+    if (this.state.fileName != '' || this.dataXml != '') {
+      const nameNewFile = (this.state.fileName) ? /^(.+)\..+$/.exec(this.state.fileName)![1] : 'xls_to_xml';
+      await invoke("xls_to_xml", {"name": nameNewFile, "data": this.dataXml})
       .then((data: any) => {
         this.setState({
           pathNewFile: data
@@ -94,9 +108,9 @@ class XlsToXml extends React.Component<{numWind: number, onChangeData: any}> {
         this.alertNotify("bg-green-700", `The data has been successfully saved to a file "${data}"!`);
       })
       .catch((err: any) => console.error(err));
-    } else if(this.file == null){
+    } else if (this.state.fileName == '') {
       this.alertNotify("bg-red-700", "You have not selected a file!");
-    } else if (this.dataXml == ''){
+    } else if (this.dataXml == '') {
       this.alertNotify("bg-red-700", "No data was received from the file!");
     }
   }
@@ -135,7 +149,15 @@ class XlsToXml extends React.Component<{numWind: number, onChangeData: any}> {
             </summary>
 
             <div className="flex flex-col gap-y-3">
-              <input className="styleFileInput" type="file" onChange={(event: any) => {this.file = event.target.files[0]}} accept=".xls, .xlsx, .xlsm" />
+              <div className="flex flex-row gap-x-2 items-center">
+                <button className="styleBut w-max" onClick={(e: any) => {this.openXlsFileFun(e)}}>Choose file</button>
+                {this.state.fileName != '' &&
+                  <span className="text-xl">{this.state.fileName}</span>
+                }
+                {this.state.fileName == '' &&
+                  <span className="text-xl">No file chosen</span>
+                }
+              </div>
               <button className="styleBut w-max" onClick={() => {this.parseDataFileFun()}}>Convert a data</button>
             </div>
           </details>

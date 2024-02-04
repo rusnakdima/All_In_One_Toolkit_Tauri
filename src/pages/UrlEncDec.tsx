@@ -5,7 +5,7 @@ import { ChevronBackCircleOutline } from "react-ionicons";
 import WindNotify from "./WindNotify";
 
 class UrlEncDec extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 
@@ -14,7 +14,7 @@ class UrlEncDec extends React.Component<{numWind: number, onChangeData: any}> {
   urlInput: string = "";
   state = {
     outputText: ""
-  };
+  }
 
   changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));

@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 import { ChevronBackCircleOutline } from "react-ionicons";
 
 class CountWords extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
   
   state = {
     dataField: "",
     outputText: ""
-  };
+  }
   file = null;
 
   changeNumWind(numWind: number) {
@@ -19,7 +19,7 @@ class CountWords extends React.Component<{numWind: number, onChangeData: any}> {
 
   changeFile(event: any) {
     this.file = event.target.files[0];
-    if(this.file) {
+    if (this.file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         const text = (e.target.result);

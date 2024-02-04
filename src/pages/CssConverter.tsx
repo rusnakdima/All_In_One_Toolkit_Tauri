@@ -22,7 +22,7 @@ class CssConverter extends React.Component<{numWind: number, onChangeData: any}>
   state = {
     blockTable: false,
     dataTable: {"thead": [], "tbody": []},
-  };
+  }
 
   changeNumWind(numWind: number) {
     this.props.onChangeData(Number(numWind));

@@ -6,7 +6,7 @@ import { ChevronBackCircleOutline } from "react-ionicons";
 import WindNotify from "./WindNotify";
 
 class XmlToJson extends React.Component<{numWind: number, onChangeData: any}> {
-  constructor(props: any){
+  constructor(props: any) {
     super(props);
   }
 
@@ -80,7 +80,8 @@ class XmlToJson extends React.Component<{numWind: number, onChangeData: any}> {
 
   async saveDataFileFun() {
     if (this.file != null || Object.keys(this.dataJson).length != 0) {
-      await invoke("xml_to_json", {"name": (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'xml_to_json', "data": JSON.stringify(this.dataJson)})
+      const nameNewFile = (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'xml_to_json';
+      await invoke("xml_to_json", {"name": nameNewFile, "data": JSON.stringify(this.dataJson)})
       .then((data: any) => {
         this.setState({
           pathNewFile: data
