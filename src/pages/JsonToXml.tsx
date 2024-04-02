@@ -46,7 +46,7 @@ class JsonToXml extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   convertDataFun(dataJSON: {[key: string]: any}) {
-    this.dataXml = this.parseData(dataJSON);
+    this.dataXml = `<xml>${this.parseData(dataJSON)}</xml>`;
     if (this.dataXml != '') {
       this.alertNotify("bg-green-700", "The data has been successfully converted!");
     } else {

@@ -44,7 +44,7 @@ class XmlToJson extends React.Component<{numWind: number, onChangeData: any}> {
   convertDataFun(dataXML: string) {
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(dataXML, 'text/xml');
-    this.dataJson = this.parseData([...xmlDoc.children]);
+    this.dataJson = this.parseData([...xmlDoc.children[0].children]);
 
     if (this.dataJson && Object.keys(this.dataJson).length > 0) {
       this.alertNotify("bg-green-700", "The data has been successfully converted!");

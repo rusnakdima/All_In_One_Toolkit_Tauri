@@ -28,6 +28,58 @@ class XmlToXls extends React.Component<{numWind: number, onChangeData: any}> {
     this.childRef.current.alertNotify(color, title);
   }
 
+  parseArr(arr: Array<any>, startPos: number) {
+    let table: Array<Array<string>> = [];
+    const tempHead: Array<any> = [];
+    arr.forEach((elem: any) => {
+      ; [...elem.children].forEach((key: any) => {
+        if (!tempHead.includes(key.nodeName)) {
+          tempHead.push(key.nodeName);
+        }
+      });
+    });
+    table.push(tempHead);
+
+    arr.forEach((elem: any) => {
+      console.log(elem)
+      let tempRow: Array<string> = [];
+      tempRow.push(...Array(startPos).fill(''));
+      tempHead.forEach((key: any, headIndex: number) => {
+        const element = [...elem.children].find((child) => child.nodeName == key);
+        console.log(element)
+        if (!element && element == null) {
+          tempRow.push("", "");
+        } else if ([...element.children].length > 0) {
+          console.log(element)
+          if ([...element.children].every((value: any) => value.nodeName == element.children[0].nodeName)) {
+            // tempRow.push(this.parseArr([...element.children]));this.parseArr([...elem.children], startPos + 1).forEach((row: Array<string>, iRow: number) => {
+            this.parseArr([...element.children], startPos + 1).forEach((row: Array<string>, iRow: number) => {
+              if (iRow == 0) {
+                tempRow.push(...row);
+                table.push(tempRow);
+              } else {
+                table.push(row);
+              }
+            });
+          } else {
+            this.parseData([...element.children]).forEach((row: Array<string>, iRow: number) => {
+              if (iRow == 0) {
+                tempRow.push(...row);
+                table.push(tempRow);
+              } else {
+                table.push([...Array(startPos + headIndex).fill(''), ...row]);
+              }
+            });
+          }
+        } else {
+          tempRow.push(element.textContent.toString());
+        }
+      });
+      table.push(tempRow);
+    });
+    return table;
+  }
+
   parseData(xmlNodes: Array<any>, startPos: number = 0) {
     let table: Array<Array<string>> = [];
     let tempHead: Array<string> = [];
@@ -37,14 +89,27 @@ class XmlToXls extends React.Component<{numWind: number, onChangeData: any}> {
       let tempRow: Array<string> = [];
       tempRow.push(...[...Array(startPos).fill(''), elem.nodeName]);
       if ([...elem.children].length > 0) {
-        this.parseData([...elem.children], startPos + 1).forEach((row: Array<string>, iRow: number) => {
-          if (iRow == 0) {
-            tempRow.push(...row.slice(startPos + 1));
-            table.push(tempRow);
-          } else {
-            table.push(row);
-          }
-        });
+        if ([...elem.children].every((value: any) => value.nodeName == elem.children[0].nodeName)) {
+          console.log(elem)
+          console.log(this.parseArr([...elem.children], startPos + 1))
+          this.parseArr([...elem.children], startPos + 1).forEach((row: Array<string>, iRow: number) => {
+            if (iRow == 0) {
+              tempRow.push(...row);
+              table.push(tempRow);
+            } else {
+              table.push(row);
+            }
+          });
+        } else {
+          this.parseData([...elem.children], startPos + 1).forEach((row: Array<string>, iRow: number) => {
+            if (iRow == 0) {
+              tempRow.push(...row.slice(startPos + 1));
+              table.push(tempRow);
+            } else {
+              table.push(row);
+            }
+          });
+        }
       } else {
         tempRow.push(elem.textContent.toString());
         table.push(tempRow);
@@ -57,6 +122,7 @@ class XmlToXls extends React.Component<{numWind: number, onChangeData: any}> {
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(dataXml, 'text/xml');
     this.dataXls = this.parseData([...xmlDoc.children]);
+    console.log(this.dataXls)
 
     if (Array.isArray(this.dataXls)) {
       this.alertNotify("bg-green-700", "The data has been successfully converted!");
@@ -93,7 +159,7 @@ class XmlToXls extends React.Component<{numWind: number, onChangeData: any}> {
   async saveDataFileFun() {
     if (this.file != null || this.dataXls.length > 0) {
       const nameNewFile = (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'xml_to_xls';
-      await invoke("xml_to_xls", {"name": nameNewFile, "data": JSON.stringify(this.dataXls)})
+      await invoke("xml_to_xls", {"name": nameNewFile, "data": this.dataXls})
       .then((data: any) => {
         this.setState({
           pathNewFile: data

@@ -52,7 +52,7 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
       tempRow.push(...Array(startPos).fill(''));
       tempHead.forEach((key: string) => {
         if (elem[key] !== undefined && elem[key] !== null) {
-          tempRow.push(elem[key]);
+          tempRow.push(elem[key].toString());
         }
       });
       table.push(tempRow);
@@ -166,7 +166,7 @@ class JsonToXls extends React.Component<{numWind: number, onChangeData: any}> {
   async saveDataFileFun() {
     if (this.file != null || this.dataXls.length > 0) {
       const nameNewFile = (this.file) ? /^(.+)\..+$/.exec(this.file["name"])![1] : 'json_to_xls';
-      await invoke("json_to_xls", {"name": nameNewFile, "data": JSON.stringify(this.dataXls)})
+      await invoke("json_to_xls", {"name": nameNewFile, "data": this.dataXls})
       .then((data: any) => {
         this.setState({
           pathNewFile: data

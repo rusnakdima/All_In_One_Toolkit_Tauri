@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "all_in_one_toolkit",
-    "version": "0.15.0"
+    "version": "0.16.0"
   },
   "tauri": {
     "allowlist": {
@@ -24,6 +24,9 @@
         "readDir": true,
         "exists": true,
         "scope": ["$DOCUMENT/AllInOneToolkit/*", "$DOWNLOAD"]
+      },
+      "path": {
+        "all": true
       },
       "http": {
         "all": true,
@@ -42,7 +45,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.dmitriydev.allinonetoolkit",
+      "identifier": "com.tcs.allinonetoolkit",
       "icon": [
         "icons/icon.png",
         "icons/icon.ico",

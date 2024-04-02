@@ -39,21 +39,11 @@ class CssConverter extends React.Component<{numWind: number, onChangeData: any}>
   async getDataFile() {
     await invoke("get_json")
     .then((json: any) => {
-      if (json && json != '') this.dataArr = JSON.parse(json)["root"];
+      if (json && json != '') {
+        this.dataArr = JSON.parse(json)["root"];
+      }
     })
     .catch((err: any) => console.error(err));
-    // if (this.file != null) {
-    //   const fileUrl = URL.createObjectURL(this.file);
-    //   const response = await fetch(fileUrl);
-    //   const text = await response.text();
-    //   if (text != null && text != '') {
-    //     const dataJson = JSON.parse(text);
-    //     this.dataArr = dataJson["root"];
-    //   }
-    //   this.alertNotify("bg-green-700", "Data has been successfully extracted!");
-    // } else {
-    //   this.alertNotify("bg-red-700", "You have not selected a file!");
-    // }
   }
 
   searchElemData(item: string, style: string) {

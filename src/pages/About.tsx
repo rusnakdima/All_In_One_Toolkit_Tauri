@@ -15,6 +15,7 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
 
   state = {
     dateLastUpdate: '',
+    lastVersion: '',
     windUpdates: false,
     downloadProgress: false,
   }
@@ -61,7 +62,8 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
             if (this.matchVersion(lastVer)) {
               this.alertNotify("bg-yellow-500", "A new version is available!");
               this.setState({
-                windUpdates: true
+                windUpdates: true,
+                lastVersion: lastVer
               });
             } else {
               this.alertNotify("bg-green-700", "You have the latest version!");
@@ -80,7 +82,7 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
       downloadProgress: true
     })
     this.alertNotify("bg-yellow-500", "Wait until the program update is downloaded!");
-    await invoke("download_update", {"url": `https://github.com/rusnakdima/All_In_One_Toolkit_Tauri/releases/download/v${ENV.version}/all_in_one_toolkit.exe`, "fileName": "all_in_one_toolkit.exe"})
+    await invoke("download_update", {"url": `https://github.com/rusnakdima/All_In_One_Toolkit_Tauri/releases/download/${this.state.lastVersion}/all_in_one_toolkit.exe`, "fileName": "all_in_one_toolkit.exe"})
     .then(() => {
       this.alertNotify("bg-green-700", "The new version of the program has been uploaded to the downloads folder!");
     })

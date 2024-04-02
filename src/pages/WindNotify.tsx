@@ -12,41 +12,47 @@ class WindNotify extends React.Component {
   interval: any;
 
   alertNotify(color: string, title: string) {
-    this.setState({
-      windNotify: true
-    })
-    setTimeout(() => {
-      let notify = document.querySelector("#windNotify") as HTMLDivElement | null;
-      if (notify != null) notify.classList.add(color);
+    if (title != '') {
       this.setState({
-        notText: title
+        windNotify: true
       });
-      
-      let timeNotify = document.querySelector("#timeNotify") as HTMLDivElement | null;
-      if (timeNotify != null) {
-        if (this.interval) {
-          clearInterval(this.interval);
+      setTimeout(() => {
+        let notify = document.querySelector("#windNotify") as HTMLDivElement | null;
+        if (notify != null) {
+          notify.classList.value = '';
+          notify.classList.add("styleWindNotify");
+          notify.classList.add(color);
         }
-
         this.setState({
-          width: 100
+          notText: title
         });
-
-        timeNotify.style.width = `${this.state.width}%`;
-
-        this.interval = setInterval(() => {
-          this.state.width -= 0.3;
-          if (this.state.width < 0) {
-            this.setState({
-              width: 0,
-              windNotify: false
-            });
+        
+        let timeNotify = document.querySelector("#timeNotify") as HTMLDivElement | null;
+        if (timeNotify != null) {
+          if (this.interval) {
             clearInterval(this.interval);
           }
-          if (timeNotify != null) timeNotify.style.width = `${this.state.width}%`;
-        }, 10);
-      }
-    }, 10);
+  
+          this.setState({
+            width: 100
+          });
+  
+          timeNotify.style.width = `${this.state.width}%`;
+  
+          this.interval = setInterval(() => {
+            this.state.width -= 0.3;
+            if (this.state.width < 0) {
+              this.setState({
+                width: 0,
+                windNotify: false
+              });
+              clearInterval(this.interval);
+            }
+            if (timeNotify != null) timeNotify.style.width = `${this.state.width}%`;
+          }, 10);
+        }
+      }, 10);
+    }
   }
 
   render () {
