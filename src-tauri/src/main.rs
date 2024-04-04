@@ -26,8 +26,8 @@ fn write_data(name: String, data: String, extension: String) -> String {
     let app_folder = document_folder.join("AllInOneToolkit");
     std::fs::create_dir_all(&app_folder).expect("Failed to create app folder");
     let file_path = app_folder.join(&name_file);
-    let mut data_file = File::create(&file_path).expect("creation failed");
-    data_file.write(data.as_bytes()).expect("write failed");
+    let mut data_file = File::create(&file_path).expect("Failed to create file");
+    data_file.write(data.as_bytes()).expect("Failed to write data to file");
     println!("Created a file {}", file_path.display());
     format!("{}", file_path.display())
 }
@@ -197,20 +197,29 @@ async fn get_json() -> String {
     format!("{}", data)
 }
 
-async fn download_file(url: String, file_name: String) -> core::result::Result<(), reqwest::Error> {
+async fn download_file(url: String, file_name: String) -> core::result::Result<String, Box<dyn std::error::Error>> {
     let response = reqwest::get(url).await?;
     let download_folder = path::download_dir().expect("Failed to get download folder");
     let file_path = download_folder.join(&file_name);
-    let mut file = File::create(file_path).expect("Failed to create file");
-    let mut content = Cursor::new(response.bytes().await?);
-    std::io::copy(&mut content, &mut file).expect("Failed to copy content to file");
-    Ok(())
+    let mut file = File::create(&file_path).expect("Failed to create file");
+
+    let bytes = response.bytes().await?;
+    let _ = file.write_all(&bytes);
+
+    Ok(format!("{}", file_path.display()))
 }
 
 #[tauri::command]
 async fn download_update(url: String, file_name: String) -> String {
-    let _ = download_file(url, file_name).await;
-    format!("")
+    match download_file(url, file_name).await {
+        Ok(path) => {
+            format!("{}", path)
+        }
+        Err(error) => {
+            eprintln!("Failed to download file! Error: {}", error);
+            format!("Failed to download file! Error: {}", error)
+        },
+    }
 }
 
 async fn update_file() -> core::result::Result<String, reqwest::Error> {

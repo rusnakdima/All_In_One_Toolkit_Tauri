@@ -1,14 +1,13 @@
 {
   "name": "all_in_one_toolkit",
   "private": true,
-  "version": "0.16.0",
+  "version": "0.17.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri",
-    "tw": "pnpx tailwindcss -i ./public/assets/css/input.css -o ./public/assets/css/output.css --watch"
+    "tauri": "tauri"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.5.1",
@@ -26,9 +25,9 @@
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.3",
-    "autoprefixer": "^10.4.14",
+    "autoprefixer": "^10.4.19",
     "flowbite": "^1.7.0",
-    "postcss": "^8.4.27",
+    "postcss-cli": "^11.0.0",
     "react-ionicons": "^4.2.1",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.0.2",

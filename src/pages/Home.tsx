@@ -3,6 +3,8 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { Link } from "react-router-dom";
 import { ReaderOutline, CodeWorkingOutline, ColorFilterOutline, BugOutline, BarChartOutline, CodeSlashOutline, LinkOutline, GridOutline } from "react-ionicons";
 import Keyboard from "./keyboard";
+
+import { ENV } from "../env";
 import WindNotify from "./WindNotify";
 
 interface HomeState {
@@ -22,6 +24,7 @@ class Home extends React.Component<{numWind: number, onChangeData: any}, HomeSta
   }
 
   childRef: any = React.createRef();
+  aboutRef: any = React.createRef();
 
   links: Array<any> = [
     { "to": 'count_words', "icon": 'reader', "name": 'Count words' },
@@ -64,6 +67,8 @@ class Home extends React.Component<{numWind: number, onChangeData: any}, HomeSta
         tempLinks: this.links,
       });
     }
+
+    this.checkUpdates();
   }
 
   changeNumWind = (numWind: number) => {
@@ -72,6 +77,40 @@ class Home extends React.Component<{numWind: number, onChangeData: any}, HomeSta
 
   alertNotify(color: string, title: string) {
     this.childRef.current.alertNotify(color, title);
+  }
+
+  matchVersion(lastVer: string) {
+    let tempVer = lastVer.slice(1).split(".");
+    let curVer = ENV.version.split(".");
+    return (Number(tempVer[0]) > Number(curVer[0]) || Number(tempVer[1]) > Number(curVer[1]) || Number(tempVer[2]) > Number(curVer[2]));
+  }
+
+  formatDate(date: string) {
+    return new Date(date).toISOString().split("T")[0];
+  }
+
+  async checkUpdates() {
+    localStorage['dateCheck'] = String(this.formatDate(new Date().toUTCString()));
+    await fetch('https://api.github.com/repos/rusnakdima/All_In_One_Toolkit_Tauri/releases/latest')
+      .then(response => response.json())
+      .then(json => {
+        if (json && json.tag_name) {
+          const lastVer: string = json.tag_name;
+          setTimeout(() => {
+            if (this.matchVersion(lastVer)) {
+              this.alertNotify("bg-yellow-500", "A new version is available!");
+            } else {
+              this.alertNotify("bg-green-700", "You have the latest version!");
+            }
+          }, 1000);
+        } else {
+          throw Error("Invalid request");
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        this.alertNotify("bg-red-700", "Error sending the request!");
+      });
   }
 
   addLink(to: string, icon: string, name: string): void{
