@@ -80,9 +80,21 @@ class Home extends React.Component<{numWind: number, onChangeData: any}, HomeSta
   }
 
   matchVersion(lastVer: string) {
-    let tempVer = lastVer.slice(1).split(".");
-    let curVer = ENV.version.split(".");
-    return (Number(tempVer[0]) > Number(curVer[0]) || Number(tempVer[1]) > Number(curVer[1]) || Number(tempVer[2]) > Number(curVer[2]));
+    const v1Components = lastVer.split('.').map(Number);
+    const v2Components = ENV.version.split('.').map(Number);
+
+    for (let i = 0; i < Math.max(v1Components.length, v2Components.length); i++) {
+      const v1Value = v1Components[i] || 0;
+      const v2Value = v2Components[i] || 0;
+
+      if (v1Value < v2Value) {
+        return false;
+      } else if (v1Value > v2Value) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   formatDate(date: string) {

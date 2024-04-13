@@ -36,9 +36,21 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
   }
 
   matchVersion(lastVer: string) {
-    let tempVer = lastVer.slice(1).split(".");
-    let curVer = ENV.version.split(".");
-    return (Number(tempVer[0]) > Number(curVer[0]) || Number(tempVer[1]) > Number(curVer[1]) || Number(tempVer[2]) > Number(curVer[2]));
+    const v1Components = lastVer.split('.').map(Number);
+    const v2Components = ENV.version.split('.').map(Number);
+
+    for (let i = 0; i < Math.max(v1Components.length, v2Components.length); i++) {
+      const v1Value = v1Components[i] || 0;
+      const v2Value = v2Components[i] || 0;
+
+      if (v1Value < v2Value) {
+        return false;
+      } else if (v1Value > v2Value) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   formatDate(date: string) {
@@ -175,35 +187,37 @@ class About extends React.Component<{numWind: number, onChangeData: any}> {
               </div>
             </div>
             <div className="text-xl font-bold mt-3">
-              <button className="styleLink" onClick={() => {this.checkUpdates()}}> Check for updates...</button>
+              <span className="styleLink" onClick={() => {this.checkUpdates()}}> Check for updates...</span>
             </div>
             {this.state.pathUpdate != '' &&
               <div className="text-xl font-bold mt-3">
-                <button className="styleLink" onClick={() => {this.openFile()}}>Open new version</button>
+                <span className="styleLink" onClick={() => {this.openFile()}}>Open new version</span>
               </div>
             }
           </div>
         </div>
 
-        {this.state.windUpdates && <div className="styleBackWind">
-          <div className="styleWind">
-            <div className="border-b-2 pb-2 styleBorderSolid">
-              <span className="text-xl font-bold">Updating the program</span>
-            </div>
-            <div className="flex flex-col my-3 gap-y-2">
-              <span>Do you want to download the update?</span>
-              {this.state.downloadProgress &&
-                <div className="w-full bg-gray-300 rounded-full mb-4 dark:bg-gray-700" style={{height: "20px"}}>
-                  <div className="w-full rounded-full" style={{height: "20px", backgroundImage: 'repeating-linear-gradient( 45deg, transparent, transparent 10px, rgb(5 122 85) 10px, rgb(5 122 85) 20px )', animation: 'slide 4s linear infinite'}}></div>
-                </div>
-              }
-            </div>
-            <div className="flex flex-row justify-end gap-x-3 pt-2 border-t-2 styleBorderSolid">
-              <button className="styleBut" onClick={() => {this.setState({windUpdates: false})}}>No</button>
-              <button className="styleBut" onClick={() => {this.downloadFile()}}>Yes</button>
+        {this.state.windUpdates &&
+          <div className="styleBackWind">
+            <div className="styleWind">
+              <div className="border-b-2 pb-2 styleBorderSolid">
+                <span className="text-xl font-bold">Updating the program</span>
+              </div>
+              <div className="flex flex-col my-3 gap-y-2">
+                <span>Do you want to download the update?</span>
+                {this.state.downloadProgress &&
+                  <div className="w-full bg-gray-300 rounded-full mb-4 dark:bg-gray-700" style={{height: "20px"}}>
+                    <div className="w-full rounded-full" style={{height: "20px", backgroundImage: 'repeating-linear-gradient( 45deg, transparent, transparent 10px, rgb(5 122 85) 10px, rgb(5 122 85) 20px )', animation: 'slide 4s linear infinite'}}></div>
+                  </div>
+                }
+              </div>
+              <div className="flex flex-row justify-end gap-x-3 pt-2 border-t-2 styleBorderSolid">
+                <button className="styleBut" onClick={() => {this.setState({windUpdates: false})}}>No</button>
+                <button className="styleBut" onClick={() => {this.downloadFile()}}>Yes</button>
+              </div>
             </div>
           </div>
-        </div>}
+        }
 
         <WindNotify ref={this.childRef} />
       </>

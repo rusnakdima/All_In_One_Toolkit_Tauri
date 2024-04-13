@@ -60,6 +60,9 @@ fn open_file(path: String) -> String {
     format!("")
 }
 
+/* All Above writen will be copied */
+
+
 struct ExcelData {
     rows: Vec<Vec<String>>,
 }
@@ -149,7 +152,7 @@ fn json_to_xls(name: String, data: Vec<Vec<String>>) -> String {
         Err(error) => {
             eprintln!("Failed to save the Excel file! Error: {}", error);
             format!("")
-        },
+        }
     }
 }
 
@@ -169,9 +172,12 @@ fn xml_to_xls(name: String, data: Vec<Vec<String>>) -> String {
         Err(error) => {
             eprintln!("Failed to save the Excel file! Error: {}", error);
             format!("")
-        },
+        }
     }
 }
+
+
+/* All Below writen will be copied */
 
 async fn req_site(url: String, key: String) -> core::result::Result<String, reqwest::Error> {
     let client = reqwest::Client::new();
@@ -218,7 +224,7 @@ async fn download_update(url: String, file_name: String) -> String {
         Err(error) => {
             eprintln!("Failed to download file! Error: {}", error);
             format!("Failed to download file! Error: {}", error)
-        },
+        }
     }
 }
 

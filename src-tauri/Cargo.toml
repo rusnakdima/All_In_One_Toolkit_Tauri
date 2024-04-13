@@ -1,6 +1,6 @@
 [package]
 name = "all_in_one_toolkit"
-version = "0.17.0"
+version = "0.17.1"
 description = "All In One Toolkit"
 authors = ["Dmitriy303"]
 license = "MIT License"
