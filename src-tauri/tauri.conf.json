@@ -1,0 +1,75 @@
+{
+  "build": {
+    "beforeDevCommand": "pnpm start",
+    "beforeBuildCommand": "pnpm build",
+    "devPath": "http://localhost:1420",
+    "distDir": "../dist/all_in_one_toolkit/browser"
+  },
+  "package": {
+    "productName": "all_in_one_toolkit",
+    "version": "0.18.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "shell": {
+        "all": false,
+        "open": true
+      },
+      "fs": {
+        "all": true,
+        "readFile": true,
+        "writeFile": true,
+        "readDir": true,
+        "exists": true,
+        "scope": ["$DOCUMENT/AllInOneToolkit/*", "$DOWNLOAD"]
+      },
+      "path": {
+        "all": true
+      },
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": ["https://**/*"] 
+      },
+      "dialog": {
+        "all": true,
+        "ask": true,
+        "confirm": true,
+        "message": true,
+        "open": true,
+        "save": true
+      }
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.tcs.allinonetoolkit",
+      "icon": [
+        "icons/icon.png",
+        "icons/icon.ico",
+        "icons/128x128.png"
+      ],
+      "windows": {
+        "webviewInstallMode": {
+          "type": "embedBootstrapper"
+        }
+      }
+    },
+    "security": {
+      "csp": null
+    },
+    "windows": [
+      {
+        "title": "All In One Toolkit",
+        "fullscreen": false,
+        "resizable": true,
+        "width": 800,
+        "height": 600,
+        "minHeight": 400,
+        "minWidth": 400,
+        "fileDropEnabled": false
+      }
+    ]
+  }
+}

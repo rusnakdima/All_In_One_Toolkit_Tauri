@@ -1,0 +1,6 @@
+<app-nav [isShowNav]="isShowNav"></app-nav>
+<app-header (isShowNav)="showNav($event)"></app-header>
+
+<div class="flex flex-col m-3 !pt-20">
+  <router-outlet></router-outlet>
+</div>

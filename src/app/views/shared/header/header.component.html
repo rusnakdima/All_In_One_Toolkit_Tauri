@@ -1,0 +1,16 @@
+<div class="styleHeader">
+  <div class="flex flex-row gap-x-2">
+    <ion-icon class="cursor-pointer" name="reorder-three-outline" (click)="showNav()" />
+    @if (backButton) {
+      <ion-icon class="cursor-pointer" name="chevron-back-circle-outline" (click)="back()" />
+    }
+    <span class="font-bold text-2xl">{{title}}</span>
+  </div>
+  <div>
+    @if (themeVal == '') {
+      <ion-icon class="cursor-pointer" name="sunny-outline" (click)="setTheme('dark')" />
+    } @else if (themeVal == 'dark') {
+      <ion-icon class="cursor-pointer" name="moon-outline" (click)="setTheme('')" />
+    }
+  </div>
+</div>

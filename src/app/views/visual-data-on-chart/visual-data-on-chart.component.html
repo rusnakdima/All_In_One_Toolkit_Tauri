@@ -1,0 +1,92 @@
+<div class="flex flex-col gap-y-5 w-full">
+  <details class="styleDetails">
+    <summary>
+      <span class="text-xl font-bold">Select a tabular document with data</span>
+    </summary>
+
+    <div class="flex flex-col gap-y-3">
+      <app-file-input [typeFile]="typeFile" (dataFile)="setDataFile($event)"></app-file-input>
+      <button class="styleBut w-max" (click)="createTable()">Create a table</button>
+    </div>
+  </details>
+
+  <details class="styleDetails">
+    <summary>
+      <span class="text-xl font-bold">Insert data from a table (copy a table from any source)</span>
+    </summary>
+
+    <div class="flex flex-col gap-y-3">
+      <textarea class="styleTextarea" (change)="setData($event)" rows="7"></textarea>
+      <button class="styleBut w-max" (click)="createTable()">Create a table</button>
+    </div>
+  </details>
+
+  <details class="styleDetails">
+    <summary>
+      <span class="text-xl font-bold">Enter all the data manually</span>
+    </summary>
+
+    <div class="flex flex-col gap-y-3">
+      <div class="flex flex-row gap-x-3">
+        <div class="flex flex-col gap-y-3">
+          <label class="styleLabel">Number of columns:</label>
+          <input class="styleField" type="number" value="0" (change)="setColumns($event)" />
+        </div>
+        <div class="flex flex-col gap-y-3">
+          <label class="styleLabel">Number of rows:</label>
+          <input class="styleField" type="number" value="0" (change)="setRows($event)" />
+        </div>
+      </div>
+      
+      <button class="styleBut w-max" (click)="createTableManual()">Create a table</button>
+    </div>
+  </details>
+
+  @if (blockTable) {
+    <div class="flex flex-col gap-y-2">
+      <span class="text-2xl font-bold">Table data</span>
+      <table class="border styleBorderSolid">
+        <thead>
+          <tr>
+            @for (th of dataTable.thead; track th) {
+              <th class='styleTD' contenteditable="true">{{th}}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (tr of dataTable.tbody; track tr) {
+            <tr>
+              @for (td of tr; track td) {
+                <td class="styleTD w-min h-[40px] p-5" contenteditable="true">{{td}}</td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (blockChart) {
+    <div class="flex flex-col gap-y-3">
+      <label class="styleLabel">Select the chart type:</label>
+      <select class="styleSelect" value="bar" (change)="setChartType($event)">
+        <option value="bar">Bar chart</option>
+        <option value="line">Line chart</option>
+        <option value="pie">Pie chart</option>
+        <option value="doughnut">Donat chart</option>
+      </select>
+
+      <button class="styleBut w-max" (click)="createChart()">Create a diagram</button>
+
+      @if (outChart) {
+        <div id="outChart" class="bg-white text-black">
+          <canvas id="myChart"></canvas>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<app-window-notify
+  [dataNotify]="dataNotify"
+></app-window-notify>
