@@ -7,11 +7,12 @@ import { Subject } from 'rxjs';
 /* components */
 import { FileInputComponent } from '@views/shared/fields/file-input/file-input.component';
 import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/window-notify.component';
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
 
 @Component({
   selector: 'app-xls-to-xml',
   standalone: true,
-  imports: [CommonModule, FileInputComponent, WindowNotifyComponent],
+  imports: [CommonModule, HeaderPageComponent, FileInputComponent, WindowNotifyComponent],
   templateUrl: './xls-to-xml.component.html'
 })
 export class XlsToXmlComponent {

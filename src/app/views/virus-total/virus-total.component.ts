@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 
 /* components */
 import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/window-notify.component';
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
 
 @Component({
   selector: 'app-virus-total',
@@ -13,7 +14,7 @@ import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/wind
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
   ],
-  imports: [CommonModule, WindowNotifyComponent],
+  imports: [CommonModule, HeaderPageComponent, WindowNotifyComponent],
   templateUrl: './virus-total.component.html'
 })
 export class VirusTotalComponent {

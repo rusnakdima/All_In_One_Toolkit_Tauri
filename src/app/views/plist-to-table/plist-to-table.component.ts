@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/window-notify.component';
 import { FileInputComponent } from '@views/shared/fields/file-input/file-input.component';
 import { DetailsComponent } from '@views/shared/details/details.component';
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
 
 interface HeadData {
   key: string;
@@ -31,7 +32,7 @@ interface DetailsData {
 @Component({
   selector: 'app-plist-to-table',
   standalone: true,
-  imports: [CommonModule, FileInputComponent, DetailsComponent, WindowNotifyComponent],
+  imports: [CommonModule, HeaderPageComponent, FileInputComponent, DetailsComponent, WindowNotifyComponent],
   templateUrl: './plist-to-table.component.html'
 })
 export class PlistToTableComponent {

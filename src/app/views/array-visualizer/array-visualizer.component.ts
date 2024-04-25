@@ -2,10 +2,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
+/* components */
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
+
 @Component({
   selector: 'app-array-visualizer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HeaderPageComponent],
   templateUrl: './array-visualizer.component.html'
 })
 export class ArrayVisualizerComponent {

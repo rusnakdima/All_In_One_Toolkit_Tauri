@@ -7,11 +7,14 @@ import { Subject } from 'rxjs';
 /* components */
 import { FileInputComponent } from '@views/shared/fields/file-input/file-input.component';
 import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/window-notify.component';
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
+import { XmlToJsonComponent } from '@views/xml-to-json/xml-to-json.component';
+import { JsonToXlsComponent } from '@views/json-to-xls/json-to-xls.component';
 
 @Component({
   selector: 'app-xml-to-xls',
   standalone: true,
-  imports: [CommonModule, FileInputComponent, WindowNotifyComponent],
+  imports: [CommonModule, HeaderPageComponent, FileInputComponent, WindowNotifyComponent],
   templateUrl: './xml-to-xls.component.html'
 })
 export class XmlToXlsComponent {
@@ -48,7 +51,10 @@ export class XmlToXlsComponent {
 
   convertData() {
     if (this.dataXml != '') {
-      // this.dataXls = this.parseObj(this.dataJson);
+      let parser = new DOMParser();
+      let xmlDoc = parser.parseFromString(this.dataXml, 'text/xml');
+      const dataJson = XmlToJsonComponent.prototype.parseData(Array.from(xmlDoc.children[0].children));
+      this.dataXls = JsonToXlsComponent.prototype.parseObj(dataJson);
   
       if (this.dataXls.length > 0) {
         this.dataNotify.next({ status: 'success', text: "The data has been successfully converted!" });

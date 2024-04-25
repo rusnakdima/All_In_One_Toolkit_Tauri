@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/window-notify.component';
 import { TableComponent } from '@views/shared/table/table.component';
 import { FileInputComponent } from '@views/shared/fields/file-input/file-input.component';
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
 
 interface TableData {
   thead: string[];
@@ -16,7 +17,7 @@ interface TableData {
 @Component({
   selector: 'app-json-to-table',
   standalone: true,
-  imports: [CommonModule, FileInputComponent, TableComponent, WindowNotifyComponent],
+  imports: [CommonModule, HeaderPageComponent, FileInputComponent, TableComponent, WindowNotifyComponent],
   templateUrl: './json-to-table.component.html'
 })
 export class JsonToTableComponent {

@@ -1,0 +1,31 @@
+<div class="relative flex flex-row gap-5 !pt-20 h-[100vh]" (mouseup)="modifyLayout(false, '')" (mousemove)="moveDivider($event)">
+  <div [ngStyle]="{width: (widthFirstView > 0) ? widthFirstView+'px' : '100%'}">
+    <router-outlet></router-outlet>
+  </div>
+
+  <div class="absolute flex flex-col justify-center mx-6 h-[80vh]" [ngClass]="[(endPosDivider > leftPosDivider) ? 'styleBorderSolidLite border' : 'dividerIcon mx-0 w-11']" [ngStyle]="{left: (leftPosDivider > 0) ? leftPosDivider+'px' : null}" (mousedown)="modifyLayout(true, 'leftPosDivider')">
+    <div class="absolute flex flex-col justify-center py-2 px-1 bg-white dark:bg-zinc-900 rounded-full styleBorderSolidLite border" [ngClass]="[(endPosDivider > leftPosDivider) ? '-right-6' : '']">
+      <ion-icon name="pause-outline" />
+    </div>
+  </div>
+  
+  @if (numWind >= 2) {
+    <div [ngStyle]="{width: widthSecondView+'px'}">
+      <router-outlet name="second"></router-outlet>
+    </div>
+  }
+  
+  @if (widthSecondView > 300) {
+    <div class="absolute flex flex-col justify-center mx-6 h-[80vh]" [ngClass]="[(endPosDivider > leftPosDivider2) ? 'styleBorderSolidLite border' : 'dividerIcon mx-0 w-11']" [ngStyle]="{left: (leftPosDivider2 > 0) ? leftPosDivider2+'px' : null}" (mousedown)="modifyLayout(true, 'leftPosDivider2')">
+      <div class="absolute flex flex-col justify-center py-2 px-1 bg-white dark:bg-zinc-900 rounded-full styleBorderSolidLite border" [ngClass]="[(endPosDivider > leftPosDivider2) ? '-right-6' : '']">
+        <ion-icon name="pause-outline" />
+      </div>
+    </div>
+  }
+  
+  @if (numWind >= 3) {
+    <div [ngStyle]="{width: widthThirdView+'px'}">
+      <router-outlet name="third"></router-outlet>
+    </div>
+  }
+</div>

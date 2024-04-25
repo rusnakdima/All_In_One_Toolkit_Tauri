@@ -1,12 +1,14 @@
 /* system libraries */
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Subject } from 'rxjs';
+
+/* components */
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
 
 @Component({
   selector: 'app-color-pallete',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HeaderPageComponent],
   templateUrl: './color-pallete.component.html'
 })
 export class ColorPalleteComponent {

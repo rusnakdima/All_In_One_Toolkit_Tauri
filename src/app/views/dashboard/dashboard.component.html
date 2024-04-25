@@ -1,10 +1,13 @@
-<div class="flex flex-col gap-y-5 w-full">
+<div class="flex flex-col gap-y-5 m-5">
   @if (recentActionLinks.length > 0) {
-    <span class="text-2xl">Recent Action</span>
+    <div class="flex flex-row justify-between">
+      <span class="text-2xl">Recent Action</span>
+      <button class="styleBut" (click)="clearRecentLink()">Clear</button>
+    </div>
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 gap-2">
+    <div class="flex flex-row flex-wrap gap-2">
       @for (link of recentActionLinks; track link) {
-        <div class="styleLinkBlock" [routerLink]="['/'+link.url]" (click)="saveLink(link)">
+        <div class="styleLinkBlock w-[200px]" (click)="redirToLink(link.url)" (click)="saveLink(link)">
           <div class="flex flex-row gap-x-2">
             @for (icon of link.icon; track icon; let i = $index) {
               <img [src]="icon" [alt]="['link.title_'+i]" [ngClass]="link.icon.length > 1 ? 'w-12 h-12' : 'w-14 h-14'">
@@ -24,9 +27,9 @@
     ></app-search>
   </div>
 
-  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 gap-2">
+  <div class="flex flex-row flex-wrap gap-2">
     @for (link of links; track link) {
-      <div class="styleLinkBlock" [routerLink]="['/'+link.url]" (click)="saveLink(link)">
+      <div class="styleLinkBlock w-[200px]" (click)="redirToLink(link.url)" (click)="saveLink(link)">
         <div class="flex flex-row gap-x-2">
           @for (icon of link.icon; track icon; let i = $index) {
             <img [src]="icon" [alt]="['link.title_'+i]" [ngClass]="link.icon.length > 1 ? 'w-12 h-12' : 'w-14 h-14'">

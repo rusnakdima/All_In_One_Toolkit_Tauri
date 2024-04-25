@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 
 /* components */
 import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/window-notify.component';
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
 
 interface TableData {
   thead: Array<any>;
@@ -15,7 +16,7 @@ interface TableData {
 @Component({
   selector: 'app-css-converter',
   standalone: true,
-  imports: [CommonModule, WindowNotifyComponent],
+  imports: [CommonModule, HeaderPageComponent, WindowNotifyComponent],
   templateUrl: './css-converter.component.html'
 })
 export class CssConverterComponent {

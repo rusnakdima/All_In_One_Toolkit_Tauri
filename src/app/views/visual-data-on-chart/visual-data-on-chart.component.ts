@@ -7,13 +7,14 @@ import { ArcElement, BarController, BarElement, CategoryScale, Chart, ChartType,
 /* components */
 import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/window-notify.component';
 import { FileInputComponent } from '@views/shared/fields/file-input/file-input.component';
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
 
 Chart.register(BarController, PieController, LineController, DoughnutController, CategoryScale, LinearScale, BarElement, PointElement, LineElement, ArcElement, Title, Tooltip, Legend);
 
 @Component({
   selector: 'app-visual-data-on-chart',
   standalone: true,
-  imports: [CommonModule, FileInputComponent, WindowNotifyComponent],
+  imports: [CommonModule, HeaderPageComponent, FileInputComponent, WindowNotifyComponent],
   templateUrl: './visual-data-on-chart.component.html'
 })
 export class VisualDataOnChartComponent {

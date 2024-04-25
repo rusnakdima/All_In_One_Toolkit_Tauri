@@ -2,16 +2,17 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
+import { Subject } from 'rxjs';
 
 /* components */
 import { HeaderComponent } from '@views/shared/header/header.component'; 
 import { NavComponent } from '@views/shared/nav/nav.component';
-import { Subject } from 'rxjs';
+import { CustomRouterOutletComponent } from '@views/shared/custom-router-outlet/custom-router-outlet.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent, NavComponent],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, NavComponent, CustomRouterOutletComponent],
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {

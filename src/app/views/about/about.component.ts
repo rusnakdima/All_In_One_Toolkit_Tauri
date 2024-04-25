@@ -12,12 +12,13 @@ import { AboutService } from '@services/about.service';
 
 /* components */
 import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/window-notify.component';
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
 
 @Component({
   selector: 'app-about',
   standalone: true,
   providers: [AboutService],
-  imports: [CommonModule, HttpClientModule, WindowNotifyComponent],
+  imports: [CommonModule, HttpClientModule, HeaderPageComponent, WindowNotifyComponent],
   templateUrl: './about.component.html'
 })
 export class AboutComponent {

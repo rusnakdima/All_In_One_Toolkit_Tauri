@@ -1,4 +1,6 @@
-<div class="flex flex-col gap-y-5 w-full">
+<app-header-page></app-header-page>
+
+<div class="flex flex-col gap-y-5 m-5">
   <div class="flex flex-col gap-y-1">
     <label class="styleLabel">Write or paste the JS code with the functions of the array</label>
     <textarea class="styleTextarea" cols="30" rows="10" (keyup)="executeCode($event)" [value]="['const array = [];']"></textarea>

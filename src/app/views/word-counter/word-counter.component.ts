@@ -6,11 +6,12 @@ import { Subject } from 'rxjs';
 /* components */
 import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/window-notify.component';
 import { FileInputComponent } from '@views/shared/fields/file-input/file-input.component';
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
 
 @Component({
   selector: 'app-word-counter',
   standalone: true,
-  imports: [CommonModule, FileInputComponent, WindowNotifyComponent],
+  imports: [CommonModule, HeaderPageComponent, FileInputComponent, WindowNotifyComponent],
   templateUrl: './word-counter.component.html'
 })
 export class WordCounterComponent implements OnInit {

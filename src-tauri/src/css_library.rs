@@ -13,23 +13,32 @@ async fn update_file() -> core::result::Result<String, reqwest::Error> {
 
   if file_path.exists() {
     let existing_content = read_file_content(&file_path).unwrap();
-    let response = reqwest::get(url).await?;
-    let mut content = Cursor::new(response.bytes().await?);
-    let mut new_content = Vec::new();
-    let _ = content.read_to_end(&mut new_content);
-
-    if existing_content != new_content {
-      let _ = update_file_content(&file_path, &new_content);
-      Ok("The style library has been successfully updated!".to_string())
-    } else {
-      Ok("".to_string())
+    let response = reqwest::get(url).await;
+    match response {
+      Ok(data) => {
+        let mut content = Cursor::new(data.bytes().await.unwrap());
+        let mut new_content = Vec::new();
+        let _ = content.read_to_end(&mut new_content);
+        if existing_content != new_content {
+          let _ = update_file_content(&file_path, &new_content);
+          Ok("The style library has been successfully updated!".to_string())
+        } else {
+          Ok("".to_string())
+        }
+      },
+      Err(err) => Ok(format!("Error: {:?}!", err.to_string()))
     }
   } else {
-    let response = reqwest::get(url).await?;
-    let mut file = File::create(file_path).expect("Failed to create file");
-    let mut content = Cursor::new(response.bytes().await?);
-    std::io::copy(&mut content, &mut file).expect("Failed to copy content to file");
-    Ok("The style library has been successfully loaded!".to_string())
+    let response = reqwest::get(url).await;
+    match response {
+      Ok(data) => {
+        let mut file = File::create(file_path).expect("Failed to create file");
+        let mut content = Cursor::new(data.bytes().await.unwrap());
+        std::io::copy(&mut content, &mut file).expect("Failed to copy content to file");
+        Ok("The style library has been successfully loaded!".to_string())
+      },
+      Err(err) => Ok(format!("Error: {:?}!", err.to_string()))
+    }
   }
 }
 

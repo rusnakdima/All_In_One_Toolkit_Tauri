@@ -7,11 +7,12 @@ import { Subject } from 'rxjs';
 /* components */
 import { FileInputComponent } from '@views/shared/fields/file-input/file-input.component';
 import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/window-notify.component';
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
 
 @Component({
   selector: 'app-xml-to-json',
   standalone: true,
-  imports: [CommonModule, FileInputComponent, WindowNotifyComponent],
+  imports: [CommonModule, HeaderPageComponent, FileInputComponent, WindowNotifyComponent],
   templateUrl: './xml-to-json.component.html'
 })
 export class XmlToJsonComponent {
@@ -41,7 +42,7 @@ export class XmlToJsonComponent {
     this.dataXml = event.target.value;
   }
 
-  parseData(xmlNodes: Array<any>) {
+  public parseData(xmlNodes: Array<any>) {
     let tempObj: {[key: string]: any} = {};
     xmlNodes.forEach((elem: any) => {
       if ([...elem.children].length > 0) {

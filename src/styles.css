@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .styleBody {
-  @apply text-black bg-white dark:text-white dark:bg-zinc-900 top-0 left-0 m-0
+  @apply text-black dark:text-white bg-white dark:bg-zinc-900 top-0 left-0 m-0 select-none
 }
 
 .styleHeader {
@@ -92,6 +92,13 @@ svg {
 
 pre {
   @apply w-full p-5 rounded-lg bg-slate-300 dark:bg-slate-700
+}
+
+.dividerIcon > div {
+  @apply hidden
+}
+.dividerIcon:hover > div {
+  @apply flex
 }
 
 ::-webkit-scrollbar {

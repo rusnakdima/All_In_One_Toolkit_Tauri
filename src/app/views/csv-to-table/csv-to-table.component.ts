@@ -6,11 +6,12 @@ import { Subject } from 'rxjs';
 /* components */
 import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/window-notify.component';
 import { FileInputComponent } from '@views/shared/fields/file-input/file-input.component';
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
 
 @Component({
   selector: 'app-csv-to-table',
   standalone: true,
-  imports: [CommonModule, FileInputComponent, WindowNotifyComponent],
+  imports: [CommonModule, HeaderPageComponent, FileInputComponent, WindowNotifyComponent],
   templateUrl: './csv-to-table.component.html'
 })
 export class CsvToTableComponent {

@@ -5,11 +5,12 @@ import { Subject } from 'rxjs';
 
 /* components */
 import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/window-notify.component';
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
 
 @Component({
   selector: 'app-base64-enc-dec',
   standalone: true,
-  imports: [CommonModule, WindowNotifyComponent],
+  imports: [CommonModule, HeaderPageComponent, WindowNotifyComponent],
   templateUrl: './base64-enc-dec.component.html'
 })
 export class Base64EncDecComponent {

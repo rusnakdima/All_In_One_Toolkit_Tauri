@@ -2,10 +2,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
+/* components */
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
+
 @Component({
   selector: 'app-key-code',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HeaderPageComponent],
   templateUrl: './key-code.component.html'
 })
 export class KeyCodeComponent {

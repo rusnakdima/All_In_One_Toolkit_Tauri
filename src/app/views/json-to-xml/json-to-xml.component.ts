@@ -7,11 +7,12 @@ import { Subject } from 'rxjs';
 /* components */
 import { FileInputComponent } from '@views/shared/fields/file-input/file-input.component';
 import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/window-notify.component';
+import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
 
 @Component({
   selector: 'app-json-to-xml',
   standalone: true,
-  imports: [CommonModule, FileInputComponent, WindowNotifyComponent],
+  imports: [CommonModule, HeaderPageComponent, FileInputComponent, WindowNotifyComponent],
   templateUrl: './json-to-xml.component.html'
 })
 export class JsonToXmlComponent {
@@ -49,7 +50,10 @@ export class JsonToXmlComponent {
   parseData(obj: {[key: string]: any}, stroke: string = '') {
     let tempElement = '';
     Object.entries(obj).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
+      if (value == null) {
+        key = key.replace(/[\" \"]/gi,"");
+        tempElement += `<${key}>null</${key}>`;
+      } else if (Array.isArray(value)) {
         tempElement += `${this.parseData(value, key)}`;
       } else if (typeof value == 'object') {
         key = (isNaN(+key)) ? key : stroke;

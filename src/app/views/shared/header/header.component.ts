@@ -13,46 +13,18 @@ import { Router, RouterModule } from '@angular/router';
   templateUrl: './header.component.html'
 })
 export class HeaderComponent {
-  title: string = '';
-
-  constructor(
-    private router: Router,
-    private location: Location
-  ) {}
+  constructor() {}
 
   @Output() isShowNav: EventEmitter<boolean> = new EventEmitter();
 
   themeVal: string = '';
-  backButton: boolean = false;
 
   ngOnInit(): void {
-    this.setTitleRoute();
     this.themeVal = (localStorage.getItem('theme') != null) ? localStorage.getItem('theme')! : '';
   }
 
   showNav() {
     this.isShowNav.next(true);
-  }
-  
-  setTitleRoute() {
-    setInterval(() => {
-      const endPos: number = (this.router.url.indexOf('?') > -1) ? this.router.url.indexOf('?') : this.router.url.length;
-      const urlParam = this.router.config.find(x => x.path === this.router.url.slice(1, endPos));
-      if (this.router.url.slice(1, endPos).split('/')[0] != 'dashboard') {
-        this.backButton = true;
-      } else {
-        this.backButton = false;
-      }
-      if (urlParam) {
-        this.title = urlParam["title"]!.toString();
-      } else {
-        this.title = "Not Found";
-      }
-    }, 100);
-  }
-
-  back() {
-    this.location.back();
   }
 
   setTheme(theme: string) {

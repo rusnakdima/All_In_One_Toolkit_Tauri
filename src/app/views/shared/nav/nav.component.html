@@ -1,8 +1,8 @@
-<div class="fixed top-0 left-0 m-0 p-0 z-40 w-full h-screen bg-white/60 dark:bg-black/30" [ngClass]="showNav ? 'block' : '-translate-x-full'" (click)="showNav = false">
+<div class="fixed top-0 left-0 m-0 p-0 z-[999] w-full h-screen bg-white/60 dark:bg-black/30" [ngClass]="showNav ? 'block' : '-translate-x-full'" (click)="showNav = false">
   <div class="w-64 p-4 bg-gray-200 dark:bg-zinc-800 h-screen transition-transform" [ngClass]="showNav ? '' : '-translate-x-full'">
     <span class="text-base font-semibold text-gray-500 dark:text-gray-400 uppercase">Menu</span>
     <div class="flex flex-col py-4 overflow-y-auto h-full space-y-2 font-medium">
-      <div class="styleLinkMenu" [routerLink]="['/home']">
+      <div class="styleLinkMenu" [routerLink]="['/dashboard']">
         <img src="https://cdn-icons-png.flaticon.com/512/1828/1828673.png" alt="dashboard" class="w-7 h-7">
         <span>Dashboard</span>
       </div>
