@@ -19,6 +19,7 @@ export class CustomRouterOutletComponent implements OnInit {
 
   [key: string]: any;
   numWind: number = 1;
+  widthBody: number = 0;
   endPosDivider: number = 0;
   leftPosDivider: number = 0;
   leftPosDivider2: number = 0;
@@ -33,14 +34,45 @@ export class CustomRouterOutletComponent implements OnInit {
   ngOnInit(): void {
     this.router.navigateByUrl('/dashboard(second:dashboard//third:dashboard)');
     setInterval(() => {
-      this.endPosDivider = document.body.clientWidth -70;
-      if (this.leftPosDivider == 0) {
-        this.leftPosDivider = document.body.clientWidth -70;
+      if (this.widthBody != document.body.clientWidth) {
+        this.widthBody = document.body.clientWidth;
       }
-      if (this.leftPosDivider2 == 0) {
-        this.leftPosDivider2 = document.body.clientWidth -70;
+      this.endPosDivider = this.widthBody -47;
+      if (this.moveElem == '') {
+        if (this.leftPosDivider == 0) {
+          this.leftPosDivider = this.widthBody -47;
+        }
+        if (this.leftPosDivider2 == 0) {
+          this.leftPosDivider2 = this.widthBody -47;
+        }
+        if (this.numWind == 1) {
+          this.leftPosDivider = this.widthBody -47;
+          this.leftPosDivider2 = this.widthBody -47;
+          this.widthFirstView = this.leftPosDivider +47;
+          this.widthSecondView = 0;
+          this.widthThirdView = 0;
+        } else if (this.numWind == 2) {
+          this.leftPosDivider2 = this.widthBody -47;
+          this.widthFirstView = this.leftPosDivider +16;
+          this.widthSecondView = this.leftPosDivider2 - this.widthFirstView;
+          this.widthThirdView = 0;
+          if (this.endPosDivider - this.leftPosDivider < 300) {
+            this.numWind = 1;
+            this.leftPosDivider = this.endPosDivider;
+            this.widthFirstView = 0;
+          }
+        } else if (this.numWind == 3) {
+          this.widthFirstView = this.leftPosDivider +16;
+          this.widthSecondView = this.leftPosDivider2 - this.widthFirstView;
+          this.widthThirdView = this.widthBody - (this.leftPosDivider2 +36);
+          if (this.endPosDivider - this.leftPosDivider2 < 300) {
+            this.numWind = 2;
+            this.leftPosDivider2 = this.endPosDivider;
+            this.widthSecondView = this.leftPosDivider2 - this.widthFirstView;
+          }
+        }
       }
-    });
+    }, 100);
   }
 
   modifyLayout(down: boolean, elem: string) {
@@ -94,16 +126,8 @@ export class CustomRouterOutletComponent implements OnInit {
         this.numWind = 3;
       } else if (this.widthSecondView > 200) {
         this.numWind = 2;
-        if (this.endPosDivider - this.leftPosDivider2 < 300) {
-          this.leftPosDivider2 = this.endPosDivider;
-          this.widthSecondView = this.leftPosDivider2 - this.widthFirstView;
-        }
       } else {
         this.numWind = 1;
-        if (this.endPosDivider - this.leftPosDivider < 300) {
-          this.leftPosDivider = this.endPosDivider;
-          this.widthFirstView = 0;
-        }
       }
     }
   }

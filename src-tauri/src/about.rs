@@ -26,3 +26,16 @@ pub async fn download_update(url: String, file_name: String) -> String {
     }
   }
 }
+
+#[tauri::command]
+pub async fn get_binary_name_file() -> String {
+  if cfg!(target_os = "linux") {
+    format!("all_in_one_toolkit")
+  } else if cfg!(target_os = "windows") {
+    format!("all_in_one_toolkit.exe")
+  } else if cfg!(target_os = "macos") {
+    format!("all_in_one_toolkit.app")
+  } else {
+    format!("Unknown")
+  }
+}

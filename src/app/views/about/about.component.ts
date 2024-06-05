@@ -34,9 +34,10 @@ export class AboutComponent {
   dateVersion: string = localStorage['dateVersion'] || 'Unknown';
   dateCheck: string = localStorage['dateCheck'] || 'Unknown';
 
+  nameFile: string = '';
   lastVersion: string = '';
   pathUpdate: string = '';
-  
+
   windUpdates: boolean = false;
   downloadProgress: boolean = false;
 
@@ -68,6 +69,21 @@ export class AboutComponent {
   }
 
   getDate() {
+    this.aboutService.getBinaryNameFile()
+    .then((data: any) => {
+      if (data) {
+        if (data != "Unknown") {
+          this.nameFile = data;
+        }
+      } else {
+        throw Error(data);
+      }
+    })
+    .catch((err: any) => {
+      console.error(err);
+      this.dataNotify.next({status: 'error', text: err});
+    });
+
     this.aboutService.getDate(this.version).subscribe({
       next: (res: any) => {
         if (res && res.published_at) {
@@ -112,23 +128,27 @@ export class AboutComponent {
   }
 
   downloadFile() {
-    this.downloadProgress = true,
-    this.dataNotify.next({status: 'warning', text: "Wait until the program update is downloaded!"});
-    this.aboutService.downloadUpdate(this.lastVersion)
-    .then((data: any) => {
-      if (data) {
-        this.dataNotify.next({status:'success', text: "The new version of the program has been successfully downloaded!"});
-        this.pathUpdate = data;
-      } else {
-        throw Error(data);
-      }
-    })
-    .catch((err: any) => {
-      console.error(err);
-      this.dataNotify.next({status: 'error', text: err});
-    });
-    this.downloadProgress = false;
-    this.windUpdates = false;
+    if (this.nameFile != '') {
+      this.downloadProgress = true,
+      this.dataNotify.next({status: 'warning', text: "Wait until the program update is downloaded!"});
+      this.aboutService.downloadUpdate(this.lastVersion, this.nameFile)
+      .then((data: any) => {
+        if (data) {
+          this.dataNotify.next({status:'success', text: "The new version of the program has been successfully downloaded!"});
+          this.pathUpdate = data;
+        } else {
+          throw Error(data);
+        }
+      })
+      .catch((err: any) => {
+        console.error(err);
+        this.dataNotify.next({status: 'error', text: err});
+      });
+      this.downloadProgress = false;
+      this.windUpdates = false;
+    } else {
+      this.dataNotify.next({status: 'error', text: "System definition error! It is impossible to find a file for this OS!"});
+    }
   }
 
   openFile() {

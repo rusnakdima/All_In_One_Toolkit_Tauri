@@ -12,6 +12,7 @@ use manage_file::get_data_by_path;
 use manage_file::open_file_in_app;
 use manage_file::write_data_to_file;
 use about::download_update;
+use about::get_binary_name_file;
 use css_library::update_library;
 use css_library::get_css_library;
 use virus_total::virus_total;
@@ -30,6 +31,7 @@ fn main() {
 			open_file_in_app,
 			write_data_to_file,
 			download_update,
+			get_binary_name_file,
 			update_library,
 			get_css_library,
 			virus_total,

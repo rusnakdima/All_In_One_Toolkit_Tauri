@@ -26,13 +26,17 @@ export class AboutService {
   getDate(version: string): Observable<any> {
     return this.http.get<any>(`https://api.github.com/repos/rusnakdima/${this.nameProduct}/releases/tags/v${version}`, httpOptions);
   }
-  
+
+  getBinaryNameFile() {
+    return invoke("get_binary_name_file");
+  }
+
   checkUpdate(): Observable<any> {
     return this.http.get<any>(`https://api.github.com/repos/rusnakdima/${this.nameProduct}/releases/latest`, httpOptions);
   }
 
-  downloadUpdate(version: string) {
-    return invoke("download_update", {"url": `https://github.com/rusnakdima/${this.nameProduct}/releases/download/${version}/all_in_one_toolkit.exe`, "fileName": "all_in_one_toolkit.exe"});
+  downloadUpdate(version: string, nameFile: string) {
+    return invoke("download_update", {"url": `https://github.com/rusnakdima/${this.nameProduct}/releases/download/${version}/${nameFile}`, "fileName": nameFile});
   }
 
   openFile(path: string) {
