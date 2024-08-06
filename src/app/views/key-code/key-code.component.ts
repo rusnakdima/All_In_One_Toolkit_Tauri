@@ -12,8 +12,6 @@ import { HeaderPageComponent } from '@views/shared/header-page/header-page.compo
   templateUrl: './key-code.component.html'
 })
 export class KeyCodeComponent {
-  title: string = '';
-
   constructor() {}
 
   keyCode: number = 0;

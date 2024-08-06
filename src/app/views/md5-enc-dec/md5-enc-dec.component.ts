@@ -1,19 +1,20 @@
-/* syste, libraries */
+/* system libraries */
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import {Md5} from 'ts-md5';
 import { Subject } from 'rxjs';
 
 /* components */
-import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/window-notify.component';
 import { HeaderPageComponent } from '@views/shared/header-page/header-page.component';
+import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/window-notify.component';
 
 @Component({
-  selector: 'app-base64-enc-dec',
+  selector: 'app-md5-enc-dec',
   standalone: true,
   imports: [CommonModule, HeaderPageComponent, WindowNotifyComponent],
-  templateUrl: './base64-enc-dec.component.html'
+  templateUrl: './md5-enc-dec.component.html'
 })
-export class Base64EncDecComponent {
+export class Md5EncDecComponent {
   constructor() {}
 
   dataNotify: Subject<INotify> = new Subject();
@@ -29,21 +30,21 @@ export class Base64EncDecComponent {
 
   encode() {
     try {
-      const encodeData = btoa(this.baseInput);
+      const encodeData = Md5.hashStr(this.baseInput);
       this.outputText = encodeData;
     } catch (error: any) {
       console.error(error);
       this.dataNotify.next({ status: 'error', text: error.toString() });
     }
   }
-  
-  decode() {
-    try {
-      const decodeData = atob(this.baseInput);
-      this.outputText = decodeData;
-    } catch (error: any) {
-      console.error(error);
-      this.dataNotify.next({ status: 'error', text: error.toString() });
-    }
-  }
+
+  // decode() {
+  //   try {
+  //     const decodeData = (this.baseInput);
+  //     this.outputText = decodeData;
+  //   } catch (error: any) {
+  //     console.error(error);
+  //     this.dataNotify.next({ status: 'error', text: error.toString() });
+  //   }
+  // }
 }

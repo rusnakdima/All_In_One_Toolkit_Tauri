@@ -16,8 +16,6 @@ import { HeaderPageComponent } from '@views/shared/header-page/header-page.compo
   templateUrl: './xml-to-json.component.html'
 })
 export class XmlToJsonComponent {
-  title: string = '';
-
   constructor() {}
 
   dataNotify: Subject<INotify> = new Subject();

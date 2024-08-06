@@ -12,8 +12,6 @@ import { HeaderPageComponent } from '@views/shared/header-page/header-page.compo
   templateUrl: './array-visualizer.component.html'
 })
 export class ArrayVisualizerComponent {
-  title: string = '';
-
   constructor() {}
 
   dataArray: Array<any> = []

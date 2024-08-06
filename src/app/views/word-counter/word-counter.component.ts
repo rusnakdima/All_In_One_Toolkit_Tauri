@@ -15,8 +15,6 @@ import { HeaderPageComponent } from '@views/shared/header-page/header-page.compo
   templateUrl: './word-counter.component.html'
 })
 export class WordCounterComponent implements OnInit {
-  title: string = '';
-
   constructor() {}
 
   dataNotify: Subject<INotify> = new Subject();

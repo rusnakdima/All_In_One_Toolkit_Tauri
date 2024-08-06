@@ -22,8 +22,6 @@ import { HeaderPageComponent } from '@views/shared/header-page/header-page.compo
   templateUrl: './about.component.html'
 })
 export class AboutComponent {
-  title: string = '';
-  
   constructor(
     private aboutService: AboutService
   ) {}

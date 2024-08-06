@@ -18,8 +18,6 @@ import { INotify, WindowNotifyComponent } from '@views/shared/window-notify/wind
   templateUrl: './file-input.component.html'
 })
 export class FileInputComponent implements OnInit, OnDestroy {
-  title: string = '';
-
   constructor() {
     listen('tauri://file-drop', event => {
       console.log(event)
@@ -31,7 +29,7 @@ export class FileInputComponent implements OnInit, OnDestroy {
   @Input() typeFile: string = '';
   @Output() dataFile: EventEmitter<string> = new EventEmitter();
   @Output() reciveFileName: EventEmitter<string> = new EventEmitter();
-  
+
   fileName: string = '';
   filePath: string = '';
 

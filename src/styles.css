@@ -2,12 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+.theme {
+  @apply text-black dark:text-white bg-white dark:bg-zinc-900
+}
+
 .styleBody {
-  @apply text-black dark:text-white bg-white dark:bg-zinc-900 top-0 left-0 m-0 select-none
+  @apply theme top-0 left-0 m-0 select-none
 }
 
 .styleHeader {
-  @apply styleBody flex flex-row justify-between items-center p-3 mx-auto styleBorderSolidLite border-b-2 !rounded-none fixed w-full z-40
+  @apply styleBody fixed flex flex-row justify-between items-center p-3 mx-auto z-40 !rounded-none styleBorderSolidLite border-b-2 w-full
 }
 
 .styleWindNotify {
@@ -19,7 +23,7 @@
 }
 
 .styleWind {
-  @apply top-[25%] left-[25%] z-50 p-4 bg-white dark:bg-zinc-900 absolute mx-auto w-1/2 rounded-xl border styleBorderSolid
+  @apply absolute top-[25%] left-[25%] p-4 mx-auto z-50 rounded-xl styleBorderSolid border bg-white dark:bg-zinc-900 w-1/2
 }
 
 .styleBorderSolid {
@@ -31,23 +35,23 @@
 }
 
 .styleLinkMenu {
-  @apply flex flex-row gap-x-4 items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700
+  @apply flex flex-row gap-x-4 items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white
 }
 
 .styleLinkBlock {
-  @apply flex flex-col gap-y-2 items-center text-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 border-2 border-solid border-black dark:border-white
+  @apply flex flex-col gap-y-2 items-center  p-2 rounded-lg border-2 border-solid border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white text-center
 }
 
 .styleLink {
-  @apply no-underline text-blue-700 dark:text-red-500 cursor-pointer
+  @apply text-blue-700 dark:text-red-500 no-underline cursor-pointer
 }
 
 .styleLabel {
-  @apply block mt-2 font-medium text-gray-900 dark:text-white
+  @apply block mt-2 text-gray-900 dark:text-white font-medium
 }
 
 .styleElem {
-  @apply rounded-lg text-gray-900 dark:text-white bg-slate-300 dark:bg-neutral-800 border border-gray-400 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-500 dark:placeholder:text-gray-100 placeholder:text-lg
+  @apply rounded-lg border border-gray-400 dark:border-gray-600 bg-slate-300 dark:bg-neutral-800 focus:ring-blue-500 dark:focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-500 text-gray-900 dark:text-white dark:placeholder:text-gray-100 placeholder:text-lg
 }
 
 .styleField {
@@ -59,23 +63,23 @@
 }
 
 .styleTextarea {
-  @apply block p-2.5 w-full styleElem
+  @apply block p-2.5 styleElem w-full
 }
 
 .styleBut {
-  @apply rounded-lg py-2 px-4 border-b-4 flex flex-row justify-center text-center items-center bg-blue-600 border-solid border-blue-950 text-white dark:bg-green-800 dark:border-green-900 dark:text-white active:border-0 active:mt-1
+  @apply flex flex-row justify-center items-center py-2 px-4 active:mt-1 rounded-lg border-b-4 active:border-0 border-solid border-blue-950 dark:border-green-900 bg-blue-600 dark:bg-green-800 text-white dark:text-white text-center
 }
 
 .styleSelect {
-  @apply block w-full px-3 py-2 styleElem
+  @apply block px-3 py-2 styleElem w-full
 }
 
 .styleRadio {
-  @apply w-6 h-6 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600
+  @apply border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 focus:ring-2 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 w-6 h-6 text-red-600
 }
 
 .styleTD {
-  @apply border-2 styleBorderSolid p-1 !border-gray-300 dark:!border-gray-600
+  @apply p-1 styleBorderSolid border-2 !border-gray-300 dark:!border-gray-600
 }
 
 .styleDetails {
@@ -83,7 +87,7 @@
 }
 
 ion-icon {
-  @apply !text-4xl z-0
+  @apply z-0 !text-4xl
 }
 
 svg {
@@ -91,7 +95,7 @@ svg {
 }
 
 pre {
-  @apply w-full p-5 rounded-lg bg-slate-300 dark:bg-slate-700
+  @apply p-5 rounded-lg bg-slate-300 dark:bg-slate-700 w-full
 }
 
 .dividerIcon > div {

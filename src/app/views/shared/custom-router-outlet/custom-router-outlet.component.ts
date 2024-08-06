@@ -1,7 +1,7 @@
 /* system libraries */
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit } from '@angular/core';
-import { Router, RouterOutlet, withViewTransitions } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-custom-router-outlet',
@@ -37,22 +37,22 @@ export class CustomRouterOutletComponent implements OnInit {
       if (this.widthBody != document.body.clientWidth) {
         this.widthBody = document.body.clientWidth;
       }
-      this.endPosDivider = this.widthBody -47;
+      this.endPosDivider = this.widthBody -21;
       if (this.moveElem == '') {
         if (this.leftPosDivider == 0) {
-          this.leftPosDivider = this.widthBody -47;
+          this.leftPosDivider = this.widthBody -21;
         }
         if (this.leftPosDivider2 == 0) {
-          this.leftPosDivider2 = this.widthBody -47;
+          this.leftPosDivider2 = this.widthBody -21;
         }
         if (this.numWind == 1) {
-          this.leftPosDivider = this.widthBody -47;
-          this.leftPosDivider2 = this.widthBody -47;
-          this.widthFirstView = this.leftPosDivider +47;
+          this.leftPosDivider = this.widthBody -21;
+          this.leftPosDivider2 = this.widthBody -21;
+          this.widthFirstView = this.leftPosDivider +21;
           this.widthSecondView = 0;
           this.widthThirdView = 0;
         } else if (this.numWind == 2) {
-          this.leftPosDivider2 = this.widthBody -47;
+          this.leftPosDivider2 = this.widthBody -21;
           this.widthFirstView = this.leftPosDivider +16;
           this.widthSecondView = this.leftPosDivider2 - this.widthFirstView;
           this.widthThirdView = 0;

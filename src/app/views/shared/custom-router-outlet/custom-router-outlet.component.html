@@ -3,8 +3,8 @@
     <router-outlet></router-outlet>
   </div>
 
-  <div class="flex flex-col justify-center h-[80vh]" [ngClass]="[((endPosDivider > leftPosDivider) ? 'styleBorderSolidLite border mx-6' : 'dividerIcon mx-0 w-[46px]') + ' ' + ((numWind > 1) ? 'fixed' : 'absolute')]" [ngStyle]="{left: (leftPosDivider > 0) ? leftPosDivider+'px' : null}" (mousedown)="modifyLayout(true, 'leftPosDivider')">
-    <div class="absolute flex flex-col justify-center py-2 px-1 bg-white dark:bg-zinc-900 rounded-full styleBorderSolidLite border" [ngClass]="[(endPosDivider > leftPosDivider) ? '-right-6' : '']">
+  <div class="flex flex-col justify-center h-[80vh]" [ngClass]="[((endPosDivider > leftPosDivider) ? 'styleBorderSolidLite border mx-6' : 'dividerIcon mx-0 w-[20px]') + ' ' + ((numWind > 1) ? 'fixed' : 'absolute')]" [ngStyle]="{left: (leftPosDivider > 0) ? leftPosDivider+'px' : null}" (mousedown)="modifyLayout(true, 'leftPosDivider')">
+    <div class="absolute flex flex-col justify-center py-2 px-1 rounded-full styleBorderSolidLite border bg-white dark:bg-zinc-900" [ngClass]="[(endPosDivider > leftPosDivider) ? '-right-6' : '']">
       <ion-icon name="pause-outline" />
     </div>
   </div>
@@ -16,8 +16,8 @@
   }
 
   @if (widthSecondView > 300) {
-    <div class="flex flex-col justify-center h-[80vh]" [ngClass]="[((endPosDivider > leftPosDivider2) ? 'styleBorderSolidLite border mx-6' : 'dividerIcon mx-0 w-[46px]') + ' ' + ((numWind > 2) ? 'fixed' : 'absolute')]" [ngStyle]="{left: (leftPosDivider2 > 0) ? leftPosDivider2+'px' : null}" (mousedown)="modifyLayout(true, 'leftPosDivider2')">
-      <div class="absolute flex flex-col justify-center py-2 px-1 bg-white dark:bg-zinc-900 rounded-full styleBorderSolidLite border" [ngClass]="[(endPosDivider > leftPosDivider2) ? '-right-6' : '']">
+    <div class="flex flex-col justify-center h-[80vh]" [ngClass]="[((endPosDivider > leftPosDivider2) ? 'styleBorderSolidLite border mx-6' : 'dividerIcon mx-0 w-[20px]') + ' ' + ((numWind > 2) ? 'fixed' : 'absolute')]" [ngStyle]="{left: (leftPosDivider2 > 0) ? leftPosDivider2+'px' : null}" (mousedown)="modifyLayout(true, 'leftPosDivider2')">
+      <div class="absolute flex flex-col justify-center py-2 px-1 rounded-full styleBorderSolidLite border bg-white dark:bg-zinc-900" [ngClass]="[(endPosDivider > leftPosDivider2) ? '-right-6' : '']">
         <ion-icon name="pause-outline" />
       </div>
     </div>

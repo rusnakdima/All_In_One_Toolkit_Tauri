@@ -12,8 +12,6 @@ import { HeaderPageComponent } from '@views/shared/header-page/header-page.compo
   templateUrl: './color-pallete.component.html'
 })
 export class ColorPalleteComponent {
-  title: string = '';
-
   constructor() {}
 
   typeCol: string = "";

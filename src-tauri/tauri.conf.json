@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "all_in_one_toolkit",
-    "version": "0.20.0"
+    "version": "0.21.0"
   },
   "tauri": {
     "allowlist": {

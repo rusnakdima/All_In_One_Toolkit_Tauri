@@ -15,8 +15,6 @@ import { HeaderPageComponent } from '@views/shared/header-page/header-page.compo
   templateUrl: './markdown-editor.component.html'
 })
 export class MarkdownEditorComponent {
-  title: string = '';
-
   constructor() {}
 
   dataNotify: Subject<INotify> = new Subject();

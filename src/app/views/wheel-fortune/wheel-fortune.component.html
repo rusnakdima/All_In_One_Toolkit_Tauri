@@ -1,0 +1,50 @@
+<app-header-page></app-header-page>
+
+<div class="flex flex-col gap-y-5 m-5">
+  <div class="flex flex-row justify-center gap-x-3 overflow-x-auto">
+    <div class="flex flex-col gap-y-3 items-center w-[70%]">
+      @if (winningEntry != '') {
+        @if (typeWinner == 'first') {
+          <span class="font-bold text-2xl">Winning: {{winningEntry}}</span>
+        } @else if (typeWinner == 'last' && listEntries.length == 1) {
+          <span class="font-bold text-2xl">Winning: {{winningEntry}}</span>
+        } @else {
+          <span class="font-bold text-2xl"> </span>
+        }
+      } @else {
+        <span class="font-bold text-2xl"> </span>
+      }
+
+      <div class="flex flex-col justify-center items-center w-[80%]">
+        <div class="relative flex flex-col justify-center items-end" (click)="startSpin()">
+          <div class="absolute -mr-10 z-10 border-solid border-t-[30px] border-b-[30px] border-r-[60px] border-t-transparent border-b-transparent border-r-gray-400"></div>
+
+          <div class="relative flex flex-col justify-center items-center">
+            <canvas id="wheel" width="700" height="700" style="width: 100%;"></canvas>
+            <div class="absolute rounded-full bg-white w-[15%] h-[15%]"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-y-3 p-2 styleBorderSolid border-l-2 w-1/4">
+      <label class="styleLabel text-xl">Type</label>
+      <div class="flex flex-col gap-x-3">
+        <div class="flex flex-row gap-x-2 items-center">
+          <input class="styleRadio" value="first" [disabled]="isSpinning" [checked]="typeWinner == 'first'" type="radio" name="type" id="first_winner" (change)="typeWinner = 'first'">
+          <label class="styleLabel" for="first_winner">First winner</label>
+        </div>
+
+        <div class="flex flex-row gap-x-2 items-center">
+          <input class="styleRadio" value="last" [disabled]="isSpinning" [checked]="typeWinner == 'last'" type="radio" name="type" id="last_winner" (change)="typeWinner = 'last'">
+          <label class="styleLabel" for="last_winner">Last winner</label>
+        </div>
+      </div>
+
+      <hr class="styleBorderSolidLite border">
+
+      <label class="styleLabel text-xl">Entries</label>
+      <textarea class="styleTextarea h-[50vh]" [value]="getListEntries()" (keyup)="changeFieldEntries($event)" [disabled]="isSpinning"></textarea>
+    </div>
+  </div>
+</div>

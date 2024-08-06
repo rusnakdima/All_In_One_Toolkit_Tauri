@@ -16,8 +16,6 @@ import { HeaderPageComponent } from '@views/shared/header-page/header-page.compo
   templateUrl: './json-to-xls.component.html'
 })
 export class JsonToXlsComponent {
-  title: string = '';
-
   constructor() {}
 
   dataNotify: Subject<INotify> = new Subject();

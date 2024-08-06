@@ -18,12 +18,10 @@ import { JsonToXlsComponent } from '@views/json-to-xls/json-to-xls.component';
   templateUrl: './xml-to-xls.component.html'
 })
 export class XmlToXlsComponent {
-  title: string = '';
-
   constructor() {}
 
   dataNotify: Subject<INotify> = new Subject();
-  
+
   typeFile: string = 'xml';
   fileName: string = '';
   dataXml: string = '';

@@ -20,8 +20,6 @@ interface TableData {
   templateUrl: './css-converter.component.html'
 })
 export class CssConverterComponent {
-  title: string = '';
-
   constructor() {}
 
   dataNotify: Subject<INotify> = new Subject();

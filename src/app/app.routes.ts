@@ -14,10 +14,13 @@ import { JsonToXlsComponent } from "@views/json-to-xls/json-to-xls.component";
 import { JsonToXmlComponent } from "@views/json-to-xml/json-to-xml.component";
 import { KeyCodeComponent } from "@views/key-code/key-code.component";
 import { MarkdownEditorComponent } from "@views/markdown-editor/markdown-editor.component";
+import { Md5EncDecComponent } from "@views/md5-enc-dec/md5-enc-dec.component";
 import { PlistToTableComponent } from "@views/plist-to-table/plist-to-table.component";
+import { Sha256EncDecComponent } from "@views/sha256-enc-dec/sha256-enc-dec.component";
 import { UrlEncDecComponent } from "@views/url-enc-dec/url-enc-dec.component";
 import { VirusTotalComponent } from "@views/virus-total/virus-total.component";
 import { VisualDataOnChartComponent } from "@views/visual-data-on-chart/visual-data-on-chart.component";
+import { WheelFortuneComponent } from "@views/wheel-fortune/wheel-fortune.component";
 import { WordCounterComponent } from "@views/word-counter/word-counter.component";
 import { XlsToJsonComponent } from "@views/xls-to-json/xls-to-json.component";
 import { XlsToXmlComponent } from "@views/xls-to-xml/xls-to-xml.component";
@@ -32,11 +35,14 @@ export const routes: Routes = [
   { path: 'word_counter', component: WordCounterComponent, title: 'Word counter' },
   { path: 'url_enc_dec', component: UrlEncDecComponent, title: 'URL Encode/Decode' },
   { path: 'base64_enc_dec', component: Base64EncDecComponent, title: 'Base64 Encode/Decode' },
+  { path: 'md5_enc_dec', component: Md5EncDecComponent, title: 'MD5 Encode/Decode' },
+  { path: 'sha256_enc_dec', component: Sha256EncDecComponent, title: 'SHA256 Encode/Decode' },
   { path: 'virus_total', component: VirusTotalComponent, title: 'VirusTotal' },
   { path: 'color_pallete', component: ColorPalleteComponent, title: 'Colot Pallete' },
   { path: 'key_code', component: KeyCodeComponent, title: 'JS Key Code Event' },
   { path: 'array_visualizer', component: ArrayVisualizerComponent, title: 'Array Visualizer' },
   { path: 'visual_data_chart', component: VisualDataOnChartComponent, title: 'Visualization data on chart' },
+  { path: 'wheel_fortune', component: WheelFortuneComponent, title: 'Wheel Fortune' },
   { path: 'csv_to_table', component: CsvToTableComponent, title: 'CSV visualizer in Table' },
   { path: 'json_to_table', component: JsonToTableComponent, title: 'JSON visualizer in Table' },
   { path: 'xml_to_table', component: XmlToTableComponent, title: 'XML visualizer in Table' },

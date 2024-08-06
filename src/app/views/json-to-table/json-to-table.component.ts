@@ -21,8 +21,6 @@ interface TableData {
   templateUrl: './json-to-table.component.html'
 })
 export class JsonToTableComponent {
-  title: string = '';
-
   constructor() {}
 
   dataNotify: Subject<INotify> = new Subject();

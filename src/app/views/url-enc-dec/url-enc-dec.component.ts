@@ -14,12 +14,10 @@ import { HeaderPageComponent } from '@views/shared/header-page/header-page.compo
   templateUrl: './url-enc-dec.component.html'
 })
 export class UrlEncDecComponent {
-  title: string = '';
-
   constructor() { }
 
   dataNotify: Subject<INotify> = new Subject();
-  
+
   urlInput: string = '';
   outputText: string = '';
 

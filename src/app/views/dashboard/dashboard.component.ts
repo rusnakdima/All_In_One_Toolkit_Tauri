@@ -22,8 +22,6 @@ import { SearchComponent } from '@views/shared/fields/search/search.component';
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
-  title: string = '';
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -38,11 +36,14 @@ export class DashboardComponent {
     { title: 'Word counter in file', url: 'word_counter', icon: ['https://cdn-icons-png.flaticon.com/512/7603/7603910.png'] },
     { title: 'URL Encode/Decode', url: 'url_enc_dec', icon: ['https://cdn-icons-png.flaticon.com/512/3214/3214679.png'] },
     { title: 'Base64 Encode/Decode', url: 'base64_enc_dec', icon: ['https://cdn-icons-png.flaticon.com/512/3093/3093179.png'] },
+    { title: 'MD5 Encode/Decode', url: 'md5_enc_dec', icon: ['https://cdn-icons-png.flaticon.com/512/14422/14422103.png'] },
+    { title: 'SHA256 Encode/Decode', url: 'sha256_enc_dec', icon: ['https://cdn-icons-png.flaticon.com/512/5844/5844831.png'] },
     { title: 'VirusTotal', url: 'virus_total', icon: ['https://cdn-icons-png.flaticon.com/512/7975/7975064.png'] },
     { title: 'Color Pallete', url: 'color_pallete', icon: ['https://cdn-icons-png.flaticon.com/512/5223/5223048.png'] },
     { title: 'JS Key Code Event', url: 'key_code', icon: ['https://cdn-icons-png.flaticon.com/512/124/124125.png'] },
     { title: 'Array visualizer', url: 'array_visualizer', icon: ['https://cdn-icons-png.flaticon.com/512/4799/4799899.png'] },
     { title: "Visualization data on chart", url: "visual_data_chart", icon: ["https://cdn-icons-png.flaticon.com/512/893/893220.png"] },
+    { title: "Wheel Fortune", url: "wheel_fortune", icon: ["https://cdn-icons-png.flaticon.com/512/6452/6452683.png"] },
     { title: 'CSV visualizer in Table', url: 'csv_to_table', icon: ['https://cdn-icons-png.flaticon.com/512/1126/1126902.png', 'https://cdn-icons-png.flaticon.com/512/3899/3899497.png', 'https://cdn-icons-png.flaticon.com/512/4598/4598376.png'] },
     { title: 'JSON visualizer in Table', url: 'json_to_table', icon: ['https://cdn-icons-png.flaticon.com/512/136/136525.png', 'https://cdn-icons-png.flaticon.com/512/3899/3899497.png', 'https://cdn-icons-png.flaticon.com/512/4598/4598376.png'] },
     { title: 'XML visualizer in Table', url: 'xml_to_table', icon: ['https://cdn-icons-png.flaticon.com/512/136/136526.png', 'https://cdn-icons-png.flaticon.com/512/3899/3899497.png', 'https://cdn-icons-png.flaticon.com/512/4598/4598376.png'] },

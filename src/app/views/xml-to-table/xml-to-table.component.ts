@@ -21,8 +21,6 @@ interface TableData {
   templateUrl: './xml-to-table.component.html'
 })
 export class XmlToTableComponent {
-  title: string = '';
-
   constructor() {}
 
   dataNotify: Subject<INotify> = new Subject();

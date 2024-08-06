@@ -14,8 +14,6 @@ import { Subject } from 'rxjs';
   templateUrl: './nav.component.html'
 })
 export class NavComponent implements OnInit {
-  title: string = '';
-
   constructor() {}
 
   @Input() isShowNav: Subject<boolean> = new Subject();

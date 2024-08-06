@@ -18,8 +18,6 @@ Chart.register(BarController, PieController, LineController, DoughnutController,
   templateUrl: './visual-data-on-chart.component.html'
 })
 export class VisualDataOnChartComponent {
-  title: string = '';
-
   constructor() {}
 
   dataNotify: Subject<INotify> = new Subject();

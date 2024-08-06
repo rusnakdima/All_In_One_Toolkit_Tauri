@@ -5,7 +5,7 @@
       <button class="styleBut" (click)="clearRecentLink()">Clear</button>
     </div>
 
-    <div class="flex flex-row flex-wrap gap-2">
+    <div class="flex flex-row flex-wrap gap-4">
       @for (link of recentActionLinks; track link) {
         <div class="styleLinkBlock w-[200px]" (click)="redirToLink(link.url)" (click)="saveLink(link)">
           <div class="flex flex-row gap-x-2">
@@ -27,7 +27,7 @@
     ></app-search>
   </div>
 
-  <div class="flex flex-row flex-wrap gap-2">
+  <div class="flex flex-row flex-wrap gap-4">
     @for (link of links; track link) {
       <div class="styleLinkBlock w-[200px]" (click)="redirToLink(link.url)" (click)="saveLink(link)">
         <div class="flex flex-row gap-x-2">

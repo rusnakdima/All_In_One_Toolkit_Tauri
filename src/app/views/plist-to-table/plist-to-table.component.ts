@@ -36,8 +36,6 @@ interface DetailsData {
   templateUrl: './plist-to-table.component.html'
 })
 export class PlistToTableComponent {
-  title: string = '';
-
   constructor() {}
 
   dataNotify: Subject<INotify> = new Subject();
