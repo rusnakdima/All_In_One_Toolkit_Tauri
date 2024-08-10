@@ -49,7 +49,7 @@ export class MarkdownEditorComponent {
     let htmlRaw = '';
     let tempText = text;
 
-    const commonReg = /\w\s\+\-\/\<\>\%\=\.\,\;\:\?\#\@\!\$\&\'\"\(\)\[\]\{\}\|/;
+    const commonReg = /\w\ \+\-\/\<\>\%\=\.\,\;\:\?\#\@\!\$\&\'\"\(\)\[\]\{\}\|/;
 
     const supReg = new RegExp(`\\^([${commonReg.source}\\*\\~]*)\\^`);
     const sup = tempText.match(new RegExp(supReg.source, 'g'));
@@ -95,6 +95,17 @@ export class MarkdownEditorComponent {
       });
     }
 
+    const italicAltReg = new RegExp(`\\_([${commonReg.source}\\~\\^]*)\\_`);
+    const italicAlt = tempText.match(new RegExp(italicAltReg.source, 'g'));
+    if (italicAlt && italicAlt.length > 0) {
+      italicAlt.forEach((val: string) => {
+        const dataReg = italicAltReg.exec(val);
+        if (dataReg) {
+          tempText = tempText.replace(dataReg[0], `<i>${dataReg[1]}</i>`);
+        }
+      });
+    }
+
     const linkReg = new RegExp(`\\[([${commonReg.source}\\~\\*\\^]*)\\]\\(([${commonReg.source}\\~\\*\\^]*)\\)`);
     const link = tempText.match(new RegExp(linkReg.source, 'g'));
     if (link && link.length > 0) {
@@ -117,13 +128,13 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const listBlockReg = new RegExp(`\\n(\\-\\s\?[${commonReg.source}\\~\\*\\^]+\\n)+`);
+    const listBlockReg = new RegExp(`\\n?(\\-\\s\?[${commonReg.source}\\~\\*\\^]+\\n*)+`);
     const listBlocks = tempText.match(new RegExp(listBlockReg.source, 'g'));
     if (listBlocks && listBlocks.length > 0) {
       listBlocks.forEach((block: string) => {
         const dataRegBlock = listBlockReg.exec(block);
         if (dataRegBlock) {
-          const listReg = new RegExp(`\\n(\\-\\s\?([${commonReg.source}\\~\\*\\^]+)+)+`);
+          const listReg = new RegExp(`\\n?(\\-\\s\?([${commonReg.source}\\~\\*\\^]+)+)+`);
           const list = block.match(new RegExp(listReg.source, 'g'));
           let ul = `<ul class="list-disc list-inside">`;
           let li = '';
@@ -141,7 +152,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const h6Reg = new RegExp(`#\{6\}\\s([${commonReg.source}\\~\\*\\^]+)\\n\\?`);
+    const h6Reg = new RegExp(`#\{6\}\\s([${commonReg.source}\\~\\*\\^]+)\\n*`);
     const h6 = tempText.match(new RegExp(h6Reg.source, 'g'));
     if (h6 && h6.length > 0) {
       h6.forEach((val: string) => {
@@ -152,7 +163,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const h5Reg = new RegExp(`#\{5\}\\s([${commonReg.source}\\~\\*\\^]+)\\n\\?`);
+    const h5Reg = new RegExp(`#\{5\}\\s([${commonReg.source}\\~\\*\\^]+)\\n*`);
     const h5 = tempText.match(new RegExp(h5Reg.source, 'g'));
     if (h5 && h5.length > 0) {
       h5.forEach((val: string) => {
@@ -163,7 +174,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const h4Reg = new RegExp(`#\{4\}\\s([${commonReg.source}\\~\\*\\^]+)\\n\\?`);
+    const h4Reg = new RegExp(`#\{4\}\\s([${commonReg.source}\\~\\*\\^]+)\\n*`);
     const h4 = tempText.match(new RegExp(h4Reg.source, 'g'));
     if (h4 && h4.length > 0) {
       h4.forEach((val: string) => {
@@ -174,7 +185,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const h3Reg = new RegExp(`#\{3\}\\s([${commonReg.source}\\~\\*\\^]+)\\n\\?`);
+    const h3Reg = new RegExp(`#\{3\}\\s([${commonReg.source}\\~\\*\\^]+)\\n*`);
     const h3 = tempText.match(new RegExp(h3Reg.source, 'g'));
     if (h3 && h3.length > 0) {
       h3.forEach((val: string) => {
@@ -185,7 +196,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const h2Reg = new RegExp(`#\{2\}\\s([${commonReg.source}\\~\\*\\^]+)\\n\\?`);
+    const h2Reg = new RegExp(`#\{2\}\\s([${commonReg.source}\\~\\*\\^]+)\\n*`);
     const h2 = tempText.match(new RegExp(h2Reg.source, 'g'));
     if (h2 && h2.length > 0) {
       h2.forEach((val: string) => {
@@ -196,7 +207,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const h1Reg = new RegExp(`#\\s([${commonReg.source}\\~\\*\\^]+)\\n\\?`);
+    const h1Reg = new RegExp(`#\{1\}\\s([${commonReg.source}\\~\\*\\^]+)\\n*`);
     const h1 = tempText.match(new RegExp(h1Reg.source, 'g'));
     if (h1 && h1.length > 0) {
       h1.forEach((val: string) => {
