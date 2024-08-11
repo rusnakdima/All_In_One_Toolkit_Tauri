@@ -1,6 +1,6 @@
 {
   "name": "all_in_one_toolkit",
-  "version": "0.21.2",
+  "version": "0.21.3",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
