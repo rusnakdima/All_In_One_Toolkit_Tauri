@@ -49,9 +49,7 @@ export class MarkdownEditorComponent {
     let htmlRaw = '';
     let tempText = text;
 
-    const commonReg = /\w\ \+\-\/\<\>\%\=\.\,\;\:\?\#\@\!\$\&\'\"\(\)\[\]\{\}\|/;
-
-    const supReg = new RegExp(`\\^([${commonReg.source}\\*\\~]*)\\^`);
+    const supReg = new RegExp(`\\^([^\\^\\s]+)\\^`);
     const sup = tempText.match(new RegExp(supReg.source, 'g'));
     if (sup && sup.length > 0) {
       sup.forEach((val: string) => {
@@ -62,7 +60,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const subReg = new RegExp(`\\~([${commonReg.source}\\*\\^]*)\\~`);
+    const subReg = new RegExp(`\\~([^\\~\\s]+)\\~`);
     const sub = tempText.match(new RegExp(subReg.source, 'g'));
     if (sub && sub.length > 0) {
       sub.forEach((val: string) => {
@@ -73,7 +71,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const boldReg = new RegExp(`\\*\{2\}([${commonReg.source}\\~\\^]*)\\*\{2\}`);
+    const boldReg = new RegExp(`\\*\{2\}([^\\*\\s]+)\\*\{2\}`);
     const bold = tempText.match(new RegExp(boldReg.source, 'g'));
     if (bold && bold.length > 0) {
       bold.forEach((val: string) => {
@@ -84,7 +82,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const italicReg = new RegExp(`\\*([${commonReg.source}\\~\\^]*)\\*`);
+    const italicReg = new RegExp(`\\*([^\\*\\s]+)\\*`);
     const italic = tempText.match(new RegExp(italicReg.source, 'g'));
     if (italic && italic.length > 0) {
       italic.forEach((val: string) => {
@@ -95,7 +93,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const italicAltReg = new RegExp(`\\_([${commonReg.source}\\~\\^]*)\\_`);
+    const italicAltReg = new RegExp(`\\_([^\\_\\s]+)\\_`);
     const italicAlt = tempText.match(new RegExp(italicAltReg.source, 'g'));
     if (italicAlt && italicAlt.length > 0) {
       italicAlt.forEach((val: string) => {
@@ -106,7 +104,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const linkReg = new RegExp(`\\[([${commonReg.source}\\~\\*\\^]*)\\]\\(([${commonReg.source}\\~\\*\\^]*)\\)`);
+    const linkReg = new RegExp(`\\[(.+)\\]\\((.+)\\)`);
     const link = tempText.match(new RegExp(linkReg.source, 'g'));
     if (link && link.length > 0) {
       link.forEach((val: string) => {
@@ -128,13 +126,13 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const listBlockReg = new RegExp(`^((\\s*[-*])\\s*[${commonReg.source}\\~\\*\\^]+)+\\n$`);
+    const listBlockReg = new RegExp(`^((\\s*-)\\s*.+)+\\n?$`);
     const listBlocks = tempText.match(new RegExp(listBlockReg.source, 'gm'));
     if (listBlocks && listBlocks.length > 0) {
       listBlocks.forEach((block: string) => {
         const dataRegBlock = listBlockReg.exec(block);
         if (dataRegBlock) {
-          const listReg = new RegExp(`^(\\s*[-*])\\s*([${commonReg.source}\\~\\*\\^]+)$`);
+          const listReg = new RegExp(`^(\\s*-)\\s*(.+)$`);
           const list = block.match(new RegExp(listReg.source, 'gm'));
           let ul = `<ul class="list-disc list-inside">`;
           let li = '';
@@ -152,8 +150,8 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const h6Reg = new RegExp(`^\\s*#\{6\}\\s([${commonReg.source}\\~\\*\\^]+)\\n?$`);
-    const h6 = tempText.match(new RegExp(h6Reg.source, 'g'));
+    const h6Reg = new RegExp(`^\\ *#\{6\}\\s(.+)\\n?$`);
+    const h6 = tempText.match(new RegExp(h6Reg.source, 'gm'));
     if (h6 && h6.length > 0) {
       h6.forEach((val: string) => {
         const dataReg = h6Reg.exec(val);
@@ -163,8 +161,8 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const h5Reg = new RegExp(`^\\s*#\{5\}\\s([${commonReg.source}\\~\\*\\^]+)\\n?$`);
-    const h5 = tempText.match(new RegExp(h5Reg.source, 'g'));
+    const h5Reg = new RegExp(`^\\ *#\{5\}\\s(.+)\\n?$`);
+    const h5 = tempText.match(new RegExp(h5Reg.source, 'gm'));
     if (h5 && h5.length > 0) {
       h5.forEach((val: string) => {
         const dataReg = h5Reg.exec(val);
@@ -174,8 +172,8 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const h4Reg = new RegExp(`^\\s*#\{4\}\\s([${commonReg.source}\\~\\*\\^]+)\\n?$`);
-    const h4 = tempText.match(new RegExp(h4Reg.source, 'g'));
+    const h4Reg = new RegExp(`^\\ *#\{4\}\\s(.+)\\n?$`);
+    const h4 = tempText.match(new RegExp(h4Reg.source, 'gm'));
     if (h4 && h4.length > 0) {
       h4.forEach((val: string) => {
         const dataReg = h4Reg.exec(val);
@@ -185,8 +183,8 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const h3Reg = new RegExp(`^\\s*#\{3\}\\s([${commonReg.source}\\~\\*\\^]+)\\n?$`);
-    const h3 = tempText.match(new RegExp(h3Reg.source, 'g'));
+    const h3Reg = new RegExp(`^\\ *#\{3\}\\s(.+)\\n?$`);
+    const h3 = tempText.match(new RegExp(h3Reg.source, 'gm'));
     if (h3 && h3.length > 0) {
       h3.forEach((val: string) => {
         const dataReg = h3Reg.exec(val);
@@ -196,8 +194,8 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const h2Reg = new RegExp(`^\\s*#\{2\}\\s([${commonReg.source}\\~\\*\\^]+)\\n?$`);
-    const h2 = tempText.match(new RegExp(h2Reg.source, 'g'));
+    const h2Reg = new RegExp(`^\\ *#\{2\}\\s(.+)\\n?$`);
+    const h2 = tempText.match(new RegExp(h2Reg.source, 'gm'));
     if (h2 && h2.length > 0) {
       h2.forEach((val: string) => {
         const dataReg = h2Reg.exec(val);
@@ -207,8 +205,8 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const h1Reg = new RegExp(`^\\s*#\{1\}\\s([${commonReg.source}\\~\\*\\^]+)\\n?$`);
-    const h1 = tempText.match(new RegExp(h1Reg.source, 'g'));
+    const h1Reg = new RegExp(`^\\ *#\{1\}\\s(.+)\\n?$`);
+    const h1 = tempText.match(new RegExp(h1Reg.source, 'gm'));
     if (h1 && h1.length > 0) {
       h1.forEach((val: string) => {
         const dataReg = h1Reg.exec(val);
@@ -218,7 +216,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const backticksReg = new RegExp(`\\\`([${commonReg.source}\\~\\*\\^]+)\\\``);
+    const backticksReg = new RegExp(`\`([^\\\`\\s]+)\``);
     const backticks = tempText.match(new RegExp(backticksReg.source, 'g'));
     if (backticks && backticks.length > 0) {
       backticks.forEach((val: string) => {
