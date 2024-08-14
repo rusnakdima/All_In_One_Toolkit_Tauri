@@ -49,7 +49,7 @@ export class MarkdownEditorComponent {
     let htmlRaw = '';
     let tempText = text;
 
-    const supReg = new RegExp(`\\^([^\\^\\s]+)\\^`);
+    const supReg = new RegExp(`\\^([^\\^\\n]+)\\^`);
     const sup = tempText.match(new RegExp(supReg.source, 'g'));
     if (sup && sup.length > 0) {
       sup.forEach((val: string) => {
@@ -60,7 +60,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const subReg = new RegExp(`\\~([^\\~\\s]+)\\~`);
+    const subReg = new RegExp(`\\~([^\\~\\n]+)\\~`);
     const sub = tempText.match(new RegExp(subReg.source, 'g'));
     if (sub && sub.length > 0) {
       sub.forEach((val: string) => {
@@ -71,7 +71,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const boldReg = new RegExp(`\\*\{2\}([^\\*\\s]+)\\*\{2\}`);
+    const boldReg = new RegExp(`\\*\{2\}([^\\*\\n]+)\\*\{2\}`);
     const bold = tempText.match(new RegExp(boldReg.source, 'g'));
     if (bold && bold.length > 0) {
       bold.forEach((val: string) => {
@@ -82,7 +82,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const italicReg = new RegExp(`\\*([^\\*\\s]+)\\*`);
+    const italicReg = new RegExp(`\\*([^\\*\\n]+)\\*`);
     const italic = tempText.match(new RegExp(italicReg.source, 'g'));
     if (italic && italic.length > 0) {
       italic.forEach((val: string) => {
@@ -93,7 +93,7 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const italicAltReg = new RegExp(`\\_([^\\_\\s]+)\\_`);
+    const italicAltReg = new RegExp(`\\_([^\\_\\n]+)\\_`);
     const italicAlt = tempText.match(new RegExp(italicAltReg.source, 'g'));
     if (italicAlt && italicAlt.length > 0) {
       italicAlt.forEach((val: string) => {
@@ -126,25 +126,48 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const listBlockReg = new RegExp(`^((\\s*-)\\s*.+)+\\n?$`);
+    const listBlockReg = new RegExp(`^((\\ *[-*])\\ *.+\\n?)+\\n?$`);
     const listBlocks = tempText.match(new RegExp(listBlockReg.source, 'gm'));
     if (listBlocks && listBlocks.length > 0) {
       listBlocks.forEach((block: string) => {
         const dataRegBlock = listBlockReg.exec(block);
         if (dataRegBlock) {
-          const listReg = new RegExp(`^(\\s*-)\\s*(.+)$`);
+          const listReg = new RegExp(`^(\\ *)([-*])\\ *(.+)$`);
           const list = block.match(new RegExp(listReg.source, 'gm'));
-          let ul = `<ul class="list-disc list-inside">`;
           let li = '';
           if (list && list.length > 0) {
             list.forEach((val: string) => {
               const dataReg = listReg.exec(val);
               if (dataReg) {
-                li += `<li>${dataReg[2]}</li>`;
+                li += `<li class='${(dataReg[1].length >= 2) ? "ml-4" : ""}'>${dataReg[3]}</li>`;
               }
             });
           }
-          ul += `${li}</ul>`;
+          const ul = `<ul class="list-disc list-inside">${li}</ul>`;
+          tempText = tempText.replace(dataRegBlock[0], ul);
+        }
+      });
+    }
+
+    
+    const listNumericBlockReg = new RegExp(`^((\\ *\\d\\.)\\ *.+\\n?)+\\n?$`);
+    const listNumericBlocks = tempText.match(new RegExp(listNumericBlockReg.source, 'gm'));
+    if (listNumericBlocks && listNumericBlocks.length > 0) {
+      listNumericBlocks.forEach((block: string) => {
+        const dataRegBlock = listNumericBlockReg.exec(block);
+        if (dataRegBlock) {
+          const listNumericReg = new RegExp(`^(\\ *)(\\d\\.)\\ *(.+)$`);
+          const listNumeric = block.match(new RegExp(listNumericReg.source, 'gm'));
+          let li = '';
+          if (listNumeric && listNumeric.length > 0) {
+            listNumeric.forEach((val: string) => {
+              const dataReg = listNumericReg.exec(val);
+              if (dataReg) {
+                li += `<li class='${(dataReg[1].length >= 2) ? "ml-4" : ""}'>${dataReg[3]}</li>`;
+              }
+            });
+          }
+          const ul = `<ol class="list-decimal list-inside">${li}</ol>`;
           tempText = tempText.replace(dataRegBlock[0], ul);
         }
       });
@@ -216,13 +239,24 @@ export class MarkdownEditorComponent {
       });
     }
 
-    const backticksReg = new RegExp(`\`([^\\\`\\s]+)\``);
+    const backticksReg = new RegExp(`\`([^\\\`\\n]+)\``);
     const backticks = tempText.match(new RegExp(backticksReg.source, 'g'));
     if (backticks && backticks.length > 0) {
       backticks.forEach((val: string) => {
         const dataReg = backticksReg.exec(val);
         if (dataReg) {
           tempText = tempText.replace(dataReg[0], `<span class='bg-gray-500 dark:bg-gray-600'>${dataReg[1]}</span>`);
+        }
+      });
+    }
+
+    const paragraphReg = new RegExp(`^(.+)\\n?$`);
+    const paragraph = tempText.match(new RegExp(paragraphReg.source, 'gm'));
+    if (paragraph && paragraph.length > 0) {
+      paragraph.forEach((val: string) => {
+        const dataReg = paragraphReg.exec(val);
+        if (dataReg) {
+          tempText = tempText.replace(dataReg[0], `<p>${dataReg[1]}</p>`);
         }
       });
     }
@@ -237,6 +271,7 @@ export class MarkdownEditorComponent {
         }
       });
     }
+
     htmlRaw = tempText;
     return htmlRaw;
   }

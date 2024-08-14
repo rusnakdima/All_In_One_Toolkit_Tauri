@@ -28,7 +28,7 @@ dependencies = [
 
 [[package]]
 name = "all_in_one_toolkit"
-version = "0.21.4"
+version = "0.21.5"
 dependencies = [
  "calamine",
  "chrono",
