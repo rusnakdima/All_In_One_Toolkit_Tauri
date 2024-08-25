@@ -2,8 +2,8 @@ name: Build for Multiple Platforms
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - master
   workflow_dispatch:
 
 jobs:
