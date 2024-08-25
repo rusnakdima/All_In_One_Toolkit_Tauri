@@ -97,7 +97,7 @@ export class DashboardComponent {
     }
     localStorage["recAct"] = JSON.stringify(this.recentActionLinks);
   }
-  
+
   clearRecentLink() {
     this.recentActionLinks = [];
     localStorage.removeItem("recAct");
